@@ -122,11 +122,11 @@ div.csl-indent {
 <link rel="stylesheet" href="../styles.css">
 <meta property="og:title" content="Quantecol - Ecological Modeling in Stan">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://quantecol.com.au/img/tiger.jpg">
+<meta property="og:image" content="../img/tiger.jpg">
 <meta property="og:site-name" content="Quantecol">
 <meta name="twitter:title" content="Quantecol - Ecological Modeling in Stan">
 <meta name="twitter:description" content="">
-<meta name="twitter:image" content="https://quantecol.com.au/img/tiger.jpg">
+<meta name="twitter:image" content="../img/tiger.jpg">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -2497,7 +2497,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var filterRegex = new RegExp("https:\/\/quantecol\.com\.au");
+      var filterRegex = new RegExp('/' + window.location.host + '/');
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href);
     }
