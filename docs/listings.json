@@ -1,0 +1,16 @@
+[
+  {
+    "listing": "/blog.html",
+    "items": [
+      "/blog/hmm-in-stan.html"
+    ]
+  },
+  {
+    "listing": "/portfolio.html",
+    "items": [
+      "/portfolio/multievent.html",
+      "/portfolio/fleayi-adult.html",
+      "/portfolio/dmso.html"
+    ]
+  }
+]

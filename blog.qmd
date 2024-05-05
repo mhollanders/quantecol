@@ -1,0 +1,10 @@
+---
+pagetitle: "Quantecol - Blog"
+listing:
+  contents:
+    - hmm-in-stan.qmd
+  type: grid
+  sort: "date desc"
+---
+
+## Blog
