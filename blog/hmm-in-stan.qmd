@@ -144,7 +144,7 @@ $$
 \end{bmatrix}
 $$ {#eq-tpm-z1}
 
-Here, an individual that's dead cannot become alive anymore, and an individual transitions from alive to alive with probability $\phi$. The observation process still deals with two observed states, (1) not detected and (2) detected, and is also formulated as a $2 \times 2$ TPM, where the ecological states are in the rows (states of departure) and the observed states in the columns (states of arrival):
+Here, the dead state is an [absorbing state](https://en.wikipedia.org/wiki/Absorbing_Markov_chain) and individuals remain in the alive states with probability $\phi$. The observation process still deals with two observed states, (1) not detected and (2) detected, and is also formulated as a $2 \times 2$ TPM, where the ecological states are in the rows (states of departure) and the observed states in the columns (states of arrival):
 
 $$
 \mathrm{TPM}_y = \begin{bmatrix}
@@ -597,7 +597,7 @@ Consider a study area containing sites $i \in 1 : I$ surveyed across $t \in 1 : 
 ::: {.callout-tip}
 ### Ecology occurs in continuous time
 
-TPMs assume equal intervals between surveys, but this is the exception rather than the norm for ecological data. Although things like survival probabilities can easily be exponentiated to the time interval, this doesn't work for processes that are not [absorbing states](https://en.wikipedia.org/wiki/Absorbing_Markov_chain), i.e., snakes moving in and out of sites. Unlike individual survival, sites are free to transition between states from year to year. Even with simpler models, however, it often makes more sense to model the survival process with mortality hazard rates (where the survival probability $S$ is related to the mortality hazard rate $h$ as $S = \exp(-h)$) for a number of reasons [@ergon2018]. The multistate extension of this is straightforward, where we instead take the matrix exponential of a TRM [@glennie2022]. By constructing our transition matrices as TRMs, where the off-diagonals contain instantaneous hazard rates and the diagonals contain negative sums of these off-diagonals (ensuring rows sum to 0, not 1), we can generate time-specific TPMs by taking the matrix exponential of the TRM multiplied by the time interval between occasions ($\tau_t$), thereby essentially marginalising over possible state transitions that occurred during survey intervals:
+TPMs assume equal intervals between surveys, but this is the exception rather than the norm for ecological data. Although things like survival probabilities can easily be exponentiated to the time interval, this doesn't work for processes that are not absorbing states, i.e., snakes moving in and out of sites. Unlike individual survival, sites are free to transition between states from year to year. Even with simpler models, however, it often makes more sense to model the survival process with mortality hazard rates (where the survival probability $S$ is related to the mortality hazard rate $h$ as $S = \exp(-h)$) for a number of reasons [@ergon2018]. The multistate extension of this is straightforward, where we instead take the matrix exponential of a TRM [@glennie2022]. By constructing our transition matrices as TRMs, where the off-diagonals contain instantaneous hazard rates and the diagonals contain negative sums of these off-diagonals (ensuring rows sum to 0, not 1), we can generate time-specific TPMs by taking the matrix exponential of the TRM multiplied by the time interval between occasions ($\tau_t$), thereby essentially marginalising over possible state transitions that occurred during survey intervals:
 
 $$
 \mathrm{TPM}_t = \exp \left( \mathrm{TRM} \times \tau_t \right)
@@ -1174,8 +1174,8 @@ temp <- rnorm(n_prim - 1) |> sort(decreasing = T)  # it's getting colder
 # parameters
 phi_a <- c(0.1, 0.1)       # mortality rates of uninfected/infected frogs (intercepts)
 phi_b <- 0.3               # effect of one log Bd gene copy on mortality
-psi_a <- c(0.5, 0.4)       # rates of gaining/clearing infections (intercepts)
-psi_b <- c(-0.3, 0.5)      # effect of temperature on rates of gaining/clearing infections
+psi_a <- c(0.7, 0.4)       # rates of gaining/clearing infections (intercepts)
+psi_b <- c(-0.4, 0.3)      # effect of temperature on rates of gaining/clearing infections
 p_a <- c(0.7, 0.6)         # detection probabilities of uninfected/infected frogs
 r <- c(0.4, 0.6)           # pathogen detection probabilities (per log Bd gene copy)
 lambda <- c(0.05, 0.10)    # sampling/diagnostic false positive probabilities

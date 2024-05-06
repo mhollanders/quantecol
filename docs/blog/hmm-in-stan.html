@@ -122,11 +122,11 @@ div.csl-indent {
 <link rel="stylesheet" href="../styles.css">
 <meta property="og:title" content="Quantecol - Ecological Modeling in Stan">
 <meta property="og:description" content="">
-<meta property="og:image" content="../img/tiger.jpg">
+<meta property="og:image" content="https://quantecol.com.au/img/tiger.jpg">
 <meta property="og:site-name" content="Quantecol">
 <meta name="twitter:title" content="Quantecol - Ecological Modeling in Stan">
 <meta name="twitter:description" content="">
-<meta name="twitter:image" content="../img/tiger.jpg">
+<meta name="twitter:image" content="https://quantecol.com.au/img/tiger.jpg">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -342,8 +342,8 @@ thin = 1: p, phi
 RW sampler (2)
   - phi
   - p
-binary sampler (264)
-  - z[]  (264 elements)</code></pre>
+binary sampler (304)
+  - z[]  (304 elements)</code></pre>
 </div>
 </div>
 <p>Note that because we know with certainty that individuals were alive between the first and last survey they were captured, we can actually ease computation by supplying those <code>z[i, first[i]:last[i]]</code> as known. We’ll run this model to confirm that it’s able to recover our input parameters using <strong>MCMCvis</strong> <span class="citation" data-cites="youngflesh2018">(<a href="#ref-youngflesh2018" role="doc-biblioref">Youngflesh 2018</a>)</span>.</p>
@@ -373,8 +373,8 @@ binary sampler (264)
 <pre><code># A tibble: 2 × 9
   variable  mean     sd `2.5%` `50%` `97.5%`  Rhat n.eff truth
   &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1 phi      0.667 0.0349  0.595 0.668   0.733  1.01   677   0.6
-2 p        0.751 0.0480  0.651 0.751   0.836  1.03   478   0.7</code></pre>
+1 phi      0.599 0.0402  0.517 0.600   0.672  1.01   562   0.6
+2 p        0.677 0.0609  0.549 0.680   0.789  1.02   341   0.7</code></pre>
 </div>
 </div>
 <p>As flexible as Bayesian software like BUGS and JAGS are, most of them do not use Hamiltonian Monte Carlo <span class="citation" data-cites="neal1994">(HMC, <a href="#ref-neal1994" role="doc-biblioref">Neal 1994</a>)</span> to generate samples from the posterior distribution, but see <a href="https://cran.r-project.org/web/packages/nimbleHMC/index.html"><strong>nimbleHMC</strong></a> for a recent implementation in NIMBLE. Without <a href="https://www.youtube.com/watch?v=jUSZboSq1zg">going into detail</a> myself, HMC is generally considered a superior algorithm and moreover gives warnings when something goes wrong in the sampling, alerting the user to potential issues in the estimation. As a result, HMC should generally be preferred by practitioners but it has one trait that can be challenging to ecologists in particular: HMC requires that all parameters are continuous, meaning that our typical state-space formulations of HMMs cannot be fit with HMC due to the presence of latent discrete parameters like our ecological states <code>z[i, t]</code> above. The remainder of this post will focus on dealing with fitting complex ecological models using <a href="https://mc-stan.org/">Stan</a> <span class="citation" data-cites="carpenter2017">(<a href="#ref-carpenter2017" role="doc-biblioref">Carpenter et al. 2017</a>)</span>, a probabilistic programming language which implements a state-of-the-art No U-Turn Sampler <span class="citation" data-cites="hoffman2014">(NUTS, <a href="#ref-hoffman2014" role="doc-biblioref">Hoﬀman and Gelman 2014</a>)</span>. I present a unified approach that is applicable to simple and complex models alike, highlighted with three examples of increasing complexity.</p>
@@ -391,7 +391,7 @@ binary sampler (264)
   1 - \phi &amp; \phi          
 \end{bmatrix}
 \tag{2}\]</span></span></p>
-<p>Here, an individual that’s dead cannot become alive anymore, and an individual transitions from alive to alive with probability <span class="math inline">\(\phi\)</span>. The observation process still deals with two observed states, (1) not detected and (2) detected, and is also formulated as a <span class="math inline">\(2 \times 2\)</span> TPM, where the ecological states are in the rows (states of departure) and the observed states in the columns (states of arrival):</p>
+<p>Here, the dead state is an <a href="https://en.wikipedia.org/wiki/Absorbing_Markov_chain">absorbing state</a> and individuals remain in the alive states with probability <span class="math inline">\(\phi\)</span>. The observation process still deals with two observed states, (1) not detected and (2) detected, and is also formulated as a <span class="math inline">\(2 \times 2\)</span> TPM, where the ecological states are in the rows (states of departure) and the observed states in the columns (states of arrival):</p>
 <p><span id="eq-tpm-y1"><span class="math display">\[
 \mathrm{TPM}_y = \begin{bmatrix}
   1 &amp; 0 \\
@@ -807,14 +807,14 @@ binary sampler (264)
 <div class="cell-output cell-output-stdout">
 <pre><code>Running MCMC with 4 parallel chains...
 
-Chain 3 finished in 1.9 seconds.
-Chain 1 finished in 2.1 seconds.
-Chain 2 finished in 2.1 seconds.
-Chain 4 finished in 2.1 seconds.
+Chain 3 finished in 2.0 seconds.
+Chain 1 finished in 2.2 seconds.
+Chain 4 finished in 2.2 seconds.
+Chain 2 finished in 2.3 seconds.
 
 All 4 chains finished successfully.
-Mean chain execution time: 2.0 seconds.
-Total execution time: 2.2 seconds.</code></pre>
+Mean chain execution time: 2.2 seconds.
+Total execution time: 2.4 seconds.</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
@@ -829,8 +829,8 @@ Total execution time: 2.2 seconds.</code></pre>
 <pre><code># A tibble: 2 × 8
   variable median    q5   q95 ess_bulk ess_tail ess_nimble truth
   &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;
-1 phi       0.666 0.603 0.726    2528.    2507.        677   0.6
-2 p         0.752 0.664 0.827    2355.    2597.        478   0.7</code></pre>
+1 phi       0.601 0.534 0.671    2330.    2449.        562   0.6
+2 p         0.675 0.572 0.772    2210.    2630.        341   0.7</code></pre>
 </div>
 </div>
 <p>And just to confirm, we check if the Viterbi algorithm was able to closely recover the latent alive states.</p>
@@ -854,7 +854,7 @@ Total execution time: 2.2 seconds.</code></pre>
 <span id="cb13-15"><a href="#cb13-15"></a><span class="fu">sum</span>(correct) <span class="sc">/</span> <span class="fu">sum</span>(n_unknown)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.928</code></pre>
+<pre><code>[1] 0.934</code></pre>
 </div>
 </div>
 </section>
@@ -884,7 +884,7 @@ Ecology occurs in continuous time
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>TPMs assume equal intervals between surveys, but this is the exception rather than the norm for ecological data. Although things like survival probabilities can easily be exponentiated to the time interval, this doesn’t work for processes that are not <a href="https://en.wikipedia.org/wiki/Absorbing_Markov_chain">absorbing states</a>, i.e., snakes moving in and out of sites. Unlike individual survival, sites are free to transition between states from year to year. Even with simpler models, however, it often makes more sense to model the survival process with mortality hazard rates (where the survival probability <span class="math inline">\(S\)</span> is related to the mortality hazard rate <span class="math inline">\(h\)</span> as <span class="math inline">\(S = \exp(-h)\)</span>) for a number of reasons <span class="citation" data-cites="ergon2018">(<a href="#ref-ergon2018" role="doc-biblioref">Ergon et al. 2018</a>)</span>. The multistate extension of this is straightforward, where we instead take the matrix exponential of a TRM <span class="citation" data-cites="glennie2022">(<a href="#ref-glennie2022" role="doc-biblioref">Glennie et al. 2022</a>)</span>. By constructing our transition matrices as TRMs, where the off-diagonals contain instantaneous hazard rates and the diagonals contain negative sums of these off-diagonals (ensuring rows sum to 0, not 1), we can generate time-specific TPMs by taking the matrix exponential of the TRM multiplied by the time interval between occasions (<span class="math inline">\(\tau_t\)</span>), thereby essentially marginalising over possible state transitions that occurred during survey intervals:</p>
+<p>TPMs assume equal intervals between surveys, but this is the exception rather than the norm for ecological data. Although things like survival probabilities can easily be exponentiated to the time interval, this doesn’t work for processes that are not absorbing states, i.e., snakes moving in and out of sites. Unlike individual survival, sites are free to transition between states from year to year. Even with simpler models, however, it often makes more sense to model the survival process with mortality hazard rates (where the survival probability <span class="math inline">\(S\)</span> is related to the mortality hazard rate <span class="math inline">\(h\)</span> as <span class="math inline">\(S = \exp(-h)\)</span>) for a number of reasons <span class="citation" data-cites="ergon2018">(<a href="#ref-ergon2018" role="doc-biblioref">Ergon et al. 2018</a>)</span>. The multistate extension of this is straightforward, where we instead take the matrix exponential of a TRM <span class="citation" data-cites="glennie2022">(<a href="#ref-glennie2022" role="doc-biblioref">Glennie et al. 2022</a>)</span>. By constructing our transition matrices as TRMs, where the off-diagonals contain instantaneous hazard rates and the diagonals contain negative sums of these off-diagonals (ensuring rows sum to 0, not 1), we can generate time-specific TPMs by taking the matrix exponential of the TRM multiplied by the time interval between occasions (<span class="math inline">\(\tau_t\)</span>), thereby essentially marginalising over possible state transitions that occurred during survey intervals:</p>
 <p><span id="eq-trm"><span class="math display">\[
 \mathrm{TPM}_t = \exp \left( \mathrm{TRM} \times \tau_t \right)
 \tag{4}\]</span></span></p>
@@ -985,16 +985,16 @@ Ecology occurs in continuous time
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
- [1,]    2    1    1    1    1    1    1    1    1     1
- [2,]    3    3    3    3    3    3    1    2    2     2
- [3,]    2    1    3    3    3    3    3    3    3     3
- [4,]    3    3    3    3    3    3    3    2    1     2
- [5,]    1    1    2    3    1    1    1    1    1     1
- [6,]    2    1    2    2    1    1    3    3    3     3
- [7,]    3    3    3    3    3    2    3    3    3     3
- [8,]    1    1    1    3    3    2    3    3    3     2
- [9,]    1    2    2    1    1    2    3    3    2     2
-[10,]    1    2    2    3    3    3    3    3    3     2</code></pre>
+ [1,]    3    1    1    1    3    1    2    1    2     3
+ [2,]    3    3    3    3    3    3    2    3    2     2
+ [3,]    3    3    3    3    2    2    1    2    3     3
+ [4,]    3    2    2    1    1    1    1    3    3     2
+ [5,]    1    3    3    3    3    2    2    2    2     1
+ [6,]    3    1    1    1    1    1    2    2    2     3
+ [7,]    1    2    2    3    2    2    1    1    1     2
+ [8,]    1    1    1    1    1    3    3    3    3     3
+ [9,]    1    3    3    3    3    3    3    3    3     2
+[10,]    2    2    1    1    1    1    3    3    3     3</code></pre>
 </div>
 </div>
 </section>
@@ -1354,14 +1354,14 @@ Indexing
 <div class="cell-output cell-output-stdout">
 <pre><code>Running MCMC with 4 parallel chains...
 
-Chain 3 finished in 150.3 seconds.
-Chain 4 finished in 169.8 seconds.
-Chain 1 finished in 172.3 seconds.
-Chain 2 finished in 180.4 seconds.
+Chain 2 finished in 179.2 seconds.
+Chain 1 finished in 181.2 seconds.
+Chain 3 finished in 182.3 seconds.
+Chain 4 finished in 204.0 seconds.
 
 All 4 chains finished successfully.
-Mean chain execution time: 168.2 seconds.
-Total execution time: 180.6 seconds.</code></pre>
+Mean chain execution time: 186.7 seconds.
+Total execution time: 204.2 seconds.</code></pre>
 </div>
 </div>
 </section>
@@ -1410,7 +1410,7 @@ Total execution time: 180.6 seconds.</code></pre>
 <span id="cb26-11"><a href="#cb26-11"></a><span class="fu">sum</span>((z_est <span class="sc">==</span> z)[unknowns]) <span class="sc">/</span> <span class="fu">sum</span>(unknowns)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.727</code></pre>
+<pre><code>[1] 0.676</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -1516,8 +1516,8 @@ Steady state distribution
 <span id="cb28-9"><a href="#cb28-9"></a><span class="co"># parameters</span></span>
 <span id="cb28-10"><a href="#cb28-10"></a>phi_a <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.1</span>)       <span class="co"># mortality rates of uninfected/infected frogs (intercepts)</span></span>
 <span id="cb28-11"><a href="#cb28-11"></a>phi_b <span class="ot">&lt;-</span> <span class="fl">0.3</span>               <span class="co"># effect of one log Bd gene copy on mortality</span></span>
-<span id="cb28-12"><a href="#cb28-12"></a>psi_a <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.4</span>)       <span class="co"># rates of gaining/clearing infections (intercepts)</span></span>
-<span id="cb28-13"><a href="#cb28-13"></a>psi_b <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.3</span>, <span class="fl">0.5</span>)      <span class="co"># effect of temperature on rates of gaining/clearing infections</span></span>
+<span id="cb28-12"><a href="#cb28-12"></a>psi_a <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.7</span>, <span class="fl">0.4</span>)       <span class="co"># rates of gaining/clearing infections (intercepts)</span></span>
+<span id="cb28-13"><a href="#cb28-13"></a>psi_b <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.4</span>, <span class="fl">0.3</span>)      <span class="co"># effect of temperature on rates of gaining/clearing infections</span></span>
 <span id="cb28-14"><a href="#cb28-14"></a>p_a <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.7</span>, <span class="fl">0.6</span>)         <span class="co"># detection probabilities of uninfected/infected frogs</span></span>
 <span id="cb28-15"><a href="#cb28-15"></a>r <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">0.6</span>)           <span class="co"># pathogen detection probabilities (per log Bd gene copy)</span></span>
 <span id="cb28-16"><a href="#cb28-16"></a>lambda <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.10</span>)    <span class="co"># sampling/diagnostic false positive probabilities</span></span>
@@ -2099,12 +2099,12 @@ Steady state distribution
 <div class="cell-output cell-output-stdout">
 <pre><code>Running MCMC with 2 parallel chains...
 
-Chain 2 finished in 576.1 seconds.
-Chain 1 finished in 593.6 seconds.
+Chain 1 finished in 543.6 seconds.
+Chain 2 finished in 627.5 seconds.
 
 Both chains finished successfully.
-Mean chain execution time: 584.9 seconds.
-Total execution time: 593.7 seconds.</code></pre>
+Mean chain execution time: 585.6 seconds.
+Total execution time: 627.7 seconds.</code></pre>
 </div>
 </div>
 </section>
@@ -2158,7 +2158,7 @@ Total execution time: 593.7 seconds.</code></pre>
 <span id="cb33-4"><a href="#cb33-4"></a><span class="fu">sum</span>(z_est <span class="sc">==</span> z, <span class="at">na.rm =</span> T) <span class="sc">/</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(z))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.933</code></pre>
+<pre><code>[1] 0.935</code></pre>
 </div>
 </div>
 <p>One of the main reasons to account for imperfect pathogen detection is to get more realistic estimates of infection prevalence in the population. We can use the full posterior distribution of the latent ecological states from the Viterbi algorithm to estimate the infection prevalence per primary occasion, which here was simulated to be increasing due to dropping temperatures.</p>
@@ -2238,13 +2238,13 @@ Kéry, M., and J. A. Royle. 2015. Applied Hierarchical Modeling in Ecology: Anal
 Kéry, M., and J. A. Royle. 2020. Applied hierarchical modeling in ecology: Analysis of distribution, abundance and species richness in r and BUGS: Volume 2: Dynamic and advanced models. Academic Press.
 </div>
 <div id="ref-neal1994" class="csl-entry" role="listitem">
-Neal, R. M. 1994. <a href="https://doi.org/10.1006/jcph.1994.1054">An improved acceptance procedure for the hybrid monte carlo algorithm</a>. Journal of Computational Physics 111:194–203.
+Neal, R. M. 1994. <a href="https://doi.org/10.1006/jcph.1994.1054">An improved acceptance procedure for the hybrid Monte Carlo algorithm</a>. Journal of Computational Physics 111:194–203.
 </div>
 <div id="ref-pollock1982" class="csl-entry" role="listitem">
 Pollock, K. H. 1982. <a href="https://doi.org/10.2307/3808568">A capture-recapture design robust to unequal probability of capture</a>. The Journal of Wildlife Management 46:752–757.
 </div>
 <div id="ref-rcoreteam2023" class="csl-entry" role="listitem">
-R Core Team. 2023. <a href="https://www.R-project.org/">R: A language and environment for statistical computing</a>. manual, R Foundation for Statistical Computing, Vienna, Austria.
+R Core Team. 2023. <a href="https://www.R-project.org/">R: A language and environment for statistical computing</a>. R Foundation for Statistical Computing, Vienna, Austria.
 </div>
 <div id="ref-royle2006" class="csl-entry" role="listitem">
 Royle, J. A., and W. A. Link. 2006. <a href="https://doi.org/10.1890/0012-9658(2006)87[835:GSOMAF]2.0.CO;2">Generalized site occupancy models allowing for false positive and false negative errors</a>. Ecology 87:835–841.
@@ -2259,10 +2259,10 @@ Vehtari, A., J. Gabry, M. Magnusson, Y. Yao, P.-C. Bürkner, T. Paananen, and A.
 Wickham, H. 2016. <a href="https://ggplot2.tidyverse.org"><span class="nocase">ggplot2</span>: Elegant graphics for data analysis</a>. Springer-Verlag New York.
 </div>
 <div id="ref-wickham2019" class="csl-entry" role="listitem">
-Wickham, H., M. Averick, J. Bryan, W. Chang, L. D. McGowan, R. François, G. Grolemund, A. Hayes, L. Henry, J. Hester, M. Kuhn, T. L. Pedersen, E. Miller, S. M. Bache, K. Müller, J. Ooms, D. Robinson, D. P. Seidel, V. Spinu, K. Takahashi, D. Vaughan, C. Wilke, K. Woo, and H. Yutani. 2019. <a href="https://doi.org/10.21105/joss.01686">Welcome to the Tidyverse</a>. Journal of Open Source Software 4:1686.
+Wickham, H., M. Averick, J. Bryan, W. Chang, L. D. McGowan, R. François, G. Grolemund, A. Hayes, L. Henry, J. Hester, M. Kuhn, T. L. Pedersen, E. Miller, S. M. Bache, K. Müller, J. Ooms, D. Robinson, D. P. Seidel, V. Spinu, K. Takahashi, D. Vaughan, C. Wilke, K. Woo, and H. Yutani. 2019. <a href="https://doi.org/10.21105/joss.01686">Welcome to the <span class="nocase">tidyverse</span></a>. Journal of Open Source Software 4:1686.
 </div>
 <div id="ref-youngflesh2018" class="csl-entry" role="listitem">
-Youngflesh, C. 2018. <a href="https://doi.org/10.21105/joss.00640">MCMCvis: Tools to visualize, manipulate, and summarize MCMC output</a>. Journal of Open Source Software 3:640.
+Youngflesh, C. 2018. <a href="https://doi.org/10.21105/joss.00640">MCMCvis: tools to visualize, manipulate, and summarize MCMC output</a>. Journal of Open Source Software 3:640.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -2497,7 +2497,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
+      var filterRegex = new RegExp("https:\/\/quantecol\.com\.au");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href);
     }
