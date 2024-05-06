@@ -1,15 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://quantecol.com.au/index.html</loc>
-    <lastmod>2024-05-05T23:40:14.566Z</lastmod>
+    <loc>https://quantecol.com.au/blog.html</loc>
+    <lastmod>2024-05-06T05:58:29.653Z</lastmod>
   </url>
   <url>
-    <loc>https://quantecol.com.au/blog.html</loc>
-    <lastmod>2024-05-06T01:45:58.682Z</lastmod>
+    <loc>https://quantecol.com.au/portfolio/fleayi-adult.html</loc>
+    <lastmod>2024-05-06T05:58:29.032Z</lastmod>
+  </url>
+  <url>
+    <loc>https://quantecol.com.au/portfolio/dmso.html</loc>
+    <lastmod>2024-05-06T05:58:28.539Z</lastmod>
+  </url>
+  <url>
+    <loc>https://quantecol.com.au/index.html</loc>
+    <lastmod>2024-05-06T06:11:23.456Z</lastmod>
+  </url>
+  <url>
+    <loc>https://quantecol.com.au/about/vision.html</loc>
+    <lastmod>2024-05-06T05:58:23.098Z</lastmod>
+  </url>
+  <url>
+    <loc>https://quantecol.com.au/services.html</loc>
+    <lastmod>2024-05-06T06:09:43.083Z</lastmod>
+  </url>
+  <url>
+    <loc>https://quantecol.com.au/about/contact.html</loc>
+    <lastmod>2024-05-06T05:58:22.859Z</lastmod>
+  </url>
+  <url>
+    <loc>https://quantecol.com.au/about/people/matthijs.html</loc>
+    <lastmod>2024-05-06T05:58:23.343Z</lastmod>
   </url>
   <url>
     <loc>https://quantecol.com.au/blog/hmm-in-stan.html</loc>
-    <lastmod>2024-05-06T01:45:57.011Z</lastmod>
+    <lastmod>2024-05-06T05:58:26.944Z</lastmod>
+  </url>
+  <url>
+    <loc>https://quantecol.com.au/portfolio/multievent.html</loc>
+    <lastmod>2024-05-06T05:58:28.791Z</lastmod>
+  </url>
+  <url>
+    <loc>https://quantecol.com.au/portfolio.html</loc>
+    <lastmod>2024-05-06T05:58:29.391Z</lastmod>
   </url>
 </urlset>

@@ -16,7 +16,7 @@ We provide custom services tailored to the requirements of the client. This rang
 We prefer to take a Bayesian approach because of the flexibility in building custom models, straightforward quantification of uncertainty, and ability to incorporate domain expertise when available. Our capabilities include, but are not limited to, the following statistical models:
 
   - (Generalised) linear models
-  - Power analysis
+  - Power analysis and simulations
   - Multivariate analysis
   - Dose-response models
   - Ordinal regression
@@ -24,12 +24,12 @@ We prefer to take a Bayesian approach because of the flexibility in building cus
   - Item-response models
   - Gaussian processes
   - Ecological models
-    - Mark-recapture
-    - Multievent
+    - Mark-recapture and multievent
     - (Dynamic) occupancy, including co-occurrence
     - (Dynamic) *N*- and multinomial-mixture
     - Spatial mark-recapture
     - Distance sampling
     - Species distribution models
+    - Continuous time models
     
 If you are interested in working with Quantecol, please [get in touch](about/contact.qmd).

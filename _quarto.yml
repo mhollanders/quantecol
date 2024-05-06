@@ -21,6 +21,9 @@ website:
         href: portfolio.qmd
       - text: "Blog"
         href: blog.qmd
+        menu: 
+          - text: "A unified approach to ecological modeling in Stan"
+            href: blog/hmm-in-stan.qmd
       - text: "About"
         menu:
           - text: "Our Vision"
