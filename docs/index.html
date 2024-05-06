@@ -195,23 +195,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Your datasets often contain a wealth of information but complex models are frequently required to reveal these signals. We can help you with this process, ranging from tutorials and workshops for applying statistical methodology, to conducting the entire analysis for you in a clear, collaborative fashion.</p>
 <div class="cell" data-output.var="mod">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode stan code-with-copy"><code class="sourceCode stan"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">model</span> {</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// log sample infection intensities</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">array</span>[n_ind] <span class="dt">matrix</span>[n_sec, n_prim] log_n;</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">matrix</span>[n_ind, n_prim] log_m = log(m)';</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span>:n_ind) {</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    log_n[i] = rep_matrix(log_m[i], n_sec) + n_z[i] * sigma[<span class="dv">2</span>];</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">// likelihood of diagnostic infection intensities</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span>:n_x) {</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">target +=</span> lognormal_lupdf(x[j] | log_n[ind[j]][sec[j], prim[j]], sigma[<span class="dv">3</span>]);</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">// likelihood of multievent model (threading)</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">target +=</span> reduce_sum(partial_sum_lupmf, seq_ind, grainsize, y, q, </span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>                       n_prim, n_sec, first, last, first_sec, tau, temp, </span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                       phi_a, phi_b, psi_a, psi_b, p_a, r, lambda, m, n_z, sigma);</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// likelihood of diagnostic infection intensities</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span>:n_x) {</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">target +=</span> lognormal_lupdf(x[j] | log_n[ind[j]][sec[j], prim[j]], sigma[<span class="dv">3</span>]);</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">// likelihood of multievent model (threading)</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">target +=</span> reduce_sum(partial_sum_lupmf, seq_ind, grainsize, y, q, </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                       n_prim, n_sec, first, last, first_sec, tau, temp, </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                       phi_a, phi_b, psi_a, psi_b, p_a, r, lambda, m, n_z, sigma);</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="visualisation-and-reporting" class="level3">

@@ -24,13 +24,6 @@ library(cmdstanr)
 #| eval: false
 
 model {
-  // log sample infection intensities
-  array[n_ind] matrix[n_sec, n_prim] log_n;
-  matrix[n_ind, n_prim] log_m = log(m)';
-  for (i in 1:n_ind) {
-    log_n[i] = rep_matrix(log_m[i], n_sec) + n_z[i] * sigma[2];
-  }
-  
   // likelihood of diagnostic infection intensities
   for (j in 1:n_x) {
     target += lognormal_lupdf(x[j] | log_n[ind[j]][sec[j], prim[j]], sigma[3]);
