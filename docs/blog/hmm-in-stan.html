@@ -342,8 +342,8 @@ thin = 1: p, phi
 RW sampler (2)
   - phi
   - p
-binary sampler (304)
-  - z[]  (304 elements)</code></pre>
+binary sampler (298)
+  - z[]  (298 elements)</code></pre>
 </div>
 </div>
 <p>Note that because we know with certainty that individuals were alive between the first and last survey they were captured, we can actually ease computation by supplying those <code>z[i, first[i]:last[i]]</code> as known. We’ll run this model to confirm that it’s able to recover our input parameters using <strong>MCMCvis</strong> <span class="citation" data-cites="youngflesh2018">(<a href="#ref-youngflesh2018" role="doc-biblioref">Youngflesh 2018</a>)</span>.</p>
@@ -373,8 +373,8 @@ binary sampler (304)
 <pre><code># A tibble: 2 × 9
   variable  mean     sd `2.5%` `50%` `97.5%`  Rhat n.eff truth
   &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1 phi      0.599 0.0402  0.517 0.600   0.672  1.01   562   0.6
-2 p        0.677 0.0609  0.549 0.680   0.789  1.02   341   0.7</code></pre>
+1 phi      0.658 0.0409  0.579 0.657   0.745  1.01   510   0.6
+2 p        0.592 0.0586  0.470 0.593   0.701  1.02   431   0.7</code></pre>
 </div>
 </div>
 <p>As flexible as Bayesian software like BUGS and JAGS are, most of them do not use Hamiltonian Monte Carlo <span class="citation" data-cites="neal1994">(HMC, <a href="#ref-neal1994" role="doc-biblioref">Neal 1994</a>)</span> to generate samples from the posterior distribution, but see <a href="https://cran.r-project.org/web/packages/nimbleHMC/index.html"><strong>nimbleHMC</strong></a> for a recent implementation in NIMBLE. Without <a href="https://www.youtube.com/watch?v=jUSZboSq1zg">going into detail</a> myself, HMC is generally considered a superior algorithm and moreover gives warnings when something goes wrong in the sampling, alerting the user to potential issues in the estimation. As a result, HMC should generally be preferred by practitioners but it has one trait that can be challenging to ecologists in particular: HMC requires that all parameters are continuous, meaning that our typical state-space formulations of HMMs cannot be fit with HMC due to the presence of latent discrete parameters like our ecological states <code>z[i, t]</code> above. The remainder of this post will focus on dealing with fitting complex ecological models using <a href="https://mc-stan.org/">Stan</a> <span class="citation" data-cites="carpenter2017">(<a href="#ref-carpenter2017" role="doc-biblioref">Carpenter et al. 2017</a>)</span>, a probabilistic programming language which implements a state-of-the-art No U-Turn Sampler <span class="citation" data-cites="hoffman2014">(NUTS, <a href="#ref-hoffman2014" role="doc-biblioref">Hoﬀman and Gelman 2014</a>)</span>. I present a unified approach that is applicable to simple and complex models alike, highlighted with three examples of increasing complexity.</p>
@@ -807,14 +807,14 @@ binary sampler (304)
 <div class="cell-output cell-output-stdout">
 <pre><code>Running MCMC with 4 parallel chains...
 
-Chain 3 finished in 2.0 seconds.
-Chain 1 finished in 2.2 seconds.
+Chain 1 finished in 2.1 seconds.
+Chain 3 finished in 2.2 seconds.
 Chain 4 finished in 2.2 seconds.
-Chain 2 finished in 2.3 seconds.
+Chain 2 finished in 2.4 seconds.
 
 All 4 chains finished successfully.
 Mean chain execution time: 2.2 seconds.
-Total execution time: 2.4 seconds.</code></pre>
+Total execution time: 2.5 seconds.</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
@@ -829,8 +829,8 @@ Total execution time: 2.4 seconds.</code></pre>
 <pre><code># A tibble: 2 × 8
   variable median    q5   q95 ess_bulk ess_tail ess_nimble truth
   &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;
-1 phi       0.601 0.534 0.671    2330.    2449.        562   0.6
-2 p         0.675 0.572 0.772    2210.    2630.        341   0.7</code></pre>
+1 phi       0.660 0.592 0.730    2135.    2060.        510   0.6
+2 p         0.590 0.488 0.686    1947.    1959.        431   0.7</code></pre>
 </div>
 </div>
 <p>And just to confirm, we check if the Viterbi algorithm was able to closely recover the latent alive states.</p>
@@ -854,7 +854,7 @@ Total execution time: 2.4 seconds.</code></pre>
 <span id="cb13-15"><a href="#cb13-15"></a><span class="fu">sum</span>(correct) <span class="sc">/</span> <span class="fu">sum</span>(n_unknown)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.934</code></pre>
+<pre><code>[1] 0.933</code></pre>
 </div>
 </div>
 </section>
@@ -985,16 +985,16 @@ Ecology occurs in continuous time
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
- [1,]    3    1    1    1    3    1    2    1    2     3
- [2,]    3    3    3    3    3    3    2    3    2     2
- [3,]    3    3    3    3    2    2    1    2    3     3
- [4,]    3    2    2    1    1    1    1    3    3     2
- [5,]    1    3    3    3    3    2    2    2    2     1
- [6,]    3    1    1    1    1    1    2    2    2     3
- [7,]    1    2    2    3    2    2    1    1    1     2
- [8,]    1    1    1    1    1    3    3    3    3     3
- [9,]    1    3    3    3    3    3    3    3    3     2
-[10,]    2    2    1    1    1    1    3    3    3     3</code></pre>
+ [1,]    2    2    2    2    2    2    3    3    2     3
+ [2,]    2    1    1    3    3    3    1    1    1     1
+ [3,]    3    1    1    2    2    2    3    3    3     3
+ [4,]    2    1    3    3    1    1    3    3    1     2
+ [5,]    3    3    3    3    3    3    3    3    1     1
+ [6,]    2    2    1    1    1    1    1    1    1     3
+ [7,]    3    3    3    2    2    2    2    2    2     2
+ [8,]    3    3    1    1    2    2    1    3    2     3
+ [9,]    3    2    1    1    1    1    2    2    1     1
+[10,]    3    3    1    1    3    3    3    3    3     3</code></pre>
 </div>
 </div>
 </section>
@@ -1337,7 +1337,7 @@ Indexing
 <span id="cb22-243"><a href="#cb22-243"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>We’ll run Stan and visually summarise the parameter estimates, with the input plotted alongside in green. It looks like we did alright, but there is a lot of uncertainty, probably because sites can move between 3 states between each year. Often the initial state parameters are difficult to estimate and are sometimes best parameterised as the steady state vector of the TPM. I haven’t quite worked out how to implement this efficiently in Stan.</p>
+<p>We’ll run Stan and visually summarise the parameter estimates, with the input plotted alongside in green. It looks like we did alright, but there is a lot of uncertainty, largely because sites can move between 3 states between each year. For this reason, dynamic occupancy models are notoriously data-hungry. Often the initial state parameters are particularly difficult to estimate and are sometimes best parameterised as the steady state vector of the TPM. I haven’t quite worked out how to implement this efficiently in Stan.</p>
 <div class="cell" data-fig.asp="1">
 <details open="">
 <summary>Code</summary>
@@ -1354,14 +1354,14 @@ Indexing
 <div class="cell-output cell-output-stdout">
 <pre><code>Running MCMC with 4 parallel chains...
 
-Chain 2 finished in 179.2 seconds.
-Chain 1 finished in 181.2 seconds.
-Chain 3 finished in 182.3 seconds.
-Chain 4 finished in 204.0 seconds.
+Chain 1 finished in 163.0 seconds.
+Chain 3 finished in 163.2 seconds.
+Chain 4 finished in 174.8 seconds.
+Chain 2 finished in 182.0 seconds.
 
 All 4 chains finished successfully.
-Mean chain execution time: 186.7 seconds.
-Total execution time: 204.2 seconds.</code></pre>
+Mean chain execution time: 170.7 seconds.
+Total execution time: 182.1 seconds.</code></pre>
 </div>
 </div>
 </section>
@@ -1393,7 +1393,7 @@ Total execution time: 204.2 seconds.</code></pre>
 <p><img src="hmm-in-stan_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>Let’s also check how many of our ecological ecological states were correctly recovered. Since only state 3 (snakes present and breeding) can be directly observed with certainty, we’ll only check the ecological states for those times where no breeding was observed. It looks like the model did alright, but note that dynamic multistate occupancy models are notoriously data-hungry.</p>
+<p>Let’s also check how many of our ecological ecological states were correctly recovered. Since only state 3 (snakes present and breeding) can be directly observed with certainty, we’ll only check the ecological states for those times where no breeding was observed. We certainly didn’t do as well as in the mark-recapture example, which isn’t too surprising with a small number of individuals and the complexity of the model.</p>
 <div class="cell">
 <details open="">
 <summary>Code</summary>
@@ -1410,7 +1410,7 @@ Total execution time: 204.2 seconds.</code></pre>
 <span id="cb26-11"><a href="#cb26-11"></a><span class="fu">sum</span>((z_est <span class="sc">==</span> z)[unknowns]) <span class="sc">/</span> <span class="fu">sum</span>(unknowns)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.676</code></pre>
+<pre><code>[1] 0.721</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -1493,9 +1493,9 @@ Steady state distribution
 <p>This model took me a <em>lot</em> of time to get going in Stan, but I got there in the end. I won’t go into detail about explaining everything, but I’ll mention a few key things here:</p>
 <ul>
 <li>I implemented this model with threading (within-chain parallelisation), where the work from the different HMC chains gets partitioned across (potentially) all of the cores on your computer. With this particular individual-level likelihood, this should have considerable speed benefits. Basically, I put as much of the <code>model</code> block inside the <code>partial_sum_lpmf()</code> function which then gets called by <code>reduce_sum()</code>. See the <a href="https://mc-stan.org/docs/stan-users-guide/parallelization.html">Stan User’s Guide</a> for more information. In this example, a lot of things could have been pre-computed instead of within each individual loop, but the current formulation is ready more more individual-level complexity.</li>
-<li>One thing I got hung up on for a while was how the observation and diagnostic processes should be coded. The trick is to start with the diagnostic process, that is, the lowest level of the hierarchy that is directly conditioned on the data (as we have been doing). For each secondary survey <span class="math inline">\(k\)</span> in primary <span class="math inline">\(t\)</span> that an individual was captured (using the indicator <code>q</code> created in the <code>transformed data</code> block), you sum the diagnostic probability vectors associated with the observed data (diagnostic states) for each possible (partially latent) observed state. Because these probabilities differ for each observed state, we need another object to hold the intermediate quantities, which I’ve called <code>omega</code>. The diagnostic log probability vectors are then (log) matrix multiplied with the observation (log) TPM. If the frog was not captured during that secondary, <code>lmps</code> is simply incremented with the observation TPM probababilities associated with not being detected. From here, <code>lmps</code> is incremented with the ecological process as in the previous examples.</li>
+<li>One thing I got hung up on for a while was how the observation and diagnostic processes should be coded. The trick is to start with the diagnostic process, that is, the lowest level of the hierarchy that is directly conditioned on the data (as we have been doing). For each secondary survey <span class="math inline">\(k\)</span> in primary <span class="math inline">\(t\)</span> that an individual was captured (using the indicator <code>q</code> created in the <code>transformed data</code> block), you sum the diagnostic probability vectors associated with the observed data (diagnostic states) for each possible (partially latent) observed state. Because these probabilities differ for each observed state, we need another object to hold the intermediate quantities, which I’ve called <code>omega</code>. The diagnostic log probability vectors are then (log) matrix multiplied with the observation (log) TPM. If the frog was not captured during that secondary, <code>lmps</code> is simply incremented with the observation TPM probabilities associated with not being detected. From here, <code>lmps</code> is incremented with the ecological process as in the previous examples.</li>
 <li>Because we only use the rows of the observation and diagnostic TPMs that are associated with alive and observed frogs, respectively, I don’t write out the full TPMs in the code.</li>
-<li>Stan has some <a href="https://github.com/stan-dev/math/issues/2494">issue</a> related to evaluating the gradient of <code>0 * log(0)</code>. I don’t know what that means exactly, but I know I was having errors with the model unless I formulated the model in a particular way (I <em>think</em> that’s why I had to subset <span class="math inline">\(\mathrm{TPM}_z\)</span> (<code>ltpm_z</code>) to not include the dead state, but I’m not sure). Specifically, as in Example 3, I only increment <code>lmps</code> with the alive states until the last primary of capture. After that occasion, the dead state is incremented for the first time. For sebsequent occasions, the dead state is incremented separately from the alive states. In the <code>generated quantities</code> for the Viterbi algorithm, I do need the full <code>ltpm_z</code>, as I’m interested in propagating the probabilities of the dead state.</li>
+<li>Stan has some <a href="https://github.com/stan-dev/math/issues/2494">issue</a> related to evaluating the gradient of <code>0 * log(0)</code>. I don’t know what that means exactly, but I know I was having errors with the model unless I formulated the model in a particular way (I <em>think</em> that’s why I had to subset <span class="math inline">\(\mathrm{TPM}_z\)</span> (<code>ltpm_z</code>) to not include the dead state, but I’m not sure). Specifically, as in Example 3, I only increment <code>lmps</code> with the alive states until the last primary of capture. After that occasion, the dead state is incremented for the first time. For subsequent occasions, the dead state is incremented separately from the alive states. In the <code>generated quantities</code> for the Viterbi algorithm, I do need the full <code>ltpm_z</code>, as I’m interested in propagating the probabilities of the dead state.</li>
 <li>The inclusion of false positives means the observation and diagnostic processes are examples of finite mixtures that may have multimodality in certain model constructions <span class="citation" data-cites="royle2006">(<a href="#ref-royle2006" role="doc-biblioref">Royle and Link 2006</a>)</span>. Here, the true pathogen detection probabilities <span class="math inline">\(\delta\)</span> are modeled as a function of infection intensity, which <em>may</em> be enough to avoid the multimodality. Just to be sure, however, I’ve constrained <span class="math inline">\(\lambda_{1:2}\)</span> to be less than <span class="math inline">\(r_{1:2}\)</span> in the program and further given fairly strong <span class="math inline">\(\mathrm{Beta} (1, 10)\)</span> priors for <span class="math inline">\(\lambda\)</span>.</li>
 <li>The individual infection intensities <code>m[i, t]</code> are parameterised as centered lognormal distribution and the sample infection intensities <code>n[i, t, k]</code> as non-centered lognormal, as this seemed to give the best HMC performance.</li>
 </ul>
@@ -1638,7 +1638,7 @@ Steady state distribution
 <span id="cb29-2"><a href="#cb29-2"></a>  <span class="co">/**</span></span>
 <span id="cb29-3"><a href="#cb29-3"></a><span class="co">   * Return partial sum over individuals applying the forward algorithm for multievent mark-recapture model formulated as hidden Markov model</span></span>
 <span id="cb29-4"><a href="#cb29-4"></a><span class="co">   *</span></span>
-<span id="cb29-5"><a href="#cb29-5"></a><span class="co">   * @param seq_ind    Sequence of individuals lambdaom 1 to n_ind</span></span>
+<span id="cb29-5"><a href="#cb29-5"></a><span class="co">   * @param seq_ind    Sequence of individuals from 1 to n_ind</span></span>
 <span id="cb29-6"><a href="#cb29-6"></a><span class="co">   * @param start      Start of seq_ind for partial sum</span></span>
 <span id="cb29-7"><a href="#cb29-7"></a><span class="co">   * @param end        End of seq_ind for partial sum</span></span>
 <span id="cb29-8"><a href="#cb29-8"></a><span class="co">   * @param y          Detection history</span></span>
@@ -1913,7 +1913,7 @@ Steady state distribution
 <span id="cb29-277"><a href="#cb29-277"></a>    log_n[i] = rep_matrix(log_m[i], n_sec) + n_z[i] * sigma[<span class="dv">2</span>];</span>
 <span id="cb29-278"><a href="#cb29-278"></a>  }</span>
 <span id="cb29-279"><a href="#cb29-279"></a>  </span>
-<span id="cb29-280"><a href="#cb29-280"></a>  <span class="co">// likehood of diagnostic infection intensities</span></span>
+<span id="cb29-280"><a href="#cb29-280"></a>  <span class="co">// likelihood of diagnostic infection intensities</span></span>
 <span id="cb29-281"><a href="#cb29-281"></a>  <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span>:n_x) {</span>
 <span id="cb29-282"><a href="#cb29-282"></a>    <span class="kw">target +=</span> lognormal_lupdf(x[j] | log_n[ind[j]][sec[j], prim[j]], sigma[<span class="dv">3</span>]);</span>
 <span id="cb29-283"><a href="#cb29-283"></a>  }</span>
@@ -2099,12 +2099,12 @@ Steady state distribution
 <div class="cell-output cell-output-stdout">
 <pre><code>Running MCMC with 2 parallel chains...
 
-Chain 1 finished in 543.6 seconds.
-Chain 2 finished in 627.5 seconds.
+Chain 2 finished in 616.6 seconds.
+Chain 1 finished in 620.4 seconds.
 
 Both chains finished successfully.
-Mean chain execution time: 585.6 seconds.
-Total execution time: 627.7 seconds.</code></pre>
+Mean chain execution time: 618.5 seconds.
+Total execution time: 620.6 seconds.</code></pre>
 </div>
 </div>
 </section>
@@ -2158,36 +2158,43 @@ Total execution time: 627.7 seconds.</code></pre>
 <span id="cb33-4"><a href="#cb33-4"></a><span class="fu">sum</span>(z_est <span class="sc">==</span> z, <span class="at">na.rm =</span> T) <span class="sc">/</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(z))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.935</code></pre>
+<pre><code>[1] 0.917</code></pre>
 </div>
 </div>
-<p>One of the main reasons to account for imperfect pathogen detection is to get more realistic estimates of infection prevalence in the population. We can use the full posterior distribution of the latent ecological states from the Viterbi algorithm to estimate the infection prevalence per primary occasion, which here was simulated to be increasing due to dropping temperatures.</p>
+<p>One of the main reasons to account for imperfect pathogen detection is to get more realistic estimates of infection prevalence in the population. We can use the full posterior distribution of the latent ecological states from the Viterbi algorithm to estimate the infection prevalence per primary occasion, which here was simulated to be increasing due to dropping temperatures going into Austral winter plotted for some fictional dates to show the unequal primary occasion intervals.</p>
 <div class="cell" data-fig.asp="0.618">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>fit_goat<span class="sc">$</span><span class="fu">draws</span>(<span class="st">"z"</span>, <span class="at">format =</span> <span class="st">"draws_df"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb35-2"><a href="#cb35-2"></a>  <span class="fu">pivot_longer</span>(<span class="fu">contains</span>(<span class="st">"z"</span>), <span class="at">values_to =</span> <span class="st">"z"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb35-3"><a href="#cb35-3"></a>  <span class="fu">mutate</span>(<span class="at">z =</span> <span class="fu">if_else</span>(z <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="cn">NA</span>, z),</span>
-<span id="cb35-4"><a href="#cb35-4"></a>         <span class="at">ind =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>n_ind, <span class="fu">n</span>() <span class="sc">/</span> n_ind) <span class="sc">|&gt;</span> <span class="fu">factor</span>(),</span>
-<span id="cb35-5"><a href="#cb35-5"></a>         <span class="at">prim =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>n_prim, <span class="at">each =</span> n_ind) <span class="sc">|&gt;</span> <span class="fu">rep</span>(<span class="fu">n</span>() <span class="sc">/</span> n_ind <span class="sc">/</span> n_prim) <span class="sc">|&gt;</span> <span class="fu">factor</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb35-6"><a href="#cb35-6"></a>  <span class="fu">mutate</span>(<span class="at">alive =</span> <span class="fu">sum</span>(z <span class="sc">&lt;</span> <span class="dv">3</span> <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(z), <span class="at">na.rm =</span> T),</span>
-<span id="cb35-7"><a href="#cb35-7"></a>         <span class="at">infected =</span> <span class="fu">sum</span>(z <span class="sc">==</span> <span class="dv">2</span> <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(z)),</span>
-<span id="cb35-8"><a href="#cb35-8"></a>         <span class="at">prevalence =</span> infected <span class="sc">/</span> alive,</span>
-<span id="cb35-9"><a href="#cb35-9"></a>         <span class="at">.by =</span> <span class="fu">c</span>(.draw, prim)) <span class="sc">|&gt;</span></span>
-<span id="cb35-10"><a href="#cb35-10"></a>  <span class="fu">mutate</span>(<span class="at">prevalence =</span> infected <span class="sc">/</span> alive) <span class="sc">|&gt;</span></span>
-<span id="cb35-11"><a href="#cb35-11"></a>  <span class="fu">summarise</span>(<span class="at">median =</span> <span class="fu">median</span>(prevalence),</span>
-<span id="cb35-12"><a href="#cb35-12"></a>            <span class="at">q5 =</span> <span class="fu">quantile</span>(prevalence, <span class="fl">0.05</span>),</span>
-<span id="cb35-13"><a href="#cb35-13"></a>            <span class="at">q95 =</span> <span class="fu">quantile</span>(prevalence, <span class="fl">0.95</span>),</span>
-<span id="cb35-14"><a href="#cb35-14"></a>            <span class="at">.by =</span> prim) <span class="sc">|&gt;</span></span>
-<span id="cb35-15"><a href="#cb35-15"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(prim, median)) <span class="sc">+</span></span>
-<span id="cb35-16"><a href="#cb35-16"></a>  <span class="fu">geom_pointrange</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> q5, <span class="at">ymax =</span> q95), <span class="at">position =</span> <span class="fu">position_nudge</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">10</span>)) <span class="sc">+</span></span>
-<span id="cb35-17"><a href="#cb35-17"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> infected <span class="sc">/</span> alive),</span>
-<span id="cb35-18"><a href="#cb35-18"></a>             <span class="at">data =</span> <span class="fu">tibble</span>(<span class="at">prim =</span> <span class="fu">factor</span>(<span class="dv">1</span><span class="sc">:</span>n_prim),</span>
-<span id="cb35-19"><a href="#cb35-19"></a>                           <span class="at">alive =</span> <span class="fu">apply</span>(z, <span class="dv">2</span>, \(z) <span class="fu">sum</span>(z <span class="sc">&lt;</span> <span class="dv">3</span> <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(z))),</span>
-<span id="cb35-20"><a href="#cb35-20"></a>                           <span class="at">infected =</span> <span class="fu">apply</span>(z, <span class="dv">2</span>, \(z) <span class="fu">sum</span>(z <span class="sc">==</span> <span class="dv">2</span> <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(z)))),</span>
-<span id="cb35-21"><a href="#cb35-21"></a>             <span class="at">colour =</span> green, <span class="at">position =</span> <span class="fu">position_nudge</span>(<span class="at">x =</span> <span class="sc">-</span><span class="dv">1</span><span class="sc">/</span><span class="dv">10</span>)) <span class="sc">+</span></span>
-<span id="cb35-22"><a href="#cb35-22"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fl">0.2</span>, <span class="dv">1</span>, <span class="fl">0.2</span>), <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">1.001</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb35-23"><a href="#cb35-23"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Primary Occasion"</span>, <span class="at">y =</span> <span class="st">"Infection Prevalence"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="co"># dates</span></span>
+<span id="cb35-2"><a href="#cb35-2"></a>start <span class="ot">&lt;-</span> <span class="fu">ymd</span>(<span class="st">"2020-12-01"</span>)</span>
+<span id="cb35-3"><a href="#cb35-3"></a>time_unit <span class="ot">&lt;-</span> <span class="dv">21</span></span>
+<span id="cb35-4"><a href="#cb35-4"></a>dates <span class="ot">&lt;-</span> <span class="fu">seq.Date</span>(start, start <span class="sc">+</span> <span class="fu">days</span>(<span class="dv">1</span> <span class="sc">+</span> <span class="fu">round</span>(<span class="fu">sum</span>(tau) <span class="sc">*</span> time_unit)), <span class="at">by =</span> <span class="dv">1</span>)</span>
+<span id="cb35-5"><a href="#cb35-5"></a>prim <span class="ot">&lt;-</span> dates[<span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>(n_prim <span class="sc">-</span> <span class="dv">1</span>), \(t) <span class="fu">round</span>(<span class="fu">sum</span>(tau[<span class="dv">1</span><span class="sc">:</span>t] <span class="sc">*</span> time_unit))))]</span>
+<span id="cb35-6"><a href="#cb35-6"></a></span>
+<span id="cb35-7"><a href="#cb35-7"></a><span class="co"># plot</span></span>
+<span id="cb35-8"><a href="#cb35-8"></a>fit_goat<span class="sc">$</span><span class="fu">draws</span>(<span class="st">"z"</span>, <span class="at">format =</span> <span class="st">"draws_df"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb35-9"><a href="#cb35-9"></a>  <span class="fu">pivot_longer</span>(<span class="fu">contains</span>(<span class="st">"z"</span>), <span class="at">values_to =</span> <span class="st">"z"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb35-10"><a href="#cb35-10"></a>  <span class="fu">mutate</span>(<span class="at">z =</span> <span class="fu">if_else</span>(z <span class="sc">&lt;</span> <span class="dv">1</span>, <span class="cn">NA</span>, z),</span>
+<span id="cb35-11"><a href="#cb35-11"></a>         <span class="at">ind =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>n_ind, <span class="fu">n</span>() <span class="sc">/</span> n_ind) <span class="sc">|&gt;</span> <span class="fu">factor</span>(),</span>
+<span id="cb35-12"><a href="#cb35-12"></a>         <span class="at">prim =</span> <span class="fu">rep</span>(prim, <span class="at">each =</span> n_ind) <span class="sc">|&gt;</span> <span class="fu">rep</span>(<span class="fu">n</span>() <span class="sc">/</span> n_ind <span class="sc">/</span> n_prim)) <span class="sc">|&gt;</span></span>
+<span id="cb35-13"><a href="#cb35-13"></a>  <span class="fu">mutate</span>(<span class="at">alive =</span> <span class="fu">sum</span>(z <span class="sc">==</span> <span class="dv">1</span> <span class="sc">|</span> z <span class="sc">==</span> <span class="dv">2</span>, <span class="at">na.rm =</span> T),</span>
+<span id="cb35-14"><a href="#cb35-14"></a>         <span class="at">infected =</span> <span class="fu">sum</span>(z <span class="sc">==</span> <span class="dv">2</span>, <span class="at">na.rm =</span> T),</span>
+<span id="cb35-15"><a href="#cb35-15"></a>         <span class="at">prevalence =</span> infected <span class="sc">/</span> alive,</span>
+<span id="cb35-16"><a href="#cb35-16"></a>         <span class="at">.by =</span> <span class="fu">c</span>(.draw, prim)) <span class="sc">|&gt;</span></span>
+<span id="cb35-17"><a href="#cb35-17"></a>  <span class="fu">mutate</span>(<span class="at">prevalence =</span> infected <span class="sc">/</span> alive) <span class="sc">|&gt;</span></span>
+<span id="cb35-18"><a href="#cb35-18"></a>  <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(prevalence),</span>
+<span id="cb35-19"><a href="#cb35-19"></a>            <span class="at">q5 =</span> <span class="fu">quantile</span>(prevalence, <span class="fl">0.05</span>),</span>
+<span id="cb35-20"><a href="#cb35-20"></a>            <span class="at">q95 =</span> <span class="fu">quantile</span>(prevalence, <span class="fl">0.95</span>),</span>
+<span id="cb35-21"><a href="#cb35-21"></a>            <span class="at">.by =</span> prim) <span class="sc">|&gt;</span></span>
+<span id="cb35-22"><a href="#cb35-22"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(prim, mean)) <span class="sc">+</span></span>
+<span id="cb35-23"><a href="#cb35-23"></a>  <span class="fu">geom_pointrange</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> q5, <span class="at">ymax =</span> q95), <span class="at">position =</span> <span class="fu">position_nudge</span>(<span class="at">x =</span> <span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb35-24"><a href="#cb35-24"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> infected <span class="sc">/</span> alive),</span>
+<span id="cb35-25"><a href="#cb35-25"></a>             <span class="at">data =</span> <span class="fu">tibble</span>(<span class="at">prim =</span> prim,</span>
+<span id="cb35-26"><a href="#cb35-26"></a>                           <span class="at">alive =</span> <span class="fu">apply</span>(z, <span class="dv">2</span>, \(z) <span class="fu">sum</span>(z <span class="sc">==</span> <span class="dv">1</span> <span class="sc">|</span> z <span class="sc">==</span> <span class="dv">2</span>, <span class="at">na.rm =</span> T)),</span>
+<span id="cb35-27"><a href="#cb35-27"></a>                           <span class="at">infected =</span> <span class="fu">apply</span>(z, <span class="dv">2</span>, \(z) <span class="fu">sum</span>(z <span class="sc">==</span> <span class="dv">2</span>, <span class="at">na.rm =</span> T))),</span>
+<span id="cb35-28"><a href="#cb35-28"></a>             <span class="at">colour =</span> green, <span class="at">position =</span> <span class="fu">position_nudge</span>(<span class="at">x =</span> <span class="sc">-</span><span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb35-29"><a href="#cb35-29"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fl">0.2</span>, <span class="dv">1</span>, <span class="fl">0.2</span>), <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">1.001</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb35-30"><a href="#cb35-30"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Primary Occasion"</span>, <span class="at">y =</span> <span class="st">"Infection Prevalence"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="hmm-in-stan_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>

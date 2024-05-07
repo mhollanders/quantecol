@@ -1013,7 +1013,7 @@ generated quantities {
 }
 ```
   
-We'll run Stan and visually summarise the parameter estimates, with the input plotted alongside in green. It looks like we did alright, but there is a lot of uncertainty, probably because sites can move between 3 states between each year. Often the initial state parameters are difficult to estimate and are sometimes best parameterised as the steady state vector of the TPM. I haven't quite worked out how to implement this efficiently in Stan. 
+We'll run Stan and visually summarise the parameter estimates, with the input plotted alongside in green. It looks like we did alright, but there is a lot of uncertainty, largely because sites can move between 3 states between each year. For this reason, dynamic occupancy models are notoriously data-hungry. Often the initial state parameters are particularly difficult to estimate and are sometimes best parameterised as the steady state vector of the TPM. I haven't quite worked out how to implement this efficiently in Stan. 
 
 ```{r}
 #| fig-asp: 1
@@ -1055,7 +1055,7 @@ fit_dyn$summary(c("eta", "gamma", "epsilon", "psi", "p", "delta")) |>
   labs(x = "Posterior", y = "Parameter")
 ```
 
-Let's also check how many of our ecological ecological states were correctly recovered. Since only state 3 (snakes present and breeding) can be directly observed with certainty, we'll only check the ecological states for those times where no breeding was observed. It looks like the model did alright, but note that dynamic multistate occupancy models are notoriously data-hungry.
+Let's also check how many of our ecological ecological states were correctly recovered. Since only state 3 (snakes present and breeding) can be directly observed with certainty, we'll only check the ecological states for those times where no breeding was observed. We certainly didn't do as well as in the mark-recapture example, which isn't too surprising with a small number of individuals and the complexity of the model.
 
 ```{r}
 # maximum observed state
@@ -1152,9 +1152,9 @@ Dr. Andy Royle and myself published this model in Methods in Ecology and Evoluti
 This model took me a *lot* of time to get going in Stan, but I got there in the end. I won't go into detail about explaining everything, but I'll mention a few key things here:
 
   -   I implemented this model with threading (within-chain parallelisation), where the work from the different HMC chains gets partitioned across (potentially) all of the cores on your computer. With this particular individual-level likelihood, this should have considerable speed benefits. Basically, I put as much of the `model` block inside the `partial_sum_lpmf()` function which then gets called by `reduce_sum()`. See the [Stan User's Guide](https://mc-stan.org/docs/stan-users-guide/parallelization.html) for more information. In this example, a lot of things could have been pre-computed instead of within each individual loop, but the current formulation is ready more more individual-level complexity.
-  -   One thing I got hung up on for a while was how the observation and diagnostic processes should be coded. The trick is to start with the diagnostic process, that is, the lowest level of the hierarchy that is directly conditioned on the data (as we have been doing). For each secondary survey $k$ in primary $t$ that an individual was captured (using the indicator `q` created in the `transformed data` block), you sum the diagnostic probability vectors associated with the observed data (diagnostic states) for each possible (partially latent) observed state. Because these probabilities differ for each observed state, we need another object to hold the intermediate quantities, which I've called `omega`. The diagnostic log probability vectors are then (log) matrix multiplied with the observation (log) TPM. If the frog was not captured during that secondary, `lmps` is simply incremented with the observation TPM probababilities associated with not being detected. From here, `lmps` is incremented with the ecological process as in the previous examples.
+  -   One thing I got hung up on for a while was how the observation and diagnostic processes should be coded. The trick is to start with the diagnostic process, that is, the lowest level of the hierarchy that is directly conditioned on the data (as we have been doing). For each secondary survey $k$ in primary $t$ that an individual was captured (using the indicator `q` created in the `transformed data` block), you sum the diagnostic probability vectors associated with the observed data (diagnostic states) for each possible (partially latent) observed state. Because these probabilities differ for each observed state, we need another object to hold the intermediate quantities, which I've called `omega`. The diagnostic log probability vectors are then (log) matrix multiplied with the observation (log) TPM. If the frog was not captured during that secondary, `lmps` is simply incremented with the observation TPM probabilities associated with not being detected. From here, `lmps` is incremented with the ecological process as in the previous examples.
   -   Because we only use the rows of the observation and diagnostic TPMs that are associated with alive and observed frogs, respectively, I don't write out the full TPMs in the code.
-  -   Stan has some [issue](https://github.com/stan-dev/math/issues/2494) related to evaluating the gradient of `0 * log(0)`. I don't know what that means exactly, but I know I was having errors with the model unless I formulated the model in a particular way (I *think* that's why I had to subset $\mathrm{TPM}_z$ (`ltpm_z`) to not include the dead state, but I'm not sure). Specifically, as in Example 3, I only increment `lmps` with the alive states until the last primary of capture. After that occasion, the dead state is incremented for the first time. For sebsequent occasions, the dead state is incremented separately from the alive states. In the `generated quantities` for the Viterbi algorithm, I do need the full `ltpm_z`, as I'm interested in propagating the probabilities of the dead state. 
+  -   Stan has some [issue](https://github.com/stan-dev/math/issues/2494) related to evaluating the gradient of `0 * log(0)`. I don't know what that means exactly, but I know I was having errors with the model unless I formulated the model in a particular way (I *think* that's why I had to subset $\mathrm{TPM}_z$ (`ltpm_z`) to not include the dead state, but I'm not sure). Specifically, as in Example 3, I only increment `lmps` with the alive states until the last primary of capture. After that occasion, the dead state is incremented for the first time. For subsequent occasions, the dead state is incremented separately from the alive states. In the `generated quantities` for the Viterbi algorithm, I do need the full `ltpm_z`, as I'm interested in propagating the probabilities of the dead state. 
   -   The inclusion of false positives means the observation and diagnostic processes are examples of finite mixtures that may have multimodality in certain model constructions [@royle2006]. Here, the true pathogen detection probabilities $\delta$ are modeled as a function of infection intensity, which *may* be enough to avoid the multimodality. Just to be sure, however, I've constrained $\lambda_{1:2}$ to be less than $r_{1:2}$ in the program and further given fairly strong $\mathrm{Beta} (1, 10)$ priors for $\lambda$.
   -   The individual infection intensities `m[i, t]` are parameterised as centered lognormal distribution and the sample infection intensities `n[i, t, k]` as non-centered lognormal, as this seemed to give the best HMC performance.
   
@@ -1294,7 +1294,7 @@ functions {
   /**
    * Return partial sum over individuals applying the forward algorithm for multievent mark-recapture model formulated as hidden Markov model
    *
-   * @param seq_ind    Sequence of individuals lambdaom 1 to n_ind
+   * @param seq_ind    Sequence of individuals from 1 to n_ind
    * @param start      Start of seq_ind for partial sum
    * @param end        End of seq_ind for partial sum
    * @param y          Detection history
@@ -1569,7 +1569,7 @@ model {
     log_n[i] = rep_matrix(log_m[i], n_sec) + n_z[i] * sigma[2];
   }
   
-  // likehood of diagnostic infection intensities
+  // likelihood of diagnostic infection intensities
   for (j in 1:n_x) {
     target += lognormal_lupdf(x[j] | log_n[ind[j]][sec[j], prim[j]], sigma[3]);
   }
@@ -1799,36 +1799,42 @@ z_est <- fit_goat$summary("z")$median |>
 sum(z_est == z, na.rm = T) / sum(!is.na(z))
 ```
 
-One of the main reasons to account for imperfect pathogen detection is to get more realistic estimates of infection prevalence in the population. We can use the full posterior distribution of the latent ecological states from the Viterbi algorithm to estimate the infection prevalence per primary occasion, which here was simulated to be increasing due to dropping temperatures.
+One of the main reasons to account for imperfect pathogen detection is to get more realistic estimates of infection prevalence in the population. We can use the full posterior distribution of the latent ecological states from the Viterbi algorithm to estimate the infection prevalence per primary occasion, which here was simulated to be increasing due to dropping temperatures going into Austral winter plotted for some fictional dates to show the unequal primary occasion intervals.
 
 ```{r}
 #| code-fold: true
 #| fig-asp: 0.618
 
+# dates
+start <- ymd("2020-12-01")
+time_unit <- 21
+dates <- seq.Date(start, start + days(1 + round(sum(tau) * time_unit)), by = 1)
+prim <- dates[c(1, sapply(1:(n_prim - 1), \(t) round(sum(tau[1:t] * time_unit))))]
+
+# plot
 fit_goat$draws("z", format = "draws_df") |>
   pivot_longer(contains("z"), values_to = "z") |>
   mutate(z = if_else(z < 1, NA, z),
          ind = rep(1:n_ind, n() / n_ind) |> factor(),
-         prim = rep(1:n_prim, each = n_ind) |> rep(n() / n_ind / n_prim) |> factor()) |>
-  mutate(alive = sum(z < 3 & !is.na(z), na.rm = T),
-         infected = sum(z == 2 & !is.na(z)),
+         prim = rep(prim, each = n_ind) |> rep(n() / n_ind / n_prim)) |>
+  mutate(alive = sum(z == 1 | z == 2, na.rm = T),
+         infected = sum(z == 2, na.rm = T),
          prevalence = infected / alive,
          .by = c(.draw, prim)) |>
   mutate(prevalence = infected / alive) |>
-  summarise(median = median(prevalence),
+  summarise(mean = mean(prevalence),
             q5 = quantile(prevalence, 0.05),
             q95 = quantile(prevalence, 0.95),
             .by = prim) |>
-  ggplot(aes(prim, median)) +
-  geom_pointrange(aes(ymin = q5, ymax = q95), position = position_nudge(x = 1/10)) +
+  ggplot(aes(prim, mean)) +
+  geom_pointrange(aes(ymin = q5, ymax = q95), position = position_nudge(x = 2)) +
   geom_point(aes(y = infected / alive),
-             data = tibble(prim = factor(1:n_prim),
-                           alive = apply(z, 2, \(z) sum(z < 3 & !is.na(z))),
-                           infected = apply(z, 2, \(z) sum(z == 2 & !is.na(z)))),
-             colour = green, position = position_nudge(x = -1/10)) +
+             data = tibble(prim = prim,
+                           alive = apply(z, 2, \(z) sum(z == 1 | z == 2, na.rm = T)),
+                           infected = apply(z, 2, \(z) sum(z == 2, na.rm = T))),
+             colour = green, position = position_nudge(x = -2)) +
   scale_y_continuous(breaks = seq(0.2, 1, 0.2), limits = c(0, 1.001), expand = c(0, 0)) +
-  labs(x = "Primary Occasion", y = "Infection Prevalence") 
-
+  labs(x = "Primary Occasion", y = "Infection Prevalence")
 ```
 
 Thanks for reading if you made it this far. I hope this guide will be useful for ecologists (and others) wanting to transition to gradient-based sampling methods for complex ecological models. I'm sure I've some errors somewhere, so if someone finds any or has any questions, please don't hesitate to reach out.
