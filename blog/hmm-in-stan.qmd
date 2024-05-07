@@ -1799,7 +1799,7 @@ z_est <- fit_goat$summary("z")$median |>
 sum(z_est == z, na.rm = T) / sum(!is.na(z))
 ```
 
-One of the main reasons to account for imperfect pathogen detection is to get more realistic estimates of infection prevalence in the population. We can use the full posterior distribution of the latent ecological states from the Viterbi algorithm to estimate the infection prevalence per primary occasion, which here was simulated to be increasing due to dropping temperatures going into Austral winter plotted for some fictional dates to show the unequal primary occasion intervals.
+One of the main reasons to account for imperfect pathogen detection is to get more realistic estimates of infection prevalence in the population. We can use the full posterior distribution of the latent ecological states from the Viterbi algorithm to estimate the infection prevalence per primary occasion, which here was simulated to be increasing due to dropping temperatures going into austral winter plotted for some fictional dates to show the unequal primary occasion intervals.
 
 ```{r}
 #| code-fold: true
@@ -1821,7 +1821,6 @@ fit_goat$draws("z", format = "draws_df") |>
          infected = sum(z == 2, na.rm = T),
          prevalence = infected / alive,
          .by = c(.draw, prim)) |>
-  mutate(prevalence = infected / alive) |>
   summarise(mean = mean(prevalence),
             q5 = quantile(prevalence, 0.05),
             q95 = quantile(prevalence, 0.95),
