@@ -1,0 +1,16 @@
+---
+title: "Reintroducing Extinct in the Wild reptiles"
+pagetitle: "Quantecol - Christmas Island"
+date: 2024-05-13
+image: "../img/ci-thumbnail.png"
+description: "Trial releases of critically endangered lizards on Christmas Island."
+---
+
+[Jon-Paul Emery](https://scholar.google.com/citations?user=rdDO8HUAAAAJ&hl=en) and colleagues conducted experimental releases of the Extinct in the Wild (EW) blue-tailed skinks (*Cryptoblepharus egeriae*) and Lister's geckos (*Lepidodactylus listeri*) on Christmas Island. These endemic reptiles disappeared from the wild following the establishment of the invasive common wolf snake (*Lycodon capucinus*) on the island in the 1980s. In 2018--2019, 170 skinks and 160 geckos were released into a predator-free area after which they were monitored with robust design mark-recapture surveys for one year post-release.
+
+Quantecol got involved with the analysis of the survey data, where we built a continuous time Jolly-Seber model to estimate per-capita recruitment, mortality rates of juvenile and adult skinks and geckos, and population sizes. Blue-tailed skinks flourished with high survival and recruitment rates leading to an increasing population size. Unfortuantely, Lister's geckos did not fare so well with a steadily decreasing population size and no evidence of recruitment.
+
+The work was published today as an Open Access article in [*Animal Conservation*](https://doi.org/10.1111/acv.12940) and represents an important contribution to conservation science.
+
+[![](../img/ci.png){width="61.8%"}](https://doi.org/10.1111/acv.12940)
+

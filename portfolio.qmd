@@ -2,6 +2,7 @@
 pagetitle: "Quantecol - Portfolio"
 listing:
   contents:
+    - portfolio/christmas-island.qmd
     - portfolio/multievent.qmd
     - portfolio/fleayi-adult.qmd
     - portfolio/dmso.qmd
