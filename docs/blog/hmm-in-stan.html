@@ -342,8 +342,8 @@ thin = 1: p, phi
 RW sampler (2)
   - phi
   - p
-binary sampler (273)
-  - z[]  (273 elements)</code></pre>
+binary sampler (263)
+  - z[]  (263 elements)</code></pre>
 </div>
 </div>
 <p>Note that because we know with certainty that individuals were alive between the first and last survey they were captured, we can actually ease computation by supplying those <code>z[i, first[i]:last[i]]</code> as known. We’ll run this model to confirm that it’s able to recover our input parameters using <strong>MCMCvis</strong> <span class="citation" data-cites="youngflesh2018">(<a href="#ref-youngflesh2018" role="doc-biblioref">Youngflesh 2018</a>)</span>.</p>
@@ -373,8 +373,8 @@ binary sampler (273)
 <pre><code># A tibble: 2 × 9
   variable  mean     sd `2.5%` `50%` `97.5%`  Rhat n.eff truth
   &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1 phi      0.590 0.0442  0.503 0.592   0.673  1.01   426   0.6
-2 p        0.680 0.0660  0.547 0.681   0.799  1.02   306   0.7</code></pre>
+1 phi      0.660 0.0360  0.586 0.660   0.727  1.02   633   0.6
+2 p        0.764 0.0487  0.669 0.765   0.861  1.02   429   0.7</code></pre>
 </div>
 </div>
 <p>As flexible as Bayesian software like BUGS and JAGS are, most of them do not use Hamiltonian Monte Carlo <span class="citation" data-cites="neal1994">(HMC, <a href="#ref-neal1994" role="doc-biblioref">Neal 1994</a>)</span> to generate samples from the posterior distribution, but see <a href="https://cran.r-project.org/web/packages/nimbleHMC/index.html"><strong>nimbleHMC</strong></a> for a recent implementation in NIMBLE. Without going into detail myself (but see <span class="citation" data-cites="betancourt2018">Betancourt (<a href="#ref-betancourt2018" role="doc-biblioref">2018</a>)</span>), HMC is generally considered a superior algorithm and moreover gives warnings when something goes wrong in the sampling, alerting the user to potential issues in the estimation. As a result, HMC should generally be preferred by practitioners but it has one trait that can be challenging to ecologists in particular: HMC requires that all parameters are continuous, meaning that our typical state-space formulations of HMMs cannot be fit with HMC due to the presence of latent discrete parameters like our ecological states <code>z[i, t]</code> above. The remainder of this post will focus on dealing with fitting complex ecological models using <a href="https://mc-stan.org/">Stan</a> <span class="citation" data-cites="carpenter2017">(<a href="#ref-carpenter2017" role="doc-biblioref">Carpenter et al. 2017</a>)</span>, a probabilistic programming language which implements a <a href="https://mc-stan.org/docs/reference-manual/mcmc.html">state-of-the-art</a> No U-Turn Sampler <span class="citation" data-cites="hoffman2014">(NUTS, <a href="#ref-hoffman2014" role="doc-biblioref">Hoﬀman and Gelman 2014</a>)</span>. I present a unified approach that is applicable to simple and complex models alike, highlighted with three examples of increasing complexity.</p>
@@ -807,14 +807,14 @@ binary sampler (273)
 <div class="cell-output cell-output-stdout">
 <pre><code>Running MCMC with 4 parallel chains...
 
-Chain 1 finished in 2.0 seconds.
-Chain 2 finished in 2.0 seconds.
-Chain 3 finished in 2.0 seconds.
-Chain 4 finished in 2.1 seconds.
+Chain 1 finished in 2.3 seconds.
+Chain 2 finished in 2.5 seconds.
+Chain 3 finished in 2.5 seconds.
+Chain 4 finished in 2.4 seconds.
 
 All 4 chains finished successfully.
-Mean chain execution time: 2.0 seconds.
-Total execution time: 2.3 seconds.</code></pre>
+Mean chain execution time: 2.4 seconds.
+Total execution time: 2.6 seconds.</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
@@ -829,8 +829,8 @@ Total execution time: 2.3 seconds.</code></pre>
 <pre><code># A tibble: 2 × 8
   variable median    q5   q95 ess_bulk ess_tail ess_nimble truth
   &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;
-1 phi       0.589 0.517 0.661    2332.    2443.        426   0.6
-2 p         0.687 0.576 0.787    2197.    2403.        306   0.7</code></pre>
+1 phi       0.662 0.599 0.720    2325.    2402.        633   0.6
+2 p         0.763 0.673 0.840    2163.    2446.        429   0.7</code></pre>
 </div>
 </div>
 <p>And just to confirm, we check if the Viterbi algorithm was able to closely recover the latent alive states.</p>
@@ -854,7 +854,7 @@ Total execution time: 2.3 seconds.</code></pre>
 <span id="cb13-15"><a href="#cb13-15"></a><span class="fu">sum</span>(correct) <span class="sc">/</span> <span class="fu">sum</span>(n_unknown)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.875</code></pre>
+<pre><code>[1] 0.966</code></pre>
 </div>
 </div>
 </section>
@@ -985,16 +985,16 @@ Ecology occurs in continuous time
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
- [1,]    1    1    1    1    1    1    1    1    1     1
- [2,]    3    3    3    3    3    3    2    2    3     3
- [3,]    1    3    3    2    1    1    1    2    2     2
- [4,]    2    2    2    2    2    3    3    3    3     2
- [5,]    2    3    3    3    3    3    3    3    2     2
- [6,]    2    3    2    3    2    1    3    2    2     1
- [7,]    2    3    3    3    3    3    1    1    1     3
- [8,]    2    2    1    1    1    1    3    2    2     1
- [9,]    2    2    2    2    3    2    2    2    2     1
-[10,]    2    3    3    2    1    1    3    3    2     2</code></pre>
+ [1,]    1    1    3    1    2    2    3    1    1     1
+ [2,]    3    2    3    3    3    3    3    3    2     2
+ [3,]    2    2    2    2    3    3    3    3    3     3
+ [4,]    2    2    2    2    2    3    1    1    1     1
+ [5,]    1    1    1    1    1    1    2    3    3     3
+ [6,]    1    2    2    3    1    1    2    3    1     1
+ [7,]    2    2    3    3    3    3    1    2    2     1
+ [8,]    3    3    3    3    3    3    3    2    3     3
+ [9,]    1    2    2    3    3    2    2    2    1     3
+[10,]    3    2    2    1    1    1    2    1    1     1</code></pre>
 </div>
 </div>
 </section>
@@ -1354,14 +1354,14 @@ Indexing
 <div class="cell-output cell-output-stdout">
 <pre><code>Running MCMC with 4 parallel chains...
 
-Chain 1 finished in 151.8 seconds.
-Chain 3 finished in 156.7 seconds.
-Chain 4 finished in 159.2 seconds.
-Chain 2 finished in 160.1 seconds.
+Chain 4 finished in 211.4 seconds.
+Chain 2 finished in 211.6 seconds.
+Chain 1 finished in 221.6 seconds.
+Chain 3 finished in 227.2 seconds.
 
 All 4 chains finished successfully.
-Mean chain execution time: 156.9 seconds.
-Total execution time: 160.3 seconds.</code></pre>
+Mean chain execution time: 217.9 seconds.
+Total execution time: 227.4 seconds.</code></pre>
 </div>
 </div>
 </section>
@@ -1410,7 +1410,7 @@ Total execution time: 160.3 seconds.</code></pre>
 <span id="cb26-11"><a href="#cb26-11"></a><span class="fu">sum</span>((z_est <span class="sc">==</span> z)[unknowns]) <span class="sc">/</span> <span class="fu">sum</span>(unknowns)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.704</code></pre>
+<pre><code>[1] 0.688</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -2099,12 +2099,12 @@ Steady state distribution
 <div class="cell-output cell-output-stdout">
 <pre><code>Running MCMC with 2 parallel chains...
 
-Chain 1 finished in 512.2 seconds.
-Chain 2 finished in 662.3 seconds.
+Chain 2 finished in 712.9 seconds.
+Chain 1 finished in 719.9 seconds.
 
 Both chains finished successfully.
-Mean chain execution time: 587.2 seconds.
-Total execution time: 662.4 seconds.</code></pre>
+Mean chain execution time: 716.4 seconds.
+Total execution time: 720.1 seconds.</code></pre>
 </div>
 </div>
 </section>
@@ -2158,7 +2158,7 @@ Total execution time: 662.4 seconds.</code></pre>
 <span id="cb33-4"><a href="#cb33-4"></a><span class="fu">sum</span>(z_est <span class="sc">==</span> z, <span class="at">na.rm =</span> T) <span class="sc">/</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(z))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.946</code></pre>
+<pre><code>[1] 0.94</code></pre>
 </div>
 </div>
 <p>One of the main reasons to account for imperfect pathogen detection is to get more realistic estimates of infection prevalence in the population. We can use the full posterior distribution of the latent ecological states from the Viterbi algorithm to estimate the infection prevalence per primary occasion, which here was simulated to be increasing due to dropping temperatures going into austral winter plotted for some fictional dates to show the unequal primary occasion intervals.</p>
