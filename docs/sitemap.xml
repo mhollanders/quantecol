@@ -14,7 +14,7 @@
   </url>
   <url>
     <loc>https://quantecol.com.au/blog/hmm-in-stan.html</loc>
-    <lastmod>2024-05-14T08:45:06.271Z</lastmod>
+    <lastmod>2024-10-09T01:31:27.326Z</lastmod>
   </url>
   <url>
     <loc>https://quantecol.com.au/about/people/matthijs.html</loc>
@@ -47,5 +47,9 @@
   <url>
     <loc>https://quantecol.com.au/portfolio.html</loc>
     <lastmod>2024-05-14T08:45:07.905Z</lastmod>
+  </url>
+  <url>
+    <loc>https://quantecol.com.au/blog/gaussian-processes.html</loc>
+    <lastmod>2024-10-09T04:09:00.673Z</lastmod>
   </url>
 </urlset>
