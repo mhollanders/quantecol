@@ -1,7 +1,7 @@
 {
   "listing": "/blog.html",
   "items": [
-    "/blog/hmm-in-stan.html",
-    "/blog/gaussian-processes.html"
+    "/blog/gaussian-processes.html",
+    "/blog/hmm-in-stan.html"
   ]
 }
