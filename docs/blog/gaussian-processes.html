@@ -289,7 +289,7 @@ div.csl-indent {
 <p><img src="gaussian-processes_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>Fleay’s barred frogs breed from the early spring to the middle of summer and generally there are several pulses of reproduction resulting in fresh cohorts of tadpoles. We’ll ignore this and just model the counts using random survey effects.</p>
+<p>Fleay’s barred frogs breed from the early spring to the middle of summer and generally there are several pulses of reproduction resulting in fresh cohorts of tadpoles. We’ll ignore this and just model the counts using random survey effects in the absence of any predictors.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../img/fleayi-huge.jpg" class="img-fluid figure-img" style="width:88.6%"></p>
@@ -392,7 +392,7 @@ div.csl-indent {
 <div class="cell-output cell-output-stdout">
 <pre><code>Running MCMC with 1 chain...
 
-Chain 1 finished in 0.4 seconds.</code></pre>
+Chain 1 finished in 0.3 seconds.</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
@@ -528,7 +528,7 @@ Chain 1 finished in 1.4 seconds.</code></pre>
 <span id="cb10-32"><a href="#cb10-32"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Next I extract the posterior draws of the model parameters to use the <code>predict_gp()</code> function for each draw to capture uncertainty. Then I plot the predictions over our existing figure. The GP was able to capture higher tadpole counts in the warmer months when reproduction is occurring, and that the winter and spring months prior to the first pulse of reproduction (July–October 2020) had low tadpole numbers.</p>
+<p>Next I extract the posterior draws of the model parameters to use the <code>predict_gp()</code> function for each draw to capture uncertainty. Then I plot the predictions over our existing figure. The GP was able to capture higher tadpole counts in the warmer months when reproduction is occurring, and that the winter and spring months prior to the first pulse of reproduction (July–October 2020) had low tadpole numbers. It’s possible that a different covariance kernel would work better, such as a <a href="https://mc-stan.org/docs/functions-reference/matrix_operations.html#periodic-kernel">periodic covariance kernel</a>, but I won’t go into that here.</p>
 <div class="cell" data-fig.asp="0.618">
 <details>
 <summary>Code</summary>
