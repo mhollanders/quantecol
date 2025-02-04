@@ -2,6 +2,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/blog/marginalisation.html",
       "/blog/gaussian-processes.html",
       "/blog/hmm-in-stan.html"
     ]
@@ -9,6 +10,7 @@
   {
     "listing": "/portfolio.html",
     "items": [
+      "/portfolio/subtropical-cats.html",
       "/portfolio/christmas-island.html",
       "/portfolio/multievent.html",
       "/portfolio/fleayi-adult.html",
