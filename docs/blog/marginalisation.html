@@ -315,18 +315,19 @@ y_{ij} &amp;\sim \textrm{Bernoulli} (z_i \cdot p)
 <details open="">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># parameters</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a>I <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>J_max <span class="ot">&lt;-</span> <span class="dv">3</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a>J <span class="ot">&lt;-</span> <span class="fu">rep</span>(J_max, I)</span>
-<span id="cb1-5"><a href="#cb1-5"></a>psi <span class="ot">&lt;-</span> <span class="fl">0.6</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a>p <span class="ot">&lt;-</span> <span class="fl">0.4</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a></span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="co"># simulate</span></span>
-<span id="cb1-9"><a href="#cb1-9"></a>z <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(I, <span class="dv">1</span>, psi)</span>
-<span id="cb1-10"><a href="#cb1-10"></a>y <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, I, J_max)</span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>I) {</span>
-<span id="cb1-12"><a href="#cb1-12"></a>  y[i, <span class="dv">1</span><span class="sc">:</span>J[i]] <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(J[i], <span class="dv">1</span>, z[i] <span class="sc">*</span> p)</span>
-<span id="cb1-13"><a href="#cb1-13"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a>I <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>J_max <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>J <span class="ot">&lt;-</span> <span class="fu">rep</span>(J_max, I)</span>
+<span id="cb1-6"><a href="#cb1-6"></a>psi <span class="ot">&lt;-</span> <span class="fl">0.6</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a>p <span class="ot">&lt;-</span> <span class="fl">0.4</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co"># simulate</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a>z <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(I, <span class="dv">1</span>, psi)</span>
+<span id="cb1-11"><a href="#cb1-11"></a>y <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, I, J_max)</span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>I) {</span>
+<span id="cb1-13"><a href="#cb1-13"></a>  y[i, <span class="dv">1</span><span class="sc">:</span>J[i]] <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(J[i], <span class="dv">1</span>, z[i] <span class="sc">*</span> p)</span>
+<span id="cb1-14"><a href="#cb1-14"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <section id="general-approach" class="level2">
@@ -428,18 +429,18 @@ y_{ij} &amp;\sim \textrm{Bernoulli} (z_i \cdot p)
 <div class="cell-output cell-output-stdout">
 <pre><code>Running MCMC with 8 parallel chains...
 
-Chain 2 finished in 2.1 seconds.
-Chain 8 finished in 2.1 seconds.
-Chain 4 finished in 2.2 seconds.
-Chain 5 finished in 2.2 seconds.
-Chain 6 finished in 2.2 seconds.
-Chain 7 finished in 2.2 seconds.
-Chain 1 finished in 2.3 seconds.
-Chain 3 finished in 2.3 seconds.
+Chain 1 finished in 2.4 seconds.
+Chain 3 finished in 2.5 seconds.
+Chain 4 finished in 2.4 seconds.
+Chain 2 finished in 2.6 seconds.
+Chain 5 finished in 2.6 seconds.
+Chain 8 finished in 2.5 seconds.
+Chain 6 finished in 2.7 seconds.
+Chain 7 finished in 2.9 seconds.
 
 All 8 chains finished successfully.
-Mean chain execution time: 2.2 seconds.
-Total execution time: 2.4 seconds.</code></pre>
+Mean chain execution time: 2.6 seconds.
+Total execution time: 3.0 seconds.</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
@@ -451,8 +452,8 @@ Total execution time: 2.4 seconds.</code></pre>
 <pre><code># A tibble: 2 × 8
   variable median    q5   q95  rhat ess_bulk ess_tail truth
   &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
-1 psi_a     0.431 0.338 0.537  1.00   40557.   40851.   0.6
-2 p_a       0.490 0.392 0.584  1.00   43643.   46154.   0.4</code></pre>
+1 psi_a     0.656 0.520 0.834  1.00   25715.   21924.   0.6
+2 p_a       0.346 0.260 0.436  1.00   23358.   28993.   0.4</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
@@ -463,12 +464,12 @@ Total execution time: 2.4 seconds.</code></pre>
 Computed from 80000 by 100 log-likelihood matrix.
 
          Estimate   SE
-elpd_loo   -140.0 12.2
-p_loo         2.1  0.3
-looic       279.9 24.3
+elpd_loo   -158.8 10.4
+p_loo         1.9  0.2
+looic       317.6 20.8
 ------
 MCSE of elpd_loo is 0.0.
-MCSE and ESS estimates assume MCMC draws (r_eff in [0.4, 0.9]).
+MCSE and ESS estimates assume MCMC draws (r_eff in [0.3, 0.8]).
 
 All Pareto k estimates are good (k &lt; 0.7).
 See help('pareto-k-diagnostic') for details.</code></pre>
@@ -481,7 +482,7 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">mean</span>(fit_occ<span class="sc">$</span><span class="fu">summary</span>(<span class="st">"z"</span>)<span class="sc">$</span>median <span class="sc">==</span> z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.85</code></pre>
+<pre><code>[1] 0.9</code></pre>
 </div>
 </div>
 </section>
@@ -574,7 +575,7 @@ Chain 8 finished in 0.6 seconds.
 
 All 8 chains finished successfully.
 Mean chain execution time: 0.6 seconds.
-Total execution time: 0.8 seconds.</code></pre>
+Total execution time: 0.9 seconds.</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
@@ -708,13 +709,13 @@ model2 0.0       0.0    </code></pre>
 <pre><code>Running MCMC with 8 parallel chains...
 
 Chain 1 finished in 1.2 seconds.
-Chain 4 finished in 1.2 seconds.
 Chain 2 finished in 1.2 seconds.
-Chain 3 finished in 1.3 seconds.
+Chain 3 finished in 1.2 seconds.
+Chain 4 finished in 1.3 seconds.
 Chain 5 finished in 1.2 seconds.
 Chain 7 finished in 1.2 seconds.
-Chain 6 finished in 1.3 seconds.
-Chain 8 finished in 1.3 seconds.
+Chain 8 finished in 1.1 seconds.
+Chain 6 finished in 1.2 seconds.
 
 All 8 chains finished successfully.
 Mean chain execution time: 1.2 seconds.
@@ -754,18 +755,18 @@ Total execution time: 1.5 seconds.</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Running MCMC with 8 parallel chains...
 
-Chain 8 finished in 33.4 seconds.
-Chain 2 finished in 33.9 seconds.
-Chain 1 finished in 34.0 seconds.
-Chain 5 finished in 33.9 seconds.
-Chain 7 finished in 34.0 seconds.
-Chain 6 finished in 34.6 seconds.
-Chain 4 finished in 34.7 seconds.
-Chain 3 finished in 35.0 seconds.
+Chain 2 finished in 32.8 seconds.
+Chain 5 finished in 34.0 seconds.
+Chain 8 finished in 34.5 seconds.
+Chain 7 finished in 35.6 seconds.
+Chain 1 finished in 36.2 seconds.
+Chain 3 finished in 36.4 seconds.
+Chain 6 finished in 36.6 seconds.
+Chain 4 finished in 38.9 seconds.
 
 All 8 chains finished successfully.
-Mean chain execution time: 34.2 seconds.
-Total execution time: 35.2 seconds.</code></pre>
+Mean chain execution time: 35.6 seconds.
+Total execution time: 39.1 seconds.</code></pre>
 </div>
 </div>
 <div class="cell" data-fig.asp="1">
@@ -959,17 +960,17 @@ Total execution time: 35.2 seconds.</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Running MCMC with 8 parallel chains...
 
-Chain 8 finished in 67.2 seconds.
-Chain 5 finished in 81.4 seconds.
-Chain 6 finished in 83.3 seconds.
-Chain 1 finished in 86.4 seconds.
-Chain 3 finished in 88.2 seconds.
-Chain 2 finished in 91.0 seconds.
-Chain 7 finished in 91.0 seconds.
-Chain 4 finished in 92.2 seconds.
+Chain 7 finished in 69.0 seconds.
+Chain 8 finished in 72.0 seconds.
+Chain 1 finished in 73.9 seconds.
+Chain 4 finished in 78.4 seconds.
+Chain 5 finished in 87.0 seconds.
+Chain 6 finished in 87.4 seconds.
+Chain 3 finished in 88.3 seconds.
+Chain 2 finished in 92.2 seconds.
 
 All 8 chains finished successfully.
-Mean chain execution time: 85.1 seconds.
+Mean chain execution time: 81.0 seconds.
 Total execution time: 92.4 seconds.</code></pre>
 </div>
 <details open="">
@@ -982,9 +983,9 @@ Total execution time: 92.4 seconds.</code></pre>
 <pre><code># A tibble: 3 × 8
   variable median      q5    q95  rhat ess_bulk ess_tail truth
   &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
-1 psi_a     0.767  0.697   0.830  1.00    1597.    1475.   0.8
-2 lambda_a 20.3   13.5    41.2    1.01     852.     854.  20  
-3 p_a       0.199  0.0979  0.302  1.01     853.     849.   0.2</code></pre>
+1 psi_a     0.825  0.758   0.884  1.00    1521.    1566.   0.8
+2 lambda_a 19.6   12.5    41.6    1.01     934.    1002.  20  
+3 p_a       0.199  0.0937  0.311  1.01     918.     997.   0.2</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
@@ -1143,18 +1144,18 @@ Total execution time: 92.4 seconds.</code></pre>
 <pre><code>Running MCMC with 8 parallel chains...</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Chain 5 finished in 30.1 seconds.
-Chain 8 finished in 33.0 seconds.
-Chain 1 finished in 33.7 seconds.
-Chain 6 finished in 33.6 seconds.
-Chain 3 finished in 35.0 seconds.
-Chain 7 finished in 37.4 seconds.
-Chain 4 finished in 39.5 seconds.
-Chain 2 finished in 42.0 seconds.
+<pre><code>Chain 2 finished in 26.8 seconds.
+Chain 7 finished in 30.0 seconds.
+Chain 3 finished in 31.1 seconds.
+Chain 5 finished in 32.3 seconds.
+Chain 8 finished in 33.6 seconds.
+Chain 4 finished in 33.9 seconds.
+Chain 6 finished in 34.4 seconds.
+Chain 1 finished in 35.1 seconds.
 
 All 8 chains finished successfully.
-Mean chain execution time: 35.5 seconds.
-Total execution time: 42.1 seconds.</code></pre>
+Mean chain execution time: 32.2 seconds.
+Total execution time: 35.2 seconds.</code></pre>
 </div>
 <details open="">
 <summary>Code</summary>
@@ -1164,11 +1165,11 @@ Total execution time: 42.1 seconds.</code></pre>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 8
-  variable median     q5    q95  rhat ess_bulk ess_tail  truth
-  &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;
-1 psi_a     0.767 0.692   0.829  1.00    1538.    1460.  0.8  
-2 lambda_a 12.6   5.85   46.2    1.01     740.    1055. 20    
-3 mu_a      0.381 0.0971  0.887  1.01     749.     993.  0.223</code></pre>
+  variable median    q5    q95  rhat ess_bulk ess_tail  truth
+  &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;
+1 psi_a     0.827 0.759  0.883  1.01    1429.    1181.  0.8  
+2 lambda_a 11.1   5.29  38.6    1.01     902.     857. 20    
+3 mu_a      0.393 0.106  0.884  1.01     906.     848.  0.223</code></pre>
 </div>
 </div>
 <div class="cell" data-fig.asp="1">
@@ -1208,10 +1209,10 @@ Total execution time: 42.1 seconds.</code></pre>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 2
-  model                RMSE
-  &lt;fct&gt;          &lt;rvar[1d]&gt;
-1 Counts          7.5 ± 6.5
-2 Time-to-event  10.8 ± 6.4</code></pre>
+  model               RMSE
+  &lt;fct&gt;         &lt;rvar[1d]&gt;
+1 Counts           8 ± 5.9
+2 Time-to-event   11 ± 5.6</code></pre>
 </div>
 </div>
 <p>At least our occupancy states are still estimated well.</p>
@@ -1237,7 +1238,7 @@ Total execution time: 42.1 seconds.</code></pre>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="list">
 <div id="ref-burkner2024" class="csl-entry" role="listitem">
-Bürkner, P.-C., J. Gabry, M. Kay, and A. Vehtari. 2024. Posterior: <span>Tools</span> for working with posterior distributions.
+Bürkner, P.-C., J. Gabry, M. Kay, and A. Vehtari. 2024. <span class="nocase">posterior</span>: <span>Tools</span> for working with posterior distributions.
 </div>
 <div id="ref-carpenter2017" class="csl-entry" role="listitem">
 Carpenter, B., A. Gelman, M. D. Hoffman, D. Lee, B. Goodrich, M. Betancourt, M. A. Brubaker, J. Guo, P. Li, and A. Riddell. 2017. <a href="https://doi.org/10.18637/jss.v076.i01">Stan: <span>A Probabilistic Programming Language</span></a>. Journal of Statistical Software 76:1.
@@ -1246,7 +1247,7 @@ Carpenter, B., A. Gelman, M. D. Hoffman, D. Lee, B. Goodrich, M. Betancourt, M. 
 Ergon, T., Ø. Borgan, C. R. Nater, and Y. Vindenes. 2018. <a href="https://doi.org/10.1111/2041-210X.13059">The utility of mortality hazard rates in population analyses</a>. Methods in Ecology and Evolution 9:2046–2056.
 </div>
 <div id="ref-gabry2024" class="csl-entry" role="listitem">
-Gabry, J., R. Češnovar, A. Johnson, and S. Bronder. 2024. Class="nocase"<span><span class="math inline">\(&gt;\)</span></span>cmdstanr: <span>R Interface</span> to ’<span>CmdStan</span>’.
+Gabry, J., R. Češnovar, A. Johnson, and S. Bronder. 2024. <span class="nocase">cmdstanr</span>: <span>R Interface</span> to ’<span>CmdStan</span>’.
 </div>
 <div id="ref-kay2024" class="csl-entry" role="listitem">
 Kay, M. 2024. <a href="https://doi.org/10.5281/zenodo.1308151"><span class="nocase">tidybayes</span>: <span>Tidy</span> data and geoms for <span>Bayesian</span> models</a>.
@@ -1261,7 +1262,7 @@ Royle, J. A. 2004. <a href="https://doi.org/10.1111/j.0006-341X.2004.00142.x"><s
 Strebel, N., C. J. Fiss, K. F. Kellner, J. L. Larkin, M. Kéry, and J. Cohen. 2021. <a href="https://doi.org/10.1111/2041-210X.13570">Estimating abundance based on time-to-detection data</a>. Methods in Ecology and Evolution 12:909–920.
 </div>
 <div id="ref-vehtari2024" class="csl-entry" role="listitem">
-Vehtari, A., J. Gabry, M. Magnusson, Y. Yao, P.-C. Bürkner, T. Paananen, and A. Gelman. 2024. Class="nocase"<span><span class="math inline">\(&gt;\)</span></span>loo: <span>Efficient</span> leave-one-out cross-validation and <span>WAIC</span> for <span>Bayesian</span> models.
+Vehtari, A., J. Gabry, M. Magnusson, Y. Yao, P.-C. Bürkner, T. Paananen, and A. Gelman. 2024. <span class="nocase">loo</span>: <span>Efficient</span> leave-one-out cross-validation and <span>WAIC</span> for <span>Bayesian</span> models.
 </div>
 <div id="ref-wickham2019" class="csl-entry" role="listitem">
 Wickham, H., M. Averick, J. Bryan, W. Chang, L. D. McGowan, R. François, G. Grolemund, A. Hayes, L. Henry, J. Hester, M. Kuhn, T. L. Pedersen, E. Miller, S. M. Bache, K. Müller, J. Ooms, D. Robinson, D. P. Seidel, V. Spinu, K. Takahashi, D. Vaughan, C. Wilke, K. Woo, and H. Yutani. 2019. <a href="https://doi.org/10.21105/joss.01686">Welcome to the <span class="nocase">tidyverse</span></a>. Journal of Open Source Software 4:1686.
