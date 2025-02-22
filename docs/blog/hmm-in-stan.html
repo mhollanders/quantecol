@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.6.40">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Dr.&nbsp;Matthijs Hollanders">
 <meta name="dcterms.date" content="2024-05-05">
 
-<title>Quantecol - Ecological Modeling in Stan</title>
+<title>Quantecol - Ecological Modeling in Stan – Quantecol</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,7 +24,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -35,7 +35,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -60,6 +60,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -91,17 +92,23 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-2741878938bdabb56c3a6f58ebb39665.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -110,20 +117,48 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
 }</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 <meta property="og:title" content="Quantecol - Ecological Modeling in Stan">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://quantecol.com.au/img/tiger.jpg">
-<meta property="og:site-name" content="Quantecol">
+<meta property="og:site_name" content="Quantecol">
 <meta name="twitter:title" content="Quantecol - Ecological Modeling in Stan">
 <meta name="twitter:description" content="">
 <meta name="twitter:image" content="https://quantecol.com.au/img/tiger.jpg">
@@ -134,50 +169,50 @@ div.csl-indent {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../img/Logo-Quantecol-RGB-FA-2-1000.png" alt="" class="navbar-logo">
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html" rel="" target="">
- <span class="menu-text">Home</span></a>
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../services.html" rel="" target="">
- <span class="menu-text">Services</span></a>
+    <a class="nav-link" href="../services.html"> 
+<span class="menu-text">Services</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../portfolio.html" rel="" target="">
- <span class="menu-text">Portfolio</span></a>
+    <a class="nav-link" href="../portfolio.html"> 
+<span class="menu-text">Portfolio</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../blog.html" rel="" target="">
- <span class="menu-text">Blog</span></a>
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-about" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-about" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">About</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-about">    
         <li>
-    <a class="dropdown-item" href="../about/vision.html" rel="" target="">
+    <a class="dropdown-item" href="../about/vision.html">
  <span class="dropdown-text">Our Vision</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../about/people/matthijs.html" rel="" target="">
+    <a class="dropdown-item" href="../about/people/matthijs.html">
  <span class="dropdown-text">People</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../about/contact.html" rel="" target="">
+    <a class="dropdown-item" href="../about/contact.html">
  <span class="dropdown-text">Contact Us</span></a>
   </li>  
     </ul>
@@ -185,14 +220,14 @@ div.csl-indent {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/realQuantecol" rel="" target=""><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/realQuantecol"> <i class="bi bi-twitter-x" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
+          </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -264,7 +299,9 @@ div.csl-indent {
   </div>
   
 
+
 </header>
+
 
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
@@ -279,7 +316,7 @@ div.csl-indent {
 \tag{1}\]</span></span></p>
 <p>where <span class="math inline">\(z_{i,t}\)</span> are the partially observed ecological states (where <span class="math inline">\(z=1\)</span> is an alive individual and <span class="math inline">\(z=0\)</span> is a dead individual) and <span class="math inline">\(y_{i,t}\)</span> are the observed data (where <span class="math inline">\(y=1\)</span> is an observed individual and <span class="math inline">\(y=0\)</span> is an unobserved individual). Using NIMBLE 1.1.0 in R 4.3.2 <span class="citation" data-cites="rcoreteam2023">(<a href="#ref-rcoreteam2023" role="doc-biblioref">R Core Team 2023</a>)</span>, coding this model is straightforward and follows the algebra above closely.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(nimble)</span>
 <span id="cb1-2"><a href="#cb1-2"></a>cmr_code <span class="ot">&lt;-</span> <span class="fu">nimbleCode</span>({</span>
@@ -301,7 +338,7 @@ div.csl-indent {
 </div>
 <p>After simulating some data, creating a NIMBLE model from the code, and configuring the MCMC, we can see that each unknown <code>z[i, t]</code> gets its own binary MCMC sampler.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># metadata</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>n_ind <span class="ot">&lt;-</span> <span class="dv">100</span></span>
@@ -348,7 +385,7 @@ binary sampler (263)
 </div>
 <p>Note that because we know with certainty that individuals were alive between the first and last survey they were captured, we can actually ease computation by supplying those <code>z[i, first[i]:last[i]]</code> as known. We’ll run this model to confirm that it’s able to recover our input parameters using <strong>MCMCvis</strong> <span class="citation" data-cites="youngflesh2018">(<a href="#ref-youngflesh2018" role="doc-biblioref">Youngflesh 2018</a>)</span>.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># compile and build MCMC</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a>Cmodel <span class="ot">&lt;-</span> <span class="fu">compileNimble</span>(Rmodel)</span>
@@ -360,7 +397,7 @@ binary sampler (263)
 </details>
 </div>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># summarise</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="fu">library</span>(MCMCvis)</span>
@@ -427,7 +464,7 @@ binary sampler (263)
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <div class="cell" data-output.var="cmr_p">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource stan number-lines code-with-copy"><code class="sourceCode stan"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">data</span> {</span>
 <span id="cb7-2"><a href="#cb7-2"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; n_ind, n_surv;</span>
@@ -583,16 +620,16 @@ binary sampler (263)
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <div class="cell" data-output.var="cmr_lp">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource stan number-lines code-with-copy"><code class="sourceCode stan"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">functions</span>{</span>
 <span id="cb8-2"><a href="#cb8-2"></a>  <span class="co">/**</span></span>
 <span id="cb8-3"><a href="#cb8-3"></a><span class="co">   * Return the natural logarithm of the product of the element-wise exponentiation of the specified matrices</span></span>
 <span id="cb8-4"><a href="#cb8-4"></a><span class="co">   *</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a><span class="co">   * @param a  First matrix or (row_)vector</span></span>
-<span id="cb8-6"><a href="#cb8-6"></a><span class="co">   * @param b  Second matrix or (row_)vector</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> a  First matrix or (row_)vector</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> b  Second matrix or (row_)vector</span></span>
 <span id="cb8-7"><a href="#cb8-7"></a><span class="co">   *</span></span>
-<span id="cb8-8"><a href="#cb8-8"></a><span class="co">   * @return   log(exp(a) * exp(b))</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co">   * </span><span class="an">@return</span><span class="co">   log(exp(a) * exp(b))</span></span>
 <span id="cb8-9"><a href="#cb8-9"></a><span class="co">   */</span></span>
 <span id="cb8-10"><a href="#cb8-10"></a>  <span class="dt">matrix</span> log_product_exp(<span class="dt">matrix</span> a, <span class="dt">matrix</span> b) {</span>
 <span id="cb8-11"><a href="#cb8-11"></a>    <span class="dt">int</span> x = rows(a);</span>
@@ -791,7 +828,7 @@ binary sampler (263)
 <h3 class="anchored" data-anchor-id="why-we-like-hmc">Why we like HMC</h3>
 <p>Using <strong>CmdStanR</strong> 0.7.1 to call CmdStan 2.34.1 <span class="citation" data-cites="gabry2023">(<a href="#ref-gabry2023" role="doc-biblioref">Gabry et al. 2023</a>)</span>, we’ll just run the log probability model for the same number of iterations as the NIMBLE version, and we see that there were no issues with sampling (Stan would tell us otherwise) and the effective sample sizes (ESS) were several times higher than for the NIMBLE model. This is why we want to use HMC.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># data for Stan</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a>cmr_data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">n_ind =</span> n_ind, <span class="at">n_surv =</span> n_surv, </span>
@@ -816,7 +853,7 @@ All 4 chains finished successfully.
 Mean chain execution time: 2.4 seconds.
 Total execution time: 2.6 seconds.</code></pre>
 </div>
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># summary</span></span>
 <span id="cb11-2"><a href="#cb11-2"></a><span class="fu">library</span>(tidyverse)</span>
@@ -835,7 +872,7 @@ Total execution time: 2.6 seconds.</code></pre>
 </div>
 <p>And just to confirm, we check if the Viterbi algorithm was able to closely recover the latent alive states.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># generate estimated z matrix</span></span>
 <span id="cb13-2"><a href="#cb13-2"></a>z_est <span class="ot">&lt;-</span> fit_cmr<span class="sc">$</span><span class="fu">summary</span>(<span class="st">"z"</span>)<span class="sc">$</span>median <span class="sc">|&gt;</span></span>
@@ -871,7 +908,7 @@ Total execution time: 2.6 seconds.</code></pre>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../img/tiger.jpg" class="img-fluid figure-img" style="width:88.6%"></p>
-<figcaption class="figure-caption">A rainforest tiger snake (<em>Notechis scutatus</em>) from northern New South Wales, Australia.</figcaption>
+<figcaption>A rainforest tiger snake (<em>Notechis scutatus</em>) from northern New South Wales, Australia.</figcaption>
 </figure>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -915,7 +952,7 @@ Ecology occurs in continuous time
 <h3 class="anchored" data-anchor-id="simulating-continuous-time">Simulating continuous time</h3>
 <p>Below, I’ll simulate the ecological data by specifying a TRM and using the <strong>expm</strong> package to take the matrix exponential to generate the TPM <span class="citation" data-cites="goulet2021">(<a href="#ref-goulet2021" role="doc-biblioref">Goulet et al. 2021</a>)</span>. In order to simulate ecological states <code>z[i, t]</code> we use the categorical distribution, which is just the Bernoulli distribution generalised to multiple outcomes. Note that because we’re simulating the ecological process from year to year, the time intervals <span class="math inline">\(\tau\)</span> are just 1; however, in the Stan program below, we will account for missing years using <code>tau</code>.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># metadata</span></span>
 <span id="cb15-2"><a href="#cb15-2"></a>n_site <span class="ot">&lt;-</span> <span class="dv">100</span></span>
@@ -950,7 +987,7 @@ Ecology occurs in continuous time
 [2,]  0.4 -0.8  0.4
 [3,]  0.1  0.3 -0.4</code></pre>
 </div>
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># here's the TPM</span></span>
 <span id="cb17-2"><a href="#cb17-2"></a><span class="fu">library</span>(expm)</span>
@@ -963,7 +1000,7 @@ Ecology occurs in continuous time
 [2,] 0.231 0.515 0.254
 [3,] 0.101 0.182 0.717</code></pre>
 </div>
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># containers</span></span>
 <span id="cb19-2"><a href="#cb19-2"></a>z <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, n_site, n_year)</span>
@@ -1028,7 +1065,7 @@ Robust Design
 </ul>
 <p>I’ll simulate some observational data below where the investigators aimed to conduct 4 secondary surveys per year (primary occasion), all conducted during the tiger snake breeding season, with some secondary surveys missed, and some years missed altogether.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="co"># parameters</span></span>
 <span id="cb21-2"><a href="#cb21-2"></a>p <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">0.5</span>)  <span class="co"># non-breeding/breeding detection probabilities</span></span>
@@ -1090,16 +1127,16 @@ Indexing
 <li>As in Example 1, the log likelihood and Viterbi algorithm are performed in the <code>generated quantities</code> block, but the Viterbi algorithm has been modified for this specific model.</li>
 </ul>
 <div class="cell" data-output.var="occ_dyn_ms">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource stan number-lines code-with-copy"><code class="sourceCode stan"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">functions</span>{</span>
 <span id="cb22-2"><a href="#cb22-2"></a>  <span class="co">/**</span></span>
 <span id="cb22-3"><a href="#cb22-3"></a><span class="co">   * Return the natural logarithm of the product of the element-wise exponentiation of the specified matrices</span></span>
 <span id="cb22-4"><a href="#cb22-4"></a><span class="co">   *</span></span>
-<span id="cb22-5"><a href="#cb22-5"></a><span class="co">   * @param a  First matrix or (row_)vector</span></span>
-<span id="cb22-6"><a href="#cb22-6"></a><span class="co">   * @param b  Second matrix or (row_)vector</span></span>
+<span id="cb22-5"><a href="#cb22-5"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> a  First matrix or (row_)vector</span></span>
+<span id="cb22-6"><a href="#cb22-6"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> b  Second matrix or (row_)vector</span></span>
 <span id="cb22-7"><a href="#cb22-7"></a><span class="co">   *</span></span>
-<span id="cb22-8"><a href="#cb22-8"></a><span class="co">   * @return   log(exp(a) * exp(b))</span></span>
+<span id="cb22-8"><a href="#cb22-8"></a><span class="co">   * </span><span class="an">@return</span><span class="co">   log(exp(a) * exp(b))</span></span>
 <span id="cb22-9"><a href="#cb22-9"></a><span class="co">   */</span></span>
 <span id="cb22-10"><a href="#cb22-10"></a>  <span class="dt">matrix</span> log_product_exp(<span class="dt">matrix</span> a, <span class="dt">matrix</span> b) {</span>
 <span id="cb22-11"><a href="#cb22-11"></a>    <span class="dt">int</span> x = rows(a);</span>
@@ -1339,7 +1376,7 @@ Indexing
 </div>
 <p>We’ll run Stan and visually summarise the parameter estimates, with the input plotted alongside in green. It looks like we did alright, but there is a lot of uncertainty, largely because sites can move between 3 states between each year. For this reason, dynamic occupancy models are notoriously data-hungry. Often the initial state parameters are particularly difficult to estimate and are sometimes best parameterised as the steady state vector of the TPM. I haven’t quite worked out how to implement this efficiently in Stan.</p>
 <div class="cell" data-fig.asp="1">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="co"># data for Stan</span></span>
 <span id="cb23-2"><a href="#cb23-2"></a>occ_data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">n_site =</span> n_site, <span class="at">n_year =</span> n_year, <span class="at">n_sec =</span> n_sec,</span>
@@ -1368,7 +1405,7 @@ Total execution time: 227.4 seconds.</code></pre>
 <section id="results" class="level3">
 <h3 class="anchored" data-anchor-id="results">Results</h3>
 <div class="cell" data-fig.asp="1">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="co"># visualise estimates</span></span>
 <span id="cb25-2"><a href="#cb25-2"></a>fit_dyn<span class="sc">$</span><span class="fu">summary</span>(<span class="fu">c</span>(<span class="st">"eta"</span>, <span class="st">"gamma"</span>, <span class="st">"epsilon"</span>, <span class="st">"psi"</span>, <span class="st">"p"</span>, <span class="st">"delta"</span>)) <span class="sc">|&gt;</span></span>
@@ -1390,12 +1427,16 @@ Total execution time: 227.4 seconds.</code></pre>
 <span id="cb25-18"><a href="#cb25-18"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Posterior"</span>, <span class="at">y =</span> <span class="st">"Parameter"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="hmm-in-stan_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="hmm-in-stan_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Let’s also check how many of our ecological ecological states were correctly recovered. Since only state 3 (snakes present and breeding) can be directly observed with certainty, we’ll only check the ecological states for those times where no breeding was observed. We certainly didn’t do as well as in the mark-recapture example, which isn’t too surprising with a small number of individuals and the complexity of the model.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="co"># maximum observed state</span></span>
 <span id="cb26-2"><a href="#cb26-2"></a>z_obs <span class="ot">&lt;-</span> <span class="fu">apply</span>(y, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, \(y) <span class="fu">ifelse</span>(<span class="fu">sum</span>(<span class="fu">is.na</span>(y)) <span class="sc">==</span> n_sec, </span>
@@ -1434,7 +1475,7 @@ Steady state distribution
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../img/fleayi-hmm.jpg" class="img-fluid figure-img" style="width:78.6%"></p>
-<figcaption class="figure-caption">Adult male Fleay’s or silverblue-eyed barred frog (<em>Mixophyes fleayi</em>) from Border Ranges National Park, New South Wales, Australia.</figcaption>
+<figcaption>Adult male Fleay’s or silverblue-eyed barred frog (<em>Mixophyes fleayi</em>) from Border Ranges National Park, New South Wales, Australia.</figcaption>
 </figure>
 </div>
 <p>The ecological TRM of such a disease-structured multistate model is pretty straightforward, with three possible states: (1) alive and uninfected, (2) alive and infected, and (3) dead, which is an absorbing state:</p>
@@ -1503,7 +1544,7 @@ Steady state distribution
 <h4 class="anchored" data-anchor-id="simulation">Simulation</h4>
 <p>Below I simulate some data where the rates of gaining and clearing infection are affected by temperature (negative and positive, respectively), which seems to be the case for the frog-<em>Bd</em> system. To account for the varying infection dynamics in the state probabilities at first capture, I’ll use the steady state distribution for each primary which is computed using the infection dynamics <em>probabilities</em>, given by <span class="math inline">\({\psi_p}_{1:2} = 1 - \exp(-\psi_{1:2})\)</span>. Then, the expected probability of being infected at first capture in each primary is <span class="math inline">\(\eta = \frac{{\psi_p}_1}{{\psi_p}_1 + {\psi_p}_2}\)</span>.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="co"># metadata</span></span>
 <span id="cb28-2"><a href="#cb28-2"></a>n_ind <span class="ot">&lt;-</span> <span class="dv">100</span></span>
@@ -1632,36 +1673,36 @@ Steady state distribution
 <h4 class="anchored" data-anchor-id="stan-program-1">Stan program</h4>
 <p>Here’s the Stan program.</p>
 <div class="cell" data-output.var="hmm_goat">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource stan number-lines code-with-copy"><code class="sourceCode stan"><span id="cb29-1"><a href="#cb29-1"></a><span class="kw">functions</span> {</span>
 <span id="cb29-2"><a href="#cb29-2"></a>  <span class="co">/**</span></span>
 <span id="cb29-3"><a href="#cb29-3"></a><span class="co">   * Return partial sum over individuals applying the forward algorithm for multievent mark-recapture model formulated as hidden Markov model</span></span>
 <span id="cb29-4"><a href="#cb29-4"></a><span class="co">   *</span></span>
-<span id="cb29-5"><a href="#cb29-5"></a><span class="co">   * @param seq_ind    Sequence of individuals from 1 to n_ind</span></span>
-<span id="cb29-6"><a href="#cb29-6"></a><span class="co">   * @param start      Start of seq_ind for partial sum</span></span>
-<span id="cb29-7"><a href="#cb29-7"></a><span class="co">   * @param end        End of seq_ind for partial sum</span></span>
-<span id="cb29-8"><a href="#cb29-8"></a><span class="co">   * @param y          Detection history</span></span>
-<span id="cb29-9"><a href="#cb29-9"></a><span class="co">   * @param q          Logical indicating whether individual was detected in each secondary</span></span>
-<span id="cb29-10"><a href="#cb29-10"></a><span class="co">   * @param n_prim     Number of primary occasions</span></span>
-<span id="cb29-11"><a href="#cb29-11"></a><span class="co">   * @param n_sec      Number of secondary occasions per primary</span></span>
-<span id="cb29-12"><a href="#cb29-12"></a><span class="co">   * @param first      Primary occasion of first capture per individual</span></span>
-<span id="cb29-13"><a href="#cb29-13"></a><span class="co">   * @param last       Primary occasion of last capture per individual</span></span>
-<span id="cb29-14"><a href="#cb29-14"></a><span class="co">   * @param first_sec  Secondary of first capture in primary of first capture</span></span>
-<span id="cb29-15"><a href="#cb29-15"></a><span class="co">   * @param tau        Time intervals between primary occasions</span></span>
-<span id="cb29-16"><a href="#cb29-16"></a><span class="co">   * @param temp       Average temperatures between primary occasions</span></span>
-<span id="cb29-17"><a href="#cb29-17"></a><span class="co">   * @param phi_a      Mortality rates of uninfected and infected individuals (intercepts)</span></span>
-<span id="cb29-18"><a href="#cb29-18"></a><span class="co">   * @param phi_b      Effect of one log gene copy of pathogen on mortality rate</span></span>
-<span id="cb29-19"><a href="#cb29-19"></a><span class="co">   * @param psi_a      Rates of gaining and clearing infections (intercepts)</span></span>
-<span id="cb29-20"><a href="#cb29-20"></a><span class="co">   * @param psi_b      Effects of temperature on rates of gaining and clearing infections</span></span>
-<span id="cb29-21"><a href="#cb29-21"></a><span class="co">   * @param p_a        Detection probabilities of uninfected and infected individuals</span></span>
-<span id="cb29-22"><a href="#cb29-22"></a><span class="co">   * @param r          Probabilities of detecting one log gene copy of pathogen on individuals (sampling process) and samples (diagnostic process)</span></span>
-<span id="cb29-23"><a href="#cb29-23"></a><span class="co">   * @param lambda     False positive probabilities in sampling and diagnostic processes</span></span>
-<span id="cb29-24"><a href="#cb29-24"></a><span class="co">   * @param m          Individual infection intensities per primary</span></span>
-<span id="cb29-25"><a href="#cb29-25"></a><span class="co">   * @param n_z        z-scores of sample infection intensities per secondary</span></span>
-<span id="cb29-26"><a href="#cb29-26"></a><span class="co">   * @param sigma      Vector of infection intensity SDs</span></span>
+<span id="cb29-5"><a href="#cb29-5"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> seq_ind    Sequence of individuals from 1 to n_ind</span></span>
+<span id="cb29-6"><a href="#cb29-6"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> start      Start of seq_ind for partial sum</span></span>
+<span id="cb29-7"><a href="#cb29-7"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> end        End of seq_ind for partial sum</span></span>
+<span id="cb29-8"><a href="#cb29-8"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> y          Detection history</span></span>
+<span id="cb29-9"><a href="#cb29-9"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> q          Logical indicating whether individual was detected in each secondary</span></span>
+<span id="cb29-10"><a href="#cb29-10"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> n_prim     Number of primary occasions</span></span>
+<span id="cb29-11"><a href="#cb29-11"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> n_sec      Number of secondary occasions per primary</span></span>
+<span id="cb29-12"><a href="#cb29-12"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> first      Primary occasion of first capture per individual</span></span>
+<span id="cb29-13"><a href="#cb29-13"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> last       Primary occasion of last capture per individual</span></span>
+<span id="cb29-14"><a href="#cb29-14"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> first_sec  Secondary of first capture in primary of first capture</span></span>
+<span id="cb29-15"><a href="#cb29-15"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> tau        Time intervals between primary occasions</span></span>
+<span id="cb29-16"><a href="#cb29-16"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> temp       Average temperatures between primary occasions</span></span>
+<span id="cb29-17"><a href="#cb29-17"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> phi_a      Mortality rates of uninfected and infected individuals (intercepts)</span></span>
+<span id="cb29-18"><a href="#cb29-18"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> phi_b      Effect of one log gene copy of pathogen on mortality rate</span></span>
+<span id="cb29-19"><a href="#cb29-19"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> psi_a      Rates of gaining and clearing infections (intercepts)</span></span>
+<span id="cb29-20"><a href="#cb29-20"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> psi_b      Effects of temperature on rates of gaining and clearing infections</span></span>
+<span id="cb29-21"><a href="#cb29-21"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> p_a        Detection probabilities of uninfected and infected individuals</span></span>
+<span id="cb29-22"><a href="#cb29-22"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> r          Probabilities of detecting one log gene copy of pathogen on individuals (sampling process) and samples (diagnostic process)</span></span>
+<span id="cb29-23"><a href="#cb29-23"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> lambda     False positive probabilities in sampling and diagnostic processes</span></span>
+<span id="cb29-24"><a href="#cb29-24"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> m          Individual infection intensities per primary</span></span>
+<span id="cb29-25"><a href="#cb29-25"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> n_z        z-scores of sample infection intensities per secondary</span></span>
+<span id="cb29-26"><a href="#cb29-26"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> sigma      Vector of infection intensity SDs</span></span>
 <span id="cb29-27"><a href="#cb29-27"></a><span class="co">   *</span></span>
-<span id="cb29-28"><a href="#cb29-28"></a><span class="co">   * @return           Log probability for subset of individuals</span></span>
+<span id="cb29-28"><a href="#cb29-28"></a><span class="co">   * </span><span class="an">@return</span><span class="co">           Log probability for subset of individuals</span></span>
 <span id="cb29-29"><a href="#cb29-29"></a><span class="co">   */</span></span>
 <span id="cb29-30"><a href="#cb29-30"></a>  <span class="dt">real</span> partial_sum_lpmf(</span>
 <span id="cb29-31"><a href="#cb29-31"></a>    <span class="kw">data</span> <span class="dt">array</span>[] <span class="dt">int</span> seq_ind, <span class="kw">data</span> <span class="dt">int</span> start, <span class="kw">data</span> <span class="dt">int</span> end, <span class="kw">data</span> <span class="dt">array</span>[,,,] <span class="dt">int</span> y, <span class="kw">data</span> <span class="dt">array</span>[,,] <span class="dt">int</span> q, </span>
@@ -1678,7 +1719,7 @@ Steady state distribution
 <span id="cb29-42"><a href="#cb29-42"></a>      <span class="dt">array</span>[<span class="dv">2</span>] <span class="dt">matrix</span>[n_sec, n_prim] p;</span>
 <span id="cb29-43"><a href="#cb29-43"></a>      <span class="dt">matrix</span>[n_ind, n_prim] log_m = log(m[:, start:end])';</span>
 <span id="cb29-44"><a href="#cb29-44"></a>      <span class="dt">array</span>[n_ind] <span class="dt">matrix</span>[n_sec, n_prim] n;</span>
-<span id="cb29-45"><a href="#cb29-45"></a>      tuple(<span class="dt">vector</span>[n_prim], <span class="dt">matrix</span>[n_sec, n_prim]) delta;</span>
+<span id="cb29-45"><a href="#cb29-45"></a>      <span class="dt">tuple</span>(<span class="dt">vector</span>[n_prim], <span class="dt">matrix</span>[n_sec, n_prim]) delta;</span>
 <span id="cb29-46"><a href="#cb29-46"></a>      </span>
 <span id="cb29-47"><a href="#cb29-47"></a>      <span class="co">// transform intercepts</span></span>
 <span id="cb29-48"><a href="#cb29-48"></a>      <span class="dt">vector</span>[<span class="dv">2</span>] log_phi_a = log(phi_a);</span>
@@ -1826,10 +1867,10 @@ Steady state distribution
 <span id="cb29-190"><a href="#cb29-190"></a>  <span class="co">/**</span></span>
 <span id="cb29-191"><a href="#cb29-191"></a><span class="co">   * Return the natural logarithm of the product of the element-wise exponentiation of the specified matrices</span></span>
 <span id="cb29-192"><a href="#cb29-192"></a><span class="co">   *</span></span>
-<span id="cb29-193"><a href="#cb29-193"></a><span class="co">   * @param a  First matrix or (row_)vector</span></span>
-<span id="cb29-194"><a href="#cb29-194"></a><span class="co">   * @param b  Second matrix or (row_)vector</span></span>
+<span id="cb29-193"><a href="#cb29-193"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> a  First matrix or (row_)vector</span></span>
+<span id="cb29-194"><a href="#cb29-194"></a><span class="co">   * </span><span class="an">@param</span><span class="co"> b  Second matrix or (row_)vector</span></span>
 <span id="cb29-195"><a href="#cb29-195"></a><span class="co">   *</span></span>
-<span id="cb29-196"><a href="#cb29-196"></a><span class="co">   * @return   log(exp(a) * exp(b))</span></span>
+<span id="cb29-196"><a href="#cb29-196"></a><span class="co">   * </span><span class="an">@return</span><span class="co">   log(exp(a) * exp(b))</span></span>
 <span id="cb29-197"><a href="#cb29-197"></a><span class="co">   */</span></span>
 <span id="cb29-198"><a href="#cb29-198"></a>  <span class="dt">matrix</span> log_product_exp(<span class="dt">matrix</span> a, <span class="dt">matrix</span> b) {</span>
 <span id="cb29-199"><a href="#cb29-199"></a>    <span class="dt">int</span> x = rows(a);</span>
@@ -1946,7 +1987,7 @@ Steady state distribution
 <span id="cb29-310"><a href="#cb29-310"></a>    <span class="dt">array</span>[<span class="dv">2</span>] <span class="dt">matrix</span>[n_sec, n_prim] p;</span>
 <span id="cb29-311"><a href="#cb29-311"></a>    <span class="dt">matrix</span>[n_ind, n_prim] log_m = log(m)';</span>
 <span id="cb29-312"><a href="#cb29-312"></a>    <span class="dt">array</span>[n_ind] <span class="dt">matrix</span>[n_sec, n_prim] n;</span>
-<span id="cb29-313"><a href="#cb29-313"></a>    tuple(<span class="dt">vector</span>[n_prim], <span class="dt">matrix</span>[n_sec, n_prim]) delta;</span>
+<span id="cb29-313"><a href="#cb29-313"></a>    <span class="dt">tuple</span>(<span class="dt">vector</span>[n_prim], <span class="dt">matrix</span>[n_sec, n_prim]) delta;</span>
 <span id="cb29-314"><a href="#cb29-314"></a>    <span class="dt">vector</span>[<span class="dv">2</span>] log_phi_a = log(phi_a);</span>
 <span id="cb29-315"><a href="#cb29-315"></a>    <span class="dt">vector</span>[<span class="dv">2</span>] log_psi_a = log(psi_a);</span>
 <span id="cb29-316"><a href="#cb29-316"></a>    <span class="dt">array</span>[n_prim - <span class="dv">1</span>] <span class="dt">matrix</span>[<span class="dv">3</span>, <span class="dv">3</span>] trm;</span>
@@ -2071,7 +2112,7 @@ Steady state distribution
 </div>
 <p>Next I prepare the data for Stan and run HMC with threading enabled for more computational power. On this M2 MacBook Pro I have 10 cores, meaning if I just use 2 HMC chains I can spread the work across 5 cores each. The <a href="https://mc-stan.org/docs/stan-users-guide/parallelization.html#reduce-sum-grainsize"><code>grainsize</code></a> arguments recommends how to partition the work in the partial sum function across cores.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="co"># convert diagnostic infection intensities to long format</span></span>
 <span id="cb30-2"><a href="#cb30-2"></a>x_long <span class="ot">&lt;-</span> reshape2<span class="sc">::</span><span class="fu">melt</span>(x, <span class="at">value.name =</span> <span class="st">"x"</span>, <span class="at">varnames =</span> <span class="fu">c</span>(<span class="st">"ind"</span>, <span class="st">"prim"</span>, <span class="st">"sec"</span>, <span class="st">"diag"</span>)) <span class="sc">|&gt;</span> </span>
@@ -2113,7 +2154,7 @@ Total execution time: 720.1 seconds.</code></pre>
 <h3 class="anchored" data-anchor-id="results-1">Results</h3>
 <p>We’ll visually check the parameter estimates with the simulation input and see that it was recovered well. For what it’s worth, in the paper we showed that the infection dynamics get overestimated significantly (5-fold in <a href="../portfolio/multievent.html">our application</a>) when not accounting for state misclassification.</p>
 <div class="cell" data-fig.asp="1.5">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="co"># check estimates</span></span>
 <span id="cb32-2"><a href="#cb32-2"></a>fit_goat<span class="sc">$</span><span class="fu">summary</span>(<span class="fu">c</span>(<span class="st">"phi_a"</span>, <span class="st">"phi_b"</span>, <span class="st">"psi_a"</span>, <span class="st">"psi_b"</span>, <span class="st">"p_a"</span>, <span class="st">"r"</span>, <span class="st">"lambda"</span>, <span class="st">"mu"</span>, <span class="st">"sigma"</span>)) <span class="sc">|&gt;</span></span>
@@ -2145,12 +2186,16 @@ Total execution time: 720.1 seconds.</code></pre>
 <span id="cb32-28"><a href="#cb32-28"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Posterior"</span>, <span class="at">y =</span> <span class="st">"Parameter"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="hmm-in-stan_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="hmm-in-stan_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Again, we might check to see how well we recovered our latent ecological states, which were completely unobservable from the data.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>z_est <span class="ot">&lt;-</span> fit_goat<span class="sc">$</span><span class="fu">summary</span>(<span class="st">"z"</span>)<span class="sc">$</span>median <span class="sc">|&gt;</span></span>
 <span id="cb33-2"><a href="#cb33-2"></a>  <span class="fu">matrix</span>(n_ind, n_prim) <span class="sc">|&gt;</span></span>
@@ -2163,7 +2208,7 @@ Total execution time: 720.1 seconds.</code></pre>
 </div>
 <p>One of the main reasons to account for imperfect pathogen detection is to get more realistic estimates of infection prevalence in the population. We can use the full posterior distribution of the latent ecological states from the Viterbi algorithm to estimate the infection prevalence per primary occasion, which here was simulated to be increasing due to dropping temperatures going into austral winter plotted for some fictional dates to show the unequal primary occasion intervals.</p>
 <div class="cell" data-fig.asp="0.618">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="co"># dates</span></span>
 <span id="cb35-2"><a href="#cb35-2"></a>start <span class="ot">&lt;-</span> <span class="fu">ymd</span>(<span class="st">"2020-12-01"</span>)</span>
@@ -2196,7 +2241,11 @@ Total execution time: 720.1 seconds.</code></pre>
 <span id="cb35-29"><a href="#cb35-29"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Primary Occasion"</span>, <span class="at">y =</span> <span class="st">"Infection Prevalence"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="hmm-in-stan_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="hmm-in-stan_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Thanks for reading if you made it this far. I hope this guide will be useful for ecologists (and others) wanting to transition to gradient-based sampling methods for complex ecological models. I’m sure I’ve some errors somewhere, so if someone finds any or has any questions, please don’t hesitate to reach out.</p>
@@ -2209,7 +2258,7 @@ Total execution time: 720.1 seconds.</code></pre>
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
 <div id="ref-betancourt2018" class="csl-entry" role="listitem">
 Betancourt, M. 2018, July 15. <a href="http://arxiv.org/abs/1701.02434">A conceptual introduction to Hamiltonian Monte Carlo</a>. arXiv.
 </div>
@@ -2218,9 +2267,6 @@ Carpenter, B., A. Gelman, M. D. Hoffman, D. Lee, B. Goodrich, M. Betancourt, M. 
 </div>
 <div id="ref-cooch2008a" class="csl-entry" role="listitem">
 Cooch, E. G., and G. C. White. 2008. Program MARK: A gentle introduction. 19th edition.
-</div>
-<div id="ref-devalpine2017" class="csl-entry" role="listitem">
-de Valpine, P., D. Turek, C. J. Paciorek, C. Anderson-Bergman, D. T. Lang, and R. Bodik. 2017. <a href="https://doi.org/10.1080/10618600.2016.1172487">Programming with models: Writing statistical algorithms for general model structures with NIMBLE</a>. Journal of Computational and Graphical Statistics 26:403–413.
 </div>
 <div id="ref-ergon2018" class="csl-entry" role="listitem">
 Ergon, T., Ø. Borgan, C. R. Nater, and Y. Vindenes. 2018. <a href="https://doi.org/10.1111/2041-210X.13059">The utility of mortality hazard rates in population analyses</a>. Methods in Ecology and Evolution 9:2046–2056.
@@ -2260,6 +2306,9 @@ Royle, J. A., and W. A. Link. 2006. <a href="https://doi.org/10.1890/0012-9658(2
 </div>
 <div id="ref-scheele2019a" class="csl-entry" role="listitem">
 Scheele, B. C., F. Pasmans, L. Skerratt, L. Berger, A. Martel, W. Beukema, A. A. Acevedo, P. A. Burrowes, T. Carvalho, A. Catenazzi, C. N. Foster, P. Frías-Álvarez, T. W. J. Garner, B. Gratwicke, J. M. Guayasamin, M. Hirschfeld, J. E. Kolby, T. A. Kosch, A. V. Longo, R. Maneyro, C. A. McDonald, J. R. Mendelson III, P. Palacios-Rodriguez, G. Parra-Olea, C. L. Richards-Zawacki, M.-O. Rödel, S. M. Rovito, C. Soto-Azat, L. F. Toledo, J. Voyles, C. Weldon, S. M. Whitfield, M. Wilkinson, K. R. Zamudio, and S. Canessa. 2019. <a href="https://doi.org/10.1126/science.aav0379">Amphibian fungal panzootic causes catastrophic and ongoing loss of biodiversity</a>. Science 363:1459–1463.
+</div>
+<div id="ref-devalpine2017" class="csl-entry" role="listitem">
+de Valpine, P., D. Turek, C. J. Paciorek, C. Anderson-Bergman, D. T. Lang, and R. Bodik. 2017. <a href="https://doi.org/10.1080/10618600.2016.1172487">Programming with models: Writing statistical algorithms for general model structures with NIMBLE</a>. Journal of Computational and Graphical Statistics 26:403–413.
 </div>
 <div id="ref-vehtari2023" class="csl-entry" role="listitem">
 Vehtari, A., J. Gabry, M. Magnusson, Y. Yao, P.-C. Bürkner, T. Paananen, and A. Gelman. 2023. <a href="https://mc-stan.org/loo/"><span class="nocase">loo</span>: Efficient leave-one-out cross-validation and WAIC for Bayesian models</a>.
@@ -2309,18 +2358,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -2352,11 +2390,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/quantecol\.com\.au");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -2366,8 +2443,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -2379,7 +2465,129 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -2423,6 +2631,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -2448,6 +2657,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -2505,20 +2740,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var filterRegex = new RegExp("https:\/\/quantecol\.com\.au");
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-          // default icon
-          link.classList.add("external");
-      }
-    }
 });
 </script>
 </div> <!-- /content -->
@@ -2527,12 +2748,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center">Quantecol | 53 Bentinck Street, Ballina NSW, Australia | ABN: 90 710 874 314</div>
+    <div class="nav-footer-center">
+<p>Quantecol | 53 Bentinck Street, Ballina NSW, Australia | ABN: 90 710 874 314</p>
+</div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+
 
 
 

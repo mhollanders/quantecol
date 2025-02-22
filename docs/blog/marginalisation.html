@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.6.40">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Dr.&nbsp;Matthijs Hollanders">
 <meta name="dcterms.date" content="2025-02-04">
 
-<title>Quantecol - Marginalisation</title>
+<title>Quantecol - Marginalisation – Quantecol</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,7 +24,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -35,7 +35,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -60,6 +60,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -91,17 +92,23 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-2741878938bdabb56c3a6f58ebb39665.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -110,20 +117,48 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
 }</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 <meta property="og:title" content="Quantecol - Marginalisation">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://quantecol.com.au/img/marg.png">
-<meta property="og:site-name" content="Quantecol">
+<meta property="og:site_name" content="Quantecol">
 <meta property="og:image:height" content="700">
 <meta property="og:image:width" content="1166">
 <meta name="twitter:title" content="Quantecol - Marginalisation">
@@ -138,50 +173,50 @@ div.csl-indent {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../img/Logo-Quantecol-RGB-FA-2-1000.png" alt="" class="navbar-logo">
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html" rel="" target="">
- <span class="menu-text">Home</span></a>
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../services.html" rel="" target="">
- <span class="menu-text">Services</span></a>
+    <a class="nav-link" href="../services.html"> 
+<span class="menu-text">Services</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../portfolio.html" rel="" target="">
- <span class="menu-text">Portfolio</span></a>
+    <a class="nav-link" href="../portfolio.html"> 
+<span class="menu-text">Portfolio</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../blog.html" rel="" target="">
- <span class="menu-text">Blog</span></a>
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-about" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-about" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">About</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-about">    
         <li>
-    <a class="dropdown-item" href="../about/vision.html" rel="" target="">
+    <a class="dropdown-item" href="../about/vision.html">
  <span class="dropdown-text">Our Vision</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../about/people/matthijs.html" rel="" target="">
+    <a class="dropdown-item" href="../about/people/matthijs.html">
  <span class="dropdown-text">People</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../about/contact.html" rel="" target="">
+    <a class="dropdown-item" href="../about/contact.html">
  <span class="dropdown-text">Contact Us</span></a>
   </li>  
     </ul>
@@ -189,14 +224,14 @@ div.csl-indent {
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/realQuantecol" rel="" target=""><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/realQuantecol"> <i class="bi bi-twitter-x" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
+          </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -254,7 +289,9 @@ div.csl-indent {
   </div>
   
 
+
 </header>
+
 
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
@@ -269,7 +306,7 @@ Marginal and conditional likelihoods
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>When we speak about conditional likelihoods in the context of ecological models, we express the likelihood of the data <span class="math inline">\(y\)</span> as a function of parameters <span class="math inline">\(\theta\)</span> and (partially) hidden discrete states <span class="math inline">\(Z\)</span>, denoted <span class="math inline">\(\mathcal{L}_c(y \mid \theta, Z)\)</span>. The marginal likelihood expresses the same likelihood without the discrete states, thus <em>marginalising</em> them from the model, <span class="math inline">\(\mathcal{L}_m(y \mid \theta)\)</span></p>
+<p>When we speak about conditional likelihoods in the context of ecological models, we express the likelihood of the data <span class="math inline">\(y\)</span> as a function of parameters <span class="math inline">\(\theta\)</span> and (partially) hidden discrete states <span class="math inline">\(Z\)</span>, denoted <span class="math inline">\(p_c\left(y \mid \theta, Z\right)\)</span>. The marginal likelihood expresses the likelihood conditional on the parameters without the discrete states, thus <em>marginalising</em> them from the model, <span class="math inline">\(p_m\left(y \mid \theta\right)\)</span></p>
 </div>
 </div>
 <p>Marginalisation leads to faster estimation and, ironically, better exploration of the posterior distributions of the underlying discrete states compared to sampling them directly. The downside is that these models can be more difficult to code or understand, because the marginal likelihood parameterisations don’t reflect the data-generating process as closely as the conditional parameterisations. Ironically, all of these ecological models were first constructed in the marginalised form when frequentist methods dominated the field. Although the conditional parameterisations facilitated the on-boarding of many ecologists that were less stats-savvy (like myself), generally the marginalised forms should be preferred. And when using gradient-based MCMC methods such as the No U-Turn Sampler (NUTS) implemented in Stan, you don’t have a choice.</p>
@@ -280,69 +317,68 @@ Marginal and conditional likelihoods
 <p>The data-generating process of an occupancy model is assumed to be as follows, where sites <span class="math inline">\(i \in 1:I\)</span> are either occupied by a species (<span class="math inline">\(z = 1\)</span>) or not (<span class="math inline">\(z = 0\)</span>) determined by occupancy probability <span class="math inline">\(\psi\)</span>, and subsequently detected (<span class="math inline">\(y = 1\)</span>) or not (<span class="math inline">\(y = 0\)</span>) during replicate survey <span class="math inline">\(j \in 1:J_i\)</span><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> with detection probability <span class="math inline">\(p\)</span> <span class="citation" data-cites="mackenzie2002">(<a href="#ref-mackenzie2002" role="doc-biblioref">MacKenzie et al. 2002</a>)</span>:</p>
 <p><span id="eq-occ"><span class="math display">\[
 \begin{aligned}
-z_i &amp;\sim \textrm{Bernoulli} (\psi) \\
-y_{ij} &amp;\sim \textrm{Bernoulli} (z_i \cdot p)
+z_i &amp;\sim \textrm{Bernoulli} \left(\psi\right) \\
+y_{ij} &amp;\sim \textrm{Bernoulli} \left(z_i \cdot p\right)
 \end{aligned}
 \tag{1}\]</span></span></p>
 <p>The conditional likelihood for each site’s detection history (where <span class="math inline">\(\boldsymbol{y}_i\)</span> is the detection history of each site consisting of 1s and 0s) is expressed as follows:</p>
 <p><span id="eq-occ-c"><span class="math display">\[
-\mathcal{L}_c(\boldsymbol{y}_i \mid \psi, p, z_i) = \textrm{Bernoulli}(z_i \mid \psi) \cdot \prod_{j=1}^{J_i}\textrm{Bernoulli}(y_{ij} \mid z_i \cdot p)
+p_c\left(\boldsymbol{y}_i \mid \psi, p, z_i\right) = \textrm{Bernoulli}\left(z_i \mid \psi\right) \cdot \prod_{j=1}^{J_i}\textrm{Bernoulli}\left(y_{ij} \mid z_i \cdot p\right)
 \tag{2}\]</span></span></p>
-<p>Here, the discrete occupancy states <span class="math inline">\(z_i\)</span> are partially unknown<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> and often a quantity of interest in addition to the two parameters governing the model, <span class="math inline">\(\psi\)</span> and <span class="math inline">\(p\)</span>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> The marginal likelihood is expressed as follows:</p>
+<p>Here, the discrete occupancy states <span class="math inline">\(z_i\)</span> are partially unknown<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> and often a quantity of interest in addition to the two parameters governing the model, <span class="math inline">\(\psi\)</span> and <span class="math inline">\(p\)</span>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> When we marginalise the <span class="math inline">\(z\)</span>’s from the model, we need to sum over the mutually exclusive probabilities associated with each occupancy state, where the marginal likelihood is expressed as follows:</p>
 <p><span id="eq-occ-m"><span class="math display">\[
 \begin{aligned}
-\mathcal{L}_m(\boldsymbol{y}_i \mid \psi, p) &amp;= \sum_{z = 0}^1 \left[ \textrm{Bernoulli}(z \mid \psi) \cdot \prod_{j=1}^{J_i}\textrm{Bernoulli}(y_{ij} \mid z \cdot p) \right] \\
-&amp;= \textrm{Bernoulli}(0 \mid \psi) \cdot \prod_{j=1}^{J_i}\textrm{Bernoulli}(y_{ij} \mid 0 \cdot p) \\
-&amp;\quad \ + \textrm{Bernoulli}(1 \mid \psi) \cdot \prod_{j=1}^{J_i}\textrm{Bernoulli}(y_{ij} \mid 1 \cdot p) \\
+p_m\left(\boldsymbol{y}_i \mid \psi, p\right) &amp;= \sum_{z = 0}^1 \left[ \textrm{Bernoulli}\left(z \mid \psi\right) \cdot \prod_{j=1}^{J_i}\textrm{Bernoulli}\left(y_{ij} \mid z \cdot p\right) \right] \\
+&amp;= \textrm{Bernoulli}\left(0 \mid \psi\right) \cdot \prod_{j=1}^{J_i}\textrm{Bernoulli}\left(y_{ij} \mid 0 \cdot p\right) \\
+&amp;\quad \ + \textrm{Bernoulli}\left(1 \mid \psi\right) \cdot \prod_{j=1}^{J_i}\textrm{Bernoulli}\left(y_{ij} \mid 1 \cdot p\right) \\
 \end{aligned}
 \tag{3}\]</span></span></p>
-<p>which can simplified by recognising that <span class="math inline">\(z_i\)</span> is known when any detections are made (we know the site is occupied) and that we only need to marginalise over the two states when no detections are made, because the site could still be occupied. Therefore, <a href="#eq-occ-m">Equation&nbsp;3</a> simplifies as follows, where <span class="math inline">\(Q_i = \sum_{j = 1}^{J_i} y_{ij}\)</span>:</p>
+<p>which can be simplified by recognising that <span class="math inline">\(z_i\)</span> is known when any detections are made (we know the site is occupied) and that we only need to marginalise over the two states when no detections are made, because the site could still be occupied. Therefore, <a href="#eq-occ-m" class="quarto-xref">Equation&nbsp;3</a> simplifies as follows, where <span class="math inline">\(Q_i = \sum_{j = 1}^{J_i} y_{ij}\)</span> (an indicator for whether there were any detections at a site):</p>
 <p><span id="eq-occ-m2"><span class="math display">\[
-\mathcal{L}_m(\boldsymbol{y}_i \mid \psi, p) = \begin{cases}
-\psi \cdot \prod_{j=1}^{J_i} \textrm{Bernoulli}(y_{ij} \mid p), &amp;Q_i &gt; 0, \\
-1 - \psi + \psi \cdot \prod_{j=1}^{J_i} \textrm{Bernoulli}(0 \mid p), &amp;Q_i = 0,
+p_m\left(\boldsymbol{y}_i \mid \psi, p\right) = \begin{cases}
+1 - \psi + \psi \cdot \prod_{j=1}^{J_i} \textrm{Bernoulli}\left(0 \mid p\right), &amp;\text{if }Q_i = 0, \\
+\psi \cdot \prod_{j=1}^{J_i} \textrm{Bernoulli}\left(y_{ij} \mid p\right), &amp;\text{if }Q_i &gt; 0,
 \end{cases}
 \tag{4}\]</span></span></p>
-<p>Note that the first term in the second line is just <span class="math inline">\(1 - \psi\)</span> because <span class="math inline">\(\prod_{j=1}^{J_i}\textrm{Bernoulli}(y_{ij} \mid 0) = 0\)</span> if any detections are made. If we assume constant detection probabilities across surveys within a site, this can be further simplified by adopting a Binomial distribution as follows:</p>
+<p>Note that the first term in the first line is just <span class="math inline">\(1 - \psi\)</span> because <span class="math inline">\(\prod_{j=1}^{J_i}\textrm{Bernoulli}\left(y_{ij} \mid 0\right) = 0\)</span> if any detections are made. If we assume constant detection probabilities across surveys within a site, this can be further simplified by adopting a Binomial distribution as follows:</p>
 <p><span id="eq-occ-b"><span class="math display">\[
-\mathcal{L}_m(\boldsymbol{y}_i \mid \psi, p) = \begin{cases}
-\psi \cdot \textrm{Binomial}(Q_i \mid J_i, p), &amp;Q_i &gt; 0, \\
-1 - \psi + \psi \cdot \textrm{Binomial}(0 \mid J_i, p), &amp;Q_i = 0,
+p_m\left(\boldsymbol{y}_i \mid \psi, p\right) = \begin{cases}
+1 - \psi + \psi \cdot \textrm{Binomial}\left(0 \mid J_i, p\right), &amp;\text{if }Q_i = 0, \\
+\psi \cdot \textrm{Binomial}\left(Q_i \mid J_i, p\right), &amp;\text{if } Q_i &gt; 0,
 \end{cases}
 \tag{5}\]</span></span></p>
 <p>If this isn’t making much sense yet (it didn’t to me the first few times I tried), take a look at the Stan program below. I’ll first simulate some occupancy data, where all sites have the same number of surveys.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># parameters</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>)</span>
-<span id="cb1-3"><a href="#cb1-3"></a>I <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a>J_max <span class="ot">&lt;-</span> <span class="dv">3</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a>J <span class="ot">&lt;-</span> <span class="fu">rep</span>(J_max, I)</span>
-<span id="cb1-6"><a href="#cb1-6"></a>psi <span class="ot">&lt;-</span> <span class="fl">0.6</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a>p <span class="ot">&lt;-</span> <span class="fl">0.4</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="co"># simulate</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a>z <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(I, <span class="dv">1</span>, psi)</span>
-<span id="cb1-11"><a href="#cb1-11"></a>y <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, I, J_max)</span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>I) {</span>
-<span id="cb1-13"><a href="#cb1-13"></a>  y[i, <span class="dv">1</span><span class="sc">:</span>J[i]] <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(J[i], <span class="dv">1</span>, z[i] <span class="sc">*</span> p)</span>
-<span id="cb1-14"><a href="#cb1-14"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2"></a>I <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>J_max <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>J <span class="ot">&lt;-</span> <span class="fu">rep</span>(J_max, I)</span>
+<span id="cb1-5"><a href="#cb1-5"></a>psi <span class="ot">&lt;-</span> <span class="fl">0.6</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a>p <span class="ot">&lt;-</span> <span class="fl">0.4</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co"># simulate</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a>z <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(I, <span class="dv">1</span>, psi)</span>
+<span id="cb1-10"><a href="#cb1-10"></a>y <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, I, J_max)</span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>I) {</span>
+<span id="cb1-12"><a href="#cb1-12"></a>  y[i, <span class="dv">1</span><span class="sc">:</span>J[i]] <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(J[i], <span class="dv">1</span>, z[i] <span class="sc">*</span> p)</span>
+<span id="cb1-13"><a href="#cb1-13"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <section id="general-approach" class="level2">
 <h2 class="anchored" data-anchor-id="general-approach">General approach</h2>
-<p>The first approach I outline follows <a href="#eq-occ-m2">Equation&nbsp;4</a> and computes the site-level log-likelihood in a for-loop. A few things to note about this and some upcoming programs:</p>
+<p>The first approach I outline follows <a href="#eq-occ-m2" class="quarto-xref">Equation&nbsp;4</a> and computes the site-level log-likelihood in a for-loop. A few things to note about this and some upcoming programs:</p>
 <ul>
-<li>I’m using mostly flat or weakly informative priors.</li>
-<li>When marginalising out discrete parameters, since we’re summing over the mutually exclusive probabilities, we have to keep track of our normalising constants. Therefore, we need to use the <code>_lpmf</code> instead of the <code>_lupmf</code> distributions. This doesn’t make a difference for the Bernoulli distribution because it doesn’t have constant terms, but it does for other examples.</li>
+<li>I’m using uniform priors for probabilities.</li>
+<li>When marginalising out discrete parameters, since we’re summing over the mutually exclusive probabilities, we have to keep track of our normalising constants. Therefore, we need to use the <code>_lpmf</code> instead of the <code>_lupmf</code> <a href="https://mc-stan.org/docs/stan-users-guide/proportionality-constants.html">distributions</a>. This doesn’t make a difference for the Bernoulli distribution because it doesn’t have constant terms, but it does for other examples.</li>
 <li>Although I’ve just simulated data with fixed occupancy and detection probabilities, these models facilitate site-level effects on occupancy and site-by-occasion effects on detection. Therefore, in the <code>model</code> block, I created a vector of occupancy probabilities and a matrix of detection probabilities (using the “intercepts” <code>psi_a</code> and <code>p_a</code>) to guide practitioners using this as a template for their own models.</li>
-<li>In the <code>model</code> block, since we specify a <em>log</em> probability density in Stan, I pre-compute <span class="math inline">\(\log(\psi)\)</span> and <span class="math inline">\(\log(1 - \psi)\)</span>, as this vectorised operation is more efficient than doing it for each site in the for-loop.</li>
-<li>In the same vein, summing probabilities on the second line of <a href="#eq-occ-m">Equation&nbsp;3</a> equates to using the <code>log_sum_exp()</code> function in Stan when working with log probabilities.</li>
-<li>In the <code>generated quantities</code> block, I recover the latent occupancy states that most likely generated the data. I initialise an array of ones (all sites occupied), but then for sites without detections I sort the log probabilities associated with each occupancy state and extract the most likely one, subtracting 1 from the index to yield 0s and 1s.</li>
+<li>In the <code>model</code> block, since we specify a <em>log</em> probability density in Stan, I pre-compute <span class="math inline">\(\log\left(\psi\right)\)</span> and <span class="math inline">\(\log\left(1 - \psi\right)\)</span>, as this vectorised operation is more efficient than doing it for each site in the for-loop.</li>
+<li>In the same vein, summing probabilities on the second line of <a href="#eq-occ-m" class="quarto-xref">Equation&nbsp;3</a> equates to using the <code>log_sum_exp()</code> function in Stan when working with log probabilities.</li>
+<li>In the <code>generated quantities</code> block I recover the posterior distributions for the latent occupancy states. I initialise an array of ones (all sites occupied), but then for sites without detections I use <a href="https://en.wikipedia.org/wiki/Inverse_transform_sampling">inverse transform sampling</a> to sample from the normalised state-specific log probabilities.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Since this sampling step uses the <code>categorical_logit_rng()</code> function which yields values 1 or 2 (associated with the respective log probabilities), I subtract 1 from the outcome to yield occupancy states 0 or 1.</li>
 </ul>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># load packages</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(pacman)) <span class="fu">install.packages</span>(<span class="st">"pacman"</span>)</span>
@@ -352,7 +388,7 @@ y_{ij} &amp;\sim \textrm{Bernoulli} (z_i \cdot p)
 </details>
 </div>
 <div class="cell" data-output.var="occ">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource stan number-lines code-with-copy"><code class="sourceCode stan"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">data</span> {</span>
 <span id="cb3-2"><a href="#cb3-2"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; I, J_max;  <span class="co">// number of sites and maximum surveys</span></span>
@@ -401,15 +437,15 @@ y_{ij} &amp;\sim \textrm{Bernoulli} (z_i \cdot p)
 <span id="cb3-45"><a href="#cb3-45"></a>    <span class="dt">vector</span>[I] psi = rep_vector(psi_a, I);</span>
 <span id="cb3-46"><a href="#cb3-46"></a>    <span class="dt">matrix</span>[I, J_max] p = rep_matrix(p_a, I, J_max);</span>
 <span id="cb3-47"><a href="#cb3-47"></a>    <span class="dt">vector</span>[I] log_psi = log(psi), log1m_psi = log1m(psi);</span>
-<span id="cb3-48"><a href="#cb3-48"></a>    <span class="dt">row_vector</span>[<span class="dv">2</span>] lp;</span>
+<span id="cb3-48"><a href="#cb3-48"></a>    <span class="dt">vector</span>[<span class="dv">2</span>] lp;</span>
 <span id="cb3-49"><a href="#cb3-49"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span>:I) {</span>
 <span id="cb3-50"><a href="#cb3-50"></a>      <span class="cf">if</span> (Q[i]) {</span>
 <span id="cb3-51"><a href="#cb3-51"></a>        log_lik[i] = log_psi[i] + bernoulli_lpmf(y[i, <span class="dv">1</span>:J[i]] | p[i, <span class="dv">1</span>:J[i]]);</span>
 <span id="cb3-52"><a href="#cb3-52"></a>      } <span class="cf">else</span> {</span>
 <span id="cb3-53"><a href="#cb3-53"></a>        lp = [ log1m_psi[i], </span>
-<span id="cb3-54"><a href="#cb3-54"></a>               log_psi[i] + bernoulli_lpmf(y[i, <span class="dv">1</span>:J[i]] | p[i, <span class="dv">1</span>:J[i]]) ];</span>
+<span id="cb3-54"><a href="#cb3-54"></a>               log_psi[i] + bernoulli_lpmf(y[i, <span class="dv">1</span>:J[i]] | p[i, <span class="dv">1</span>:J[i]]) ]';</span>
 <span id="cb3-55"><a href="#cb3-55"></a>        log_lik[i] = log_sum_exp(lp);</span>
-<span id="cb3-56"><a href="#cb3-56"></a>        z[i] = sort_indices_desc(lp)[<span class="dv">1</span>] - <span class="dv">1</span>;</span>
+<span id="cb3-56"><a href="#cb3-56"></a>        z[i] = categorical_logit_rng(lp - log_lik[i]) - <span class="dv">1</span>;</span>
 <span id="cb3-57"><a href="#cb3-57"></a>      }</span>
 <span id="cb3-58"><a href="#cb3-58"></a>    }</span>
 <span id="cb3-59"><a href="#cb3-59"></a>  }</span>
@@ -418,7 +454,7 @@ y_{ij} &amp;\sim \textrm{Bernoulli} (z_i \cdot p)
 </div>
 <p>Let’s run the model using <strong>cmdstanr</strong> <span class="citation" data-cites="gabry2024">(<a href="#ref-gabry2024" role="doc-biblioref">Gabry et al. 2024</a>)</span>. This samples well and fast, so we’ll run many iterations to compare speed.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>fit_occ <span class="ot">&lt;-</span> occ<span class="sc">$</span><span class="fu">sample</span>(</span>
 <span id="cb4-2"><a href="#cb4-2"></a>  <span class="at">data =</span> <span class="fu">list</span>(<span class="at">I =</span> I, <span class="at">J_max =</span> J_max, <span class="at">J =</span> J, <span class="at">y =</span> y), </span>
@@ -429,20 +465,20 @@ y_{ij} &amp;\sim \textrm{Bernoulli} (z_i \cdot p)
 <div class="cell-output cell-output-stdout">
 <pre><code>Running MCMC with 8 parallel chains...
 
-Chain 1 finished in 2.4 seconds.
-Chain 2 finished in 2.5 seconds.
-Chain 3 finished in 2.5 seconds.
-Chain 4 finished in 2.4 seconds.
-Chain 5 finished in 2.5 seconds.
-Chain 8 finished in 2.5 seconds.
+Chain 1 finished in 2.5 seconds.
+Chain 4 finished in 2.5 seconds.
+Chain 2 finished in 2.6 seconds.
+Chain 3 finished in 2.6 seconds.
+Chain 5 finished in 2.6 seconds.
+Chain 8 finished in 2.6 seconds.
 Chain 6 finished in 2.7 seconds.
-Chain 7 finished in 2.8 seconds.
+Chain 7 finished in 2.9 seconds.
 
 All 8 chains finished successfully.
-Mean chain execution time: 2.5 seconds.
-Total execution time: 2.9 seconds.</code></pre>
+Mean chain execution time: 2.6 seconds.
+Total execution time: 3.0 seconds.</code></pre>
 </div>
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>fit_occ<span class="sc">$</span><span class="fu">summary</span>(<span class="fu">c</span>(<span class="st">"psi_a"</span>, <span class="st">"p_a"</span>)) <span class="sc">|&gt;</span> </span>
 <span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">select</span>(variable, median, <span class="fu">contains</span>(<span class="st">"q"</span>), rhat, <span class="fu">contains</span>(<span class="st">"ess"</span>)) <span class="sc">|&gt;</span> </span>
@@ -452,10 +488,10 @@ Total execution time: 2.9 seconds.</code></pre>
 <pre><code># A tibble: 2 × 8
   variable median    q5   q95  rhat ess_bulk ess_tail truth
   &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
-1 psi_a     0.656 0.520 0.834  1.00   25715.   21924.   0.6
-2 p_a       0.346 0.260 0.436  1.00   23358.   28993.   0.4</code></pre>
+1 psi_a     0.656 0.520 0.834  1.00   25468.   21238.   0.6
+2 p_a       0.346 0.261 0.437  1.00   23766.   29475.   0.4</code></pre>
 </div>
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>fit_occ<span class="sc">$</span><span class="fu">loo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -466,7 +502,7 @@ Computed from 80000 by 100 log-likelihood matrix.
          Estimate   SE
 elpd_loo   -158.8 10.4
 p_loo         1.9  0.2
-looic       317.6 20.8
+looic       317.7 20.8
 ------
 MCSE of elpd_loo is 0.0.
 MCSE and ESS estimates assume MCMC draws (r_eff in [0.3, 0.8]).
@@ -475,22 +511,30 @@ All Pareto k estimates are good (k &lt; 0.7).
 See help('pareto-k-diagnostic') for details.</code></pre>
 </div>
 </div>
-<p>We can also check the proportion of sites that had the latent occupancy estimated correctly. Not too bad.</p>
+<p>We can also get the proportion of sites that had the latent occupancy states estimated correctly, using the posterior median of each site’s occupancy state. Since we know <span class="math inline">\(z=1\)</span> for sites with detections, we’ll only compute it for ambiguous sites.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">mean</span>(fit_occ<span class="sc">$</span><span class="fu">summary</span>(<span class="st">"z"</span>)<span class="sc">$</span>median <span class="sc">==</span> z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>fit_occ <span class="sc">|&gt;</span> </span>
+<span id="cb10-2"><a href="#cb10-2"></a>  <span class="fu">spread_rvars</span>(z[i]) <span class="sc">|&gt;</span> </span>
+<span id="cb10-3"><a href="#cb10-3"></a>  <span class="fu">mutate</span>(<span class="at">truth =</span> .env<span class="sc">$</span>z, </span>
+<span id="cb10-4"><a href="#cb10-4"></a>         <span class="at">Q =</span> <span class="fu">rowSums</span>(y)) <span class="sc">|&gt;</span> </span>
+<span id="cb10-5"><a href="#cb10-5"></a>  <span class="fu">filter</span>(<span class="sc">!</span>Q) <span class="sc">|&gt;</span> </span>
+<span id="cb10-6"><a href="#cb10-6"></a>  <span class="fu">summarise</span>(<span class="at">proportion_true =</span> <span class="fu">mean</span>(<span class="fu">median</span>(z) <span class="sc">==</span> truth))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.9</code></pre>
+<pre><code># A tibble: 1 × 1
+  proportion_true
+            &lt;dbl&gt;
+1           0.811</code></pre>
 </div>
 </div>
 </section>
 <section id="multinomial-likelihood" class="level2">
 <h2 class="anchored" data-anchor-id="multinomial-likelihood">Multinomial likelihood</h2>
-<p>There’s quicker ways to fit the same model, specifically with this intercepts-only model with the same number of surveys per site. This uses the multinomial likelihood by specifying cell probabilities for the possible detection histories, for which I’ll show the Stan program below. This approach leverages the definition that the number of surveys with detections follows a <span class="math inline">\(\textrm{Binomial}(J, p)\)</span> distribution and that sites have a finite number of possible detection histories.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> We can use the <code>multinomial_logit_lupmf</code> function to increment the log density after normalising the cell probabilities on the log scale.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+<p>There’s quicker ways to fit the same model, specifically with this intercepts-only model with the same number of surveys per site. This uses the multinomial likelihood by specifying cell probabilities for the possible detection histories, for which I’ll show the Stan program below. This approach leverages the definition that the number of surveys with detections follows a <span class="math inline">\(\textrm{Binomial}\left(J, p\right)\)</span> distribution and that sites have a finite number of possible detection histories.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> The cell probabilities correspond to the <span class="math inline">\(J+1\)</span> possible outcomes of having made <span class="math inline">\(y = 0, 1, \dots, J\)</span> detections with corresponding likelihood <span class="math inline">\(\textrm{Binomial}\left(y \mid J, p\right)\)</span>, where only the sites with <span class="math inline">\(y=0\)</span> detections need to have the probability of not being occupied incremented. We can use the <code>multinomial_logit_lupmf</code> function to increment the log density after normalising the cell probabilities on the log scale.</p>
 <div class="cell" data-output.var="occ_multi">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource stan number-lines code-with-copy"><code class="sourceCode stan"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">data</span> {</span>
 <span id="cb12-2"><a href="#cb12-2"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; I, J;  <span class="co">// number of sites and surveys</span></span>
@@ -543,7 +587,7 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 <span id="cb12-49"><a href="#cb12-49"></a>      } <span class="cf">else</span> {</span>
 <span id="cb12-50"><a href="#cb12-50"></a>        lp = [ log1m_psi, log_psi + bernoulli_lpmf(y[i] | p_a) ];</span>
 <span id="cb12-51"><a href="#cb12-51"></a>        log_lik[i] = log_sum_exp(lp);</span>
-<span id="cb12-52"><a href="#cb12-52"></a>        z[i] = sort_indices_desc(lp)[<span class="dv">1</span>] - <span class="dv">1</span>;</span>
+<span id="cb12-52"><a href="#cb12-52"></a>        z[i] = categorical_logit_rng(lp' - log_lik[i]) - <span class="dv">1</span>;</span>
 <span id="cb12-53"><a href="#cb12-53"></a>      }</span>
 <span id="cb12-54"><a href="#cb12-54"></a>    }</span>
 <span id="cb12-55"><a href="#cb12-55"></a>  }</span>
@@ -552,7 +596,7 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 </div>
 <p>This runs even faster and of course recovers the same posterior. We still need the same computations as the first model in the <code>generated quantities</code> block if we want the site-level log-likelihood values and latent states.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>fit_occ_multi <span class="ot">&lt;-</span> occ_multi<span class="sc">$</span><span class="fu">sample</span>(</span>
 <span id="cb13-2"><a href="#cb13-2"></a>  <span class="at">data =</span> <span class="fu">list</span>(<span class="at">I =</span> I, <span class="at">J =</span> J_max, <span class="at">y =</span> y), </span>
@@ -564,27 +608,27 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 <pre><code>Running MCMC with 8 parallel chains...</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Chain 1 finished in 0.6 seconds.
-Chain 2 finished in 0.6 seconds.
-Chain 3 finished in 0.6 seconds.
-Chain 4 finished in 0.6 seconds.
-Chain 5 finished in 0.6 seconds.
-Chain 6 finished in 0.6 seconds.
-Chain 7 finished in 0.6 seconds.
-Chain 8 finished in 0.6 seconds.
+<pre><code>Chain 1 finished in 0.7 seconds.
+Chain 2 finished in 0.7 seconds.
+Chain 3 finished in 0.7 seconds.
+Chain 4 finished in 0.8 seconds.
+Chain 5 finished in 0.7 seconds.
+Chain 6 finished in 0.7 seconds.
+Chain 7 finished in 0.7 seconds.
+Chain 8 finished in 0.7 seconds.
 
 All 8 chains finished successfully.
-Mean chain execution time: 0.6 seconds.
+Mean chain execution time: 0.7 seconds.
 Total execution time: 0.9 seconds.</code></pre>
 </div>
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">loo_compare</span>(fit_occ<span class="sc">$</span><span class="fu">loo</span>(), fit_occ_multi<span class="sc">$</span><span class="fu">loo</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>       elpd_diff se_diff
-model1 0.0       0.0    
-model2 0.0       0.0    </code></pre>
+model2 0.0       0.0    
+model1 0.0       0.0    </code></pre>
 </div>
 </div>
 <p>The approaches outlined so far works well for single season occupancy. For any flavour of multi-season (dynamic) occupancy models, you’re much better off implementing the scaleable forward algorithm I describe in detail in my <a href="../blog/hmm-in-stan.html">first post</a>.</p>
@@ -592,36 +636,36 @@ model2 0.0       0.0    </code></pre>
 </section>
 <section id="n-mixture-models" class="level1">
 <h1><em>N</em>-mixture models</h1>
-<p><em>N</em>-mixture models are a popular class of models to estimate species abundance <span class="math inline">\(N\)</span> while accounting for imperfect detection <span class="citation" data-cites="royle2004">(<a href="#ref-royle2004" role="doc-biblioref">Royle 2004</a>)</span>. The data-generating process of the model is as follows, where the abundance at sites <span class="math inline">\(i \in 1:I\)</span> assumes some non-negative discrete distribution (e.g., Poisson with expected abundance <span class="math inline">\(\lambda\)</span>) and the observed counts of individuals <span class="math inline">\(y\)</span> during surveys <span class="math inline">\(j \in 1:J_i\)</span> follow a Binomial distribution where the number of trials is the latent population size and the success probability is the per-individual detection probability:</p>
+<p><em>N</em>-mixture models are a popular class of models to estimate species abundance <span class="math inline">\(N\)</span> while accounting for imperfect detection <span class="citation" data-cites="royle2004">(<a href="#ref-royle2004" role="doc-biblioref">Royle 2004</a>)</span>. The data-generating process of the model is as follows, where the abundance at sites <span class="math inline">\(i \in 1:I\)</span> assumes some non-negative discrete distribution (e.g., Poisson with expected density <span class="math inline">\(\lambda\)</span>) and the observed counts of individuals <span class="math inline">\(y\)</span> during surveys <span class="math inline">\(j \in 1:J_i\)</span> follow a Binomial distribution where the number of trials is the latent population size and the success probability is the per-individual detection probability:</p>
 <p><span id="eq-N-dgp"><span class="math display">\[
 \begin{aligned}
-  N_i &amp;\sim \textrm{Poisson}(\lambda) \\
-  y_{ij} &amp;\sim \textrm{Binomial}(N_i, p)
+  N_i &amp;\sim \textrm{Poisson}\left(\lambda\right) \\
+  y_{ij} &amp;\sim \textrm{Binomial}\left(N_i, p\right)
 \end{aligned}
 \tag{6}\]</span></span></p>
 <p>The conditional likelihood of each site given its detection history of counts <span class="math inline">\(\boldsymbol{y}_i\)</span> is:</p>
 <p><span id="eq-N-c"><span class="math display">\[
 \begin{aligned}
-\mathcal{L}_c(\boldsymbol{y}_i \mid \lambda, p, N_i) = \textrm{Poisson}(N_i \mid \lambda) \cdot \prod_{j=1}^{J_i} \textrm{Binomial}(y_{ij} \mid N_i, p)
+p_c\left(\boldsymbol{y}_i \mid \lambda, p, N_i\right) = \textrm{Poisson}\left(N_i \mid \lambda\right) \cdot \prod_{j=1}^{J_i} \textrm{Binomial}\left(y_{ij} \mid N_i, p\right)
 \end{aligned}
 \tag{7}\]</span></span></p>
-<p>Unlike the occupancy example where we have just two possibilities to sum over (and only for sites without detections), in <em>N</em>-mixture models we have to marginalise over lots of values (the possible population sizes). We know for certain that the population sizes are <span class="math inline">\(N_i \geq \max(y_i)\)</span>, but we don’t know how large the population can be. In practice, we set a maximum population size <span class="math inline">\(K\)</span> to marginalise over to ease computational burden. <span class="math inline">\(K\)</span> should be large enough to exceed the maximum plausible population size but not much larger than that. Often, ecologists are dealing with populations that aren’t huge so it shouldn’t be a problem. In the case of very large population sizes, a normal approximation to the Poisson might be appropriate, which completely negates the need to marginalise when we treat the latent population size as continuous instead of discrete:</p>
+<p>Unlike the occupancy example where we have just two possibilities to sum over (and only for sites without detections), in <em>N</em>-mixture models we have to marginalise over lots of values (the possible population sizes). We know for certain that the population sizes are <span class="math inline">\(N_i \geq \max\left(y_i\right)\)</span>, but we don’t know how large the population can be. In practice, we set a maximum population size <span class="math inline">\(K\)</span> to marginalise over to ease computational burden. <span class="math inline">\(K\)</span> should be large enough to exceed the maximum plausible population size but not much larger than that. Often, ecologists are dealing with populations that aren’t huge so it shouldn’t be a problem. In the case of very large population sizes, a normal approximation to the Poisson might be appropriate, which completely negates the need to marginalise when we treat the latent population size as continuous instead of discrete:</p>
 <p><span id="eq-N-a"><span class="math display">\[
 \begin{aligned}
-  N_i &amp;\sim \textrm{Normal}(\lambda, \lambda) \\
-  y_{ij} &amp;\sim \textrm{Normal}(N_i \cdot p, \sqrt{N_i \cdot p \cdot (1 - p)})
+  N_i &amp;\sim \textrm{Normal}\left(\lambda, \lambda\right) \\
+  y_{ij} &amp;\sim \textrm{Normal}\left(N_i \cdot p, \sqrt{N_i \cdot p \cdot \left(1 - p\right)}\right)
 \end{aligned}
 \tag{8}\]</span></span></p>
-<p>However, we are here to marginalise. Just like in the occupancy example, we need to sum the probabilities associated with each population size in <span class="math inline">\(\max(y_i):K\)</span> given that these probabilities are mutually exclusive, yielding the following marginal likelihood for each site:</p>
+<p>However, we are here to marginalise. Just like in the occupancy example, we need to sum the mutually exclusive probabilities associated with each population size in <span class="math inline">\(\max\left(y_i\right):K\)</span>, yielding the following marginal likelihood for each site:</p>
 <p><span id="eq-N-m"><span class="math display">\[
-\mathcal{L}_m(\boldsymbol{y}_i \mid \lambda, p) = \sum_{k = \max(y_i)}^K \left[ \textrm{Poisson}(k \mid \lambda) \cdot \prod_{j=1}^{J_i} \textrm{Binomial}(y_{ij} \mid k, p) \right]
+p_m\left(\boldsymbol{y}_i \mid \lambda, p\right) = \sum_{k = \max\left(y_i\right)}^K \left[ \textrm{Poisson}\left(k \mid \lambda\right) \cdot \prod_{j=1}^{J_i} \textrm{Binomial}\left(y_{ij} \mid k, p\right) \right]
 \tag{9}\]</span></span></p>
-<p>Below is a Stan program for the marginalised <em>N</em>-mixture model after some data simulation. As in the occupancy model, I set up the code ready to use with site-level effects on expected abundance and site-by-survey effects on detection probabilities. In order to retrieve the latent population sizes, we first normalise the log probabilities associated with each of the possible population sizes and then sample from them using a categorical distribution.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
+<p>Below is a Stan program for the marginalised <em>N</em>-mixture model after some data simulation. As in the occupancy model, I set up the code ready to use with site-level effects on expected abundance and site-by-survey effects on detection probabilities. In order to retrieve the latent population sizes, we once again use inverse transform sampling by first normalising the log probabilities associated with each of the possible population sizes and then sampling from them using Stan’s <code>categorical_logit_rng()</code> function.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># parameters</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a>lambda <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a>lambda <span class="ot">&lt;-</span> <span class="dv">8</span></span>
 <span id="cb18-3"><a href="#cb18-3"></a>p <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
 <span id="cb18-4"><a href="#cb18-4"></a></span>
 <span id="cb18-5"><a href="#cb18-5"></a><span class="co"># simulate</span></span>
@@ -632,9 +676,9 @@ model2 0.0       0.0    </code></pre>
 <span id="cb18-10"><a href="#cb18-10"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>In this program we define <code>ks</code> in <code>transformed data</code> to be the number of population sizes to marginalise over for each site.</p>
+<p>We also need to consider the case when <span class="math inline">\(\max\left(y_i\right) = 0\)</span>, where we have to account for the probability of <span class="math inline">\(N_i = 0\)</span>. Since for this value of <span class="math inline">\(k=0\)</span> we still need to index the first element of the vector of log probabilities, I actually store the log probabilities of <span class="math inline">\(N_i = k\)</span> in the <span class="math inline">\(k + 1\)</span>th element of <code>lp</code>.</p>
 <div class="cell" data-output.var="nmix">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource stan number-lines code-with-copy"><code class="sourceCode stan"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">data</span> {</span>
 <span id="cb19-2"><a href="#cb19-2"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">1</span>&gt; I, J_max, K;  <span class="co">// number of sites and maximum surveys and population size</span></span>
@@ -643,60 +687,60 @@ model2 0.0       0.0    </code></pre>
 <span id="cb19-5"><a href="#cb19-5"></a>}</span>
 <span id="cb19-6"><a href="#cb19-6"></a></span>
 <span id="cb19-7"><a href="#cb19-7"></a><span class="kw">transformed data</span> {</span>
-<span id="cb19-8"><a href="#cb19-8"></a>  <span class="dt">array</span>[I] <span class="dt">int</span> max_y, ks;  <span class="co">// maximum counts and number of population sizes</span></span>
+<span id="cb19-8"><a href="#cb19-8"></a>  <span class="dt">array</span>[I] <span class="dt">int</span> max_y;  <span class="co">// maximum counts</span></span>
 <span id="cb19-9"><a href="#cb19-9"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span>:I) {</span>
 <span id="cb19-10"><a href="#cb19-10"></a>    max_y[i] = max(y[i, <span class="dv">1</span>:J[i]]);</span>
-<span id="cb19-11"><a href="#cb19-11"></a>    ks[i] = K - max_y[i] + <span class="dv">1</span>;</span>
-<span id="cb19-12"><a href="#cb19-12"></a>  }</span>
-<span id="cb19-13"><a href="#cb19-13"></a>}</span>
-<span id="cb19-14"><a href="#cb19-14"></a></span>
-<span id="cb19-15"><a href="#cb19-15"></a><span class="kw">parameters</span> {</span>
-<span id="cb19-16"><a href="#cb19-16"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; lambda_a;</span>
-<span id="cb19-17"><a href="#cb19-17"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>, <span class="kw">upper</span>=<span class="dv">1</span>&gt; p_a;</span>
-<span id="cb19-18"><a href="#cb19-18"></a>}</span>
-<span id="cb19-19"><a href="#cb19-19"></a></span>
-<span id="cb19-20"><a href="#cb19-20"></a><span class="kw">model</span> {</span>
-<span id="cb19-21"><a href="#cb19-21"></a>  <span class="co">// priors</span></span>
-<span id="cb19-22"><a href="#cb19-22"></a>  <span class="kw">target +=</span> exponential_lupdf(lambda_a | <span class="fl">0.01</span>);</span>
-<span id="cb19-23"><a href="#cb19-23"></a>  <span class="kw">target +=</span> beta_lupdf(p_a | <span class="dv">1</span>, <span class="dv">1</span>);</span>
-<span id="cb19-24"><a href="#cb19-24"></a>  </span>
-<span id="cb19-25"><a href="#cb19-25"></a>  <span class="co">// site-level expected abundance and site-by-occasion level detection</span></span>
-<span id="cb19-26"><a href="#cb19-26"></a>  <span class="dt">vector</span>[I] lambda = rep_vector(lambda_a, I);</span>
-<span id="cb19-27"><a href="#cb19-27"></a>  <span class="dt">matrix</span>[I, J_max] p = rep_matrix(p_a, I, J_max);</span>
-<span id="cb19-28"><a href="#cb19-28"></a>  </span>
-<span id="cb19-29"><a href="#cb19-29"></a>  <span class="co">// likelihood</span></span>
+<span id="cb19-11"><a href="#cb19-11"></a>  }</span>
+<span id="cb19-12"><a href="#cb19-12"></a>}</span>
+<span id="cb19-13"><a href="#cb19-13"></a></span>
+<span id="cb19-14"><a href="#cb19-14"></a><span class="kw">parameters</span> {</span>
+<span id="cb19-15"><a href="#cb19-15"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; lambda_a;</span>
+<span id="cb19-16"><a href="#cb19-16"></a>  <span class="dt">real</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>, <span class="kw">upper</span>=<span class="dv">1</span>&gt; p_a;</span>
+<span id="cb19-17"><a href="#cb19-17"></a>}</span>
+<span id="cb19-18"><a href="#cb19-18"></a></span>
+<span id="cb19-19"><a href="#cb19-19"></a><span class="kw">model</span> {</span>
+<span id="cb19-20"><a href="#cb19-20"></a>  <span class="co">// priors</span></span>
+<span id="cb19-21"><a href="#cb19-21"></a>  <span class="kw">target +=</span> exponential_lupdf(lambda_a | <span class="fl">0.01</span>);</span>
+<span id="cb19-22"><a href="#cb19-22"></a>  <span class="kw">target +=</span> beta_lupdf(p_a | <span class="dv">1</span>, <span class="dv">1</span>);</span>
+<span id="cb19-23"><a href="#cb19-23"></a>  </span>
+<span id="cb19-24"><a href="#cb19-24"></a>  <span class="co">// site-level expected abundance and site-by-occasion level detection</span></span>
+<span id="cb19-25"><a href="#cb19-25"></a>  <span class="dt">vector</span>[I] lambda = rep_vector(lambda_a, I);</span>
+<span id="cb19-26"><a href="#cb19-26"></a>  <span class="dt">matrix</span>[I, J_max] p = rep_matrix(p_a, I, J_max);</span>
+<span id="cb19-27"><a href="#cb19-27"></a>  </span>
+<span id="cb19-28"><a href="#cb19-28"></a>  <span class="co">// likelihood</span></span>
+<span id="cb19-29"><a href="#cb19-29"></a>  <span class="dt">vector</span>[K + <span class="dv">1</span>] lp;</span>
 <span id="cb19-30"><a href="#cb19-30"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span>:I) {</span>
-<span id="cb19-31"><a href="#cb19-31"></a>    <span class="dt">vector</span>[ks[i]] lp;</span>
-<span id="cb19-32"><a href="#cb19-32"></a>    <span class="cf">for</span> (k <span class="cf">in</span> max_y[i]:K) {</span>
-<span id="cb19-33"><a href="#cb19-33"></a>      lp[k - max_y[i] + <span class="dv">1</span>] = poisson_lpmf(k | lambda[i]) </span>
-<span id="cb19-34"><a href="#cb19-34"></a>                             + binomial_lpmf(y[i, <span class="dv">1</span>:J[i]] | k, p[i, <span class="dv">1</span>:J[i]]);</span>
-<span id="cb19-35"><a href="#cb19-35"></a>    }</span>
-<span id="cb19-36"><a href="#cb19-36"></a>    <span class="kw">target +=</span> log_sum_exp(lp);</span>
-<span id="cb19-37"><a href="#cb19-37"></a>  }</span>
-<span id="cb19-38"><a href="#cb19-38"></a>}</span>
-<span id="cb19-39"><a href="#cb19-39"></a></span>
-<span id="cb19-40"><a href="#cb19-40"></a><span class="kw">generated quantities</span> {</span>
-<span id="cb19-41"><a href="#cb19-41"></a>  <span class="dt">vector</span>[I] log_lik;</span>
-<span id="cb19-42"><a href="#cb19-42"></a>  <span class="dt">array</span>[I] <span class="dt">int</span> N;</span>
-<span id="cb19-43"><a href="#cb19-43"></a>  {</span>
-<span id="cb19-44"><a href="#cb19-44"></a>    <span class="dt">vector</span>[I] lambda = rep_vector(lambda_a, I);</span>
-<span id="cb19-45"><a href="#cb19-45"></a>    <span class="dt">matrix</span>[I, J_max] p = rep_matrix(p_a, I, J_max);</span>
+<span id="cb19-31"><a href="#cb19-31"></a>    <span class="cf">for</span> (k <span class="cf">in</span> max_y[i]:K) {</span>
+<span id="cb19-32"><a href="#cb19-32"></a>      lp[k + <span class="dv">1</span>] = poisson_lpmf(k | lambda[i]) </span>
+<span id="cb19-33"><a href="#cb19-33"></a>                  + binomial_lpmf(y[i, <span class="dv">1</span>:J[i]] | k, p[i, <span class="dv">1</span>:J[i]]);</span>
+<span id="cb19-34"><a href="#cb19-34"></a>    }</span>
+<span id="cb19-35"><a href="#cb19-35"></a>    <span class="kw">target +=</span> log_sum_exp(lp[(max_y[i] + <span class="dv">1</span>):(K + <span class="dv">1</span>)]);</span>
+<span id="cb19-36"><a href="#cb19-36"></a>  }</span>
+<span id="cb19-37"><a href="#cb19-37"></a>}</span>
+<span id="cb19-38"><a href="#cb19-38"></a></span>
+<span id="cb19-39"><a href="#cb19-39"></a><span class="kw">generated quantities</span> {</span>
+<span id="cb19-40"><a href="#cb19-40"></a>  <span class="dt">vector</span>[I] log_lik;</span>
+<span id="cb19-41"><a href="#cb19-41"></a>  <span class="dt">array</span>[I] <span class="dt">int</span> N;</span>
+<span id="cb19-42"><a href="#cb19-42"></a>  {</span>
+<span id="cb19-43"><a href="#cb19-43"></a>    <span class="dt">vector</span>[I] lambda = rep_vector(lambda_a, I);</span>
+<span id="cb19-44"><a href="#cb19-44"></a>    <span class="dt">matrix</span>[I, J_max] p = rep_matrix(p_a, I, J_max);</span>
+<span id="cb19-45"><a href="#cb19-45"></a>    <span class="dt">vector</span>[K + <span class="dv">1</span>] lp;</span>
 <span id="cb19-46"><a href="#cb19-46"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span>:I) {</span>
-<span id="cb19-47"><a href="#cb19-47"></a>      <span class="dt">vector</span>[ks[i]] lp;</span>
-<span id="cb19-48"><a href="#cb19-48"></a>      <span class="cf">for</span> (k <span class="cf">in</span> max_y[i]:K) {</span>
-<span id="cb19-49"><a href="#cb19-49"></a>        lp[k - max_y[i] + <span class="dv">1</span>] = poisson_lpmf(k | lambda[i]) </span>
-<span id="cb19-50"><a href="#cb19-50"></a>                               + binomial_lpmf(y[i, <span class="dv">1</span>:J[i]] | k, p[i, <span class="dv">1</span>:J[i]]);</span>
-<span id="cb19-51"><a href="#cb19-51"></a>      }</span>
-<span id="cb19-52"><a href="#cb19-52"></a>      log_lik[i] = log_sum_exp(lp);</span>
-<span id="cb19-53"><a href="#cb19-53"></a>      N[i] = categorical_logit_rng(lp - log_lik[i]) + max_y[i] - <span class="dv">1</span>;</span>
+<span id="cb19-47"><a href="#cb19-47"></a>      <span class="cf">for</span> (k <span class="cf">in</span> max_y[i]:K) {</span>
+<span id="cb19-48"><a href="#cb19-48"></a>        lp[k + <span class="dv">1</span>] = poisson_lpmf(k | lambda[i]) </span>
+<span id="cb19-49"><a href="#cb19-49"></a>                    + binomial_lpmf(y[i, <span class="dv">1</span>:J[i]] | k, p[i, <span class="dv">1</span>:J[i]]);</span>
+<span id="cb19-50"><a href="#cb19-50"></a>      }</span>
+<span id="cb19-51"><a href="#cb19-51"></a>      log_lik[i] = log_sum_exp(lp[(max_y[i] + <span class="dv">1</span>):(K + <span class="dv">1</span>)]);</span>
+<span id="cb19-52"><a href="#cb19-52"></a>      N[i] = categorical_logit_rng(lp[(max_y[i] + <span class="dv">1</span>):(K + <span class="dv">1</span>)] - log_lik[i]) </span>
+<span id="cb19-53"><a href="#cb19-53"></a>             + max_y[i] - <span class="dv">1</span>;</span>
 <span id="cb19-54"><a href="#cb19-54"></a>    }</span>
 <span id="cb19-55"><a href="#cb19-55"></a>  }</span>
 <span id="cb19-56"><a href="#cb19-56"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Let’s try this model with setting <span class="math inline">\(K\)</span> to be intentionally small at first. We won’t look at our estimates for <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(p\)</span> but instead check out the posterior distributions of some latent population sizes alongside the truth (red crosses).</p>
+<p>Let’s try this model with setting <span class="math inline">\(K\)</span> to be intentionally small at first. We won’t look at our estimates for <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(p\)</span> but instead check out the posterior distributions of some latent population sizes alongside the truth (green crosses).</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>data_nmix <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">I =</span> I, <span class="at">J_max =</span> J_max, <span class="at">K =</span> <span class="fu">max</span>(y), <span class="at">J =</span> J, <span class="at">y =</span> y)</span>
 <span id="cb20-2"><a href="#cb20-2"></a>fit_nmix <span class="ot">&lt;-</span> nmix<span class="sc">$</span><span class="fu">sample</span>(</span>
@@ -708,42 +752,46 @@ model2 0.0       0.0    </code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Running MCMC with 8 parallel chains...
 
-Chain 1 finished in 1.1 seconds.
-Chain 2 finished in 1.2 seconds.
-Chain 5 finished in 1.1 seconds.
-Chain 3 finished in 1.2 seconds.
-Chain 4 finished in 1.3 seconds.
-Chain 6 finished in 1.2 seconds.
-Chain 7 finished in 1.2 seconds.
-Chain 8 finished in 1.2 seconds.
+Chain 1 finished in 0.8 seconds.
+Chain 2 finished in 0.9 seconds.
+Chain 3 finished in 0.8 seconds.
+Chain 6 finished in 0.8 seconds.
+Chain 4 finished in 0.9 seconds.
+Chain 5 finished in 0.9 seconds.
+Chain 7 finished in 0.8 seconds.
+Chain 8 finished in 0.8 seconds.
 
 All 8 chains finished successfully.
-Mean chain execution time: 1.2 seconds.
-Total execution time: 1.4 seconds.</code></pre>
+Mean chain execution time: 0.8 seconds.
+Total execution time: 1.1 seconds.</code></pre>
 </div>
 </div>
 <p>We see that the estimated abundance of several sites is pushed right up to <span class="math inline">\(K\)</span> which we set to the maximum count. This is an extreme example, but it illustrates the point that you can tell graphically when <span class="math inline">\(K\)</span> is too small as some posteriors will pile up at <span class="math inline">\(K\)</span>.</p>
-<div class="cell" data-fig.asp="1">
-<details>
+<div class="cell">
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>fit_nmix <span class="sc">|&gt;</span> </span>
 <span id="cb22-2"><a href="#cb22-2"></a>  <span class="fu">spread_rvars</span>(N[i]) <span class="sc">|&gt;</span> </span>
 <span id="cb22-3"><a href="#cb22-3"></a>  <span class="fu">left_join</span>(<span class="fu">tibble</span>(<span class="at">i =</span> <span class="dv">1</span><span class="sc">:</span>I, <span class="at">truth =</span> N), <span class="at">by =</span> <span class="st">"i"</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb22-4"><a href="#cb22-4"></a>  <span class="fu">filter</span>(i <span class="sc">&lt;=</span> <span class="dv">25</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb22-5"><a href="#cb22-5"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> truth, <span class="at">xdist =</span> N, <span class="at">y =</span> <span class="fu">factor</span>(i) <span class="sc">|&gt;</span> <span class="fu">fct_rev</span>())) <span class="sc">+</span></span>
-<span id="cb22-6"><a href="#cb22-6"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> data_nmix<span class="sc">$</span>K, <span class="at">colour =</span> <span class="st">"red4"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span> </span>
+<span id="cb22-6"><a href="#cb22-6"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> data_nmix<span class="sc">$</span>K, <span class="at">colour =</span> green, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span> </span>
 <span id="cb22-7"><a href="#cb22-7"></a>  <span class="fu">stat_pointinterval</span>(<span class="at">point_interval =</span> median_qi, <span class="at">.width =</span> <span class="fl">0.9</span>, <span class="at">size =</span> <span class="fl">0.5</span>, <span class="at">linewidth =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
-<span id="cb22-8"><a href="#cb22-8"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_nudge</span>(<span class="at">y =</span> <span class="sc">-</span><span class="fl">0.3</span>), <span class="at">colour =</span> <span class="st">"red4"</span>, <span class="at">shape =</span> <span class="st">"cross"</span>) <span class="sc">+</span> </span>
+<span id="cb22-8"><a href="#cb22-8"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_nudge</span>(<span class="at">y =</span> <span class="sc">-</span><span class="fl">0.3</span>), <span class="at">colour =</span> green, <span class="at">shape =</span> <span class="st">"cross"</span>) <span class="sc">+</span> </span>
 <span id="cb22-9"><a href="#cb22-9"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(N), </span>
 <span id="cb22-10"><a href="#cb22-10"></a>       <span class="at">y =</span> <span class="st">"Site"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="marginalisation_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="marginalisation_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Let’s try it again with a more reasonable value for <span class="math inline">\(K\)</span>. We can now clearly see that all of the posteriors are well away from <span class="math inline">\(K\)</span>, indicating <span class="math inline">\(K\)</span> was large enough for the approximation. The model does run much slower, highlighting the trade-off between a reasonable approximation and computational cost.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>data_nmix<span class="sc">$</span>K <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">max</span>(N)</span>
 <span id="cb23-2"><a href="#cb23-2"></a>fit_nmix2 <span class="ot">&lt;-</span> nmix<span class="sc">$</span><span class="fu">sample</span>(</span>
@@ -755,41 +803,45 @@ Total execution time: 1.4 seconds.</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Running MCMC with 8 parallel chains...
 
-Chain 2 finished in 31.9 seconds.
-Chain 5 finished in 33.1 seconds.
-Chain 8 finished in 33.2 seconds.
-Chain 7 finished in 34.5 seconds.
-Chain 3 finished in 35.1 seconds.
-Chain 1 finished in 35.2 seconds.
-Chain 6 finished in 35.1 seconds.
-Chain 4 finished in 38.0 seconds.
+Chain 5 finished in 12.6 seconds.
+Chain 4 finished in 13.2 seconds.
+Chain 1 finished in 13.8 seconds.
+Chain 7 finished in 13.5 seconds.
+Chain 8 finished in 13.9 seconds.
+Chain 2 finished in 14.6 seconds.
+Chain 3 finished in 14.7 seconds.
+Chain 6 finished in 14.6 seconds.
 
 All 8 chains finished successfully.
-Mean chain execution time: 34.5 seconds.
-Total execution time: 38.2 seconds.</code></pre>
+Mean chain execution time: 13.9 seconds.
+Total execution time: 14.9 seconds.</code></pre>
 </div>
 </div>
-<div class="cell" data-fig.asp="1">
-<details>
+<div class="cell">
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>fit_nmix2 <span class="sc">|&gt;</span> </span>
 <span id="cb25-2"><a href="#cb25-2"></a>  <span class="fu">spread_rvars</span>(N[i]) <span class="sc">|&gt;</span> </span>
 <span id="cb25-3"><a href="#cb25-3"></a>  <span class="fu">left_join</span>(<span class="fu">tibble</span>(<span class="at">i =</span> <span class="dv">1</span><span class="sc">:</span>I, <span class="at">truth =</span> N), <span class="at">by =</span> <span class="st">"i"</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb25-4"><a href="#cb25-4"></a>  <span class="fu">filter</span>(i <span class="sc">&lt;=</span> <span class="dv">25</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb25-5"><a href="#cb25-5"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> truth, <span class="at">xdist =</span> N, <span class="at">y =</span> <span class="fu">factor</span>(i) <span class="sc">|&gt;</span> <span class="fu">fct_rev</span>())) <span class="sc">+</span></span>
-<span id="cb25-6"><a href="#cb25-6"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> data_nmix<span class="sc">$</span>K, <span class="at">colour =</span> <span class="st">"red4"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span> </span>
+<span id="cb25-6"><a href="#cb25-6"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> data_nmix<span class="sc">$</span>K, <span class="at">colour =</span> green, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span> </span>
 <span id="cb25-7"><a href="#cb25-7"></a>  <span class="fu">stat_pointinterval</span>(<span class="at">point_interval =</span> median_qi, <span class="at">.width =</span> <span class="fl">0.9</span>, <span class="at">size =</span> <span class="fl">0.5</span>, <span class="at">linewidth =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
-<span id="cb25-8"><a href="#cb25-8"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_nudge</span>(<span class="at">y =</span> <span class="sc">-</span><span class="fl">0.3</span>), <span class="at">colour =</span> <span class="st">"red4"</span>, <span class="at">shape =</span> <span class="st">"cross"</span>) <span class="sc">+</span> </span>
+<span id="cb25-8"><a href="#cb25-8"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_nudge</span>(<span class="at">y =</span> <span class="sc">-</span><span class="fl">0.3</span>), <span class="at">colour =</span> green, <span class="at">shape =</span> <span class="st">"cross"</span>) <span class="sc">+</span> </span>
 <span id="cb25-9"><a href="#cb25-9"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(N), </span>
 <span id="cb25-10"><a href="#cb25-10"></a>       <span class="at">y =</span> <span class="st">"Site"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="marginalisation_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="marginalisation_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
 </div>
-<p>Unsurprisingly, our estimates for <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(p\)</span> were severely biased when <span class="math inline">\(K\)</span> is too small as indicated in the plot below, where the red crosses indicate the true values.</p>
+</div>
+<p>Unsurprisingly, our estimates for <span class="math inline">\(\lambda\)</span> and <span class="math inline">\(p\)</span> were severely biased when <span class="math inline">\(K\)</span> is too small as indicated in the plot below, where the green crosses indicate the true values.</p>
 <div class="cell">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="fu">map</span>(<span class="fu">list</span>(fit_nmix, fit_nmix2), </span>
 <span id="cb26-2"><a href="#cb26-2"></a>    <span class="sc">~</span>(.x <span class="sc">|&gt;</span> </span>
@@ -808,40 +860,48 @@ Total execution time: 38.2 seconds.</code></pre>
 <span id="cb26-15"><a href="#cb26-15"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> <span class="fu">tibble</span>(<span class="at">.variable =</span> <span class="fu">c</span>(<span class="st">"lambda_a"</span>, <span class="st">"p_a"</span>),</span>
 <span id="cb26-16"><a href="#cb26-16"></a>                           <span class="at">.value =</span> <span class="fu">c</span>(lambda, p)),</span>
 <span id="cb26-17"><a href="#cb26-17"></a>             <span class="fu">aes</span>(<span class="at">x =</span> .value, <span class="at">y =</span> <span class="dv">0</span>), </span>
-<span id="cb26-18"><a href="#cb26-18"></a>             <span class="at">colour =</span> <span class="st">"red4"</span>, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">shape =</span> <span class="st">"cross"</span>) <span class="sc">+</span> </span>
+<span id="cb26-18"><a href="#cb26-18"></a>             <span class="at">colour =</span> green, <span class="at">size =</span> <span class="dv">2</span>, <span class="at">shape =</span> <span class="st">"cross"</span>) <span class="sc">+</span> </span>
 <span id="cb26-19"><a href="#cb26-19"></a>  ggeasy<span class="sc">::</span><span class="fu">easy_remove_y_axis</span>() <span class="sc">+</span> </span>
 <span id="cb26-20"><a href="#cb26-20"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Posterior"</span>, </span>
 <span id="cb26-21"><a href="#cb26-21"></a>       <span class="at">linetype =</span> <span class="st">"K"</span>,</span>
 <span id="cb26-22"><a href="#cb26-22"></a>       <span class="at">shape =</span> <span class="st">"K"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="marginalisation_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="marginalisation_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <section id="combining-occupancy-and-abundance" class="level2">
 <h2 class="anchored" data-anchor-id="combining-occupancy-and-abundance">Combining occupancy and abundance</h2>
-<p>What if we’re counting individuals at sites but not all sites are occupied? This can be described by the following generative model, which is essentially an <em>N</em>-mixture model nested in an occupancy model or a zero-inflated <em>N</em>-mixture model:</p>
+<p>What if we’re counting individuals at sites but not all sites are occupied? This can be described by the following generative model, which is essentially an <em>N</em>-mixture model nested in an occupancy model, or a zero-inflated <em>N</em>-mixture model:</p>
 <p><span id="eq-zi-nmix"><span class="math display">\[
 \begin{aligned}
-  z_i &amp;\sim \textrm{Bernoulli} (\psi) \\
-  N_i &amp;\sim \textrm{Poisson}(z_i \cdot \lambda) \\
-  y_{ij} &amp;\sim \textrm{Binomial}(N_i, p)
+  z_i &amp;\sim \textrm{Bernoulli} \left(\psi\right) \\
+  N_i &amp;\sim \textrm{Poisson}\left(z_i \cdot \lambda\right) \\
+  y_{ij} &amp;\sim \textrm{Binomial}\left(N_i, p\right)
 \end{aligned}
 \tag{10}\]</span></span></p>
 <p>The conditional likelihood for the site-level vector of counts <span class="math inline">\(\boldsymbol{y}_i\)</span> is:</p>
 <p><span id="eq-zi-nmix-c"><span class="math display">\[
-\mathcal{L}_c(\boldsymbol{y}_i \mid \psi, \lambda, p, z_i, N_i) = \textrm{Bernoulli}(z_i \mid \psi) \cdot \textrm{Poisson}(N_i \mid z_i \cdot \lambda) \cdot \prod_{j=1}^{J_i} \textrm{Binomial}(y_{ij} \mid N_i, p)
+\begin{aligned}
+p_c\left(\boldsymbol{y}_i \mid \psi, \lambda, p, z_i, N_i\right) = \ &amp; \textrm{Bernoulli}\left(z_i \mid \psi\right) \\
+&amp;\cdot \textrm{Poisson}\left(N_i \mid z_i \cdot \lambda\right) \\
+&amp;\cdot \prod_{j=1}^{J_i} \textrm{Binomial}\left(y_{ij} \mid N_i, p\right)
+\end{aligned}
 \tag{11}\]</span></span></p>
-<p>The full marginal likelihood is unwieldy to write, but if we define the expression in <a href="#eq-N-m">Equation&nbsp;9</a> as <span class="math inline">\(\theta\)</span>, then the marginal likelihood can be written analogously to our starting occupancy model in <a href="#eq-occ-m2">Equation&nbsp;4</a> as follows:</p>
+<p>The full marginal likelihood is unwieldy to write, but if we define the expression in <a href="#eq-N-m" class="quarto-xref">Equation&nbsp;9</a> as <span class="math inline">\(\theta\)</span>, then the marginal likelihood can be written analogously to our starting occupancy model in <a href="#eq-occ-m2" class="quarto-xref">Equation&nbsp;4</a> as follows:</p>
 <p><span id="eq-zi-nmix-m"><span class="math display">\[
-\mathcal{L}_m(\boldsymbol{y}_i \mid \psi, \lambda, p) = \begin{cases}
-\psi \cdot \theta, &amp;Q_i &gt; 0, \\
-1 - \psi + \psi \cdot \theta, &amp;Q_i = 0,
+p_m\left(\boldsymbol{y}_i \mid \psi, \lambda, p\right) = \begin{cases}
+1 - \psi + \psi \cdot \theta, &amp;\text{if } Q_i = 0, \\
+\psi \cdot \theta, &amp;\text{if } Q_i &gt; 0,
 \end{cases}
 \tag{12}\]</span></span></p>
-<p>where <span class="math inline">\(Q_i\)</span> is the total number of individuals detected across surveys. When marginalising discrete parameters in several hierarchical levels, you should first compute the lower levels (abundance in this case) and then increment the higher levels (occupancy). Let’s simulate some data to start.</p>
+<p>where <span class="math inline">\(Q_i = \sum_{j=1}^{J_i} y_{ij}\)</span> is the total number of individuals detected across surveys. When marginalising discrete parameters in several hierarchical levels, you should first compute the lower levels (abundance in this case) and then increment the higher levels (occupancy). Let’s simulate some data to start.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="co"># parameters</span></span>
 <span id="cb27-2"><a href="#cb27-2"></a>psi <span class="ot">&lt;-</span> <span class="fl">0.8</span></span>
@@ -855,9 +915,9 @@ Total execution time: 38.2 seconds.</code></pre>
 <span id="cb27-10"><a href="#cb27-10"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>Notice that in the <code>generated quantities</code> block, we first simulate posterior draws for <span class="math inline">\(N_i\)</span> for all sites, but then overwrite this value with 0 if the site is estimated to have not been occupied (<span class="math inline">\(z_i = 0\)</span>). This is akin to the forward-backward (Viterbi) algorithm for recovering hidden states in hidden Markov models.</p>
+<p>In this Stan program, we don’t need to account for 0 abundance because this is implied for unoccupied sites. So for the cases where <span class="math inline">\(\max\left(y_i\right)=0\)</span>, we compute the log probabilities of population sizes starting at 1. I’ve created a new indicator in <code>transformed data</code> to flag the first <span class="math inline">\(k\)</span> to marginalise over. Also notice that in the <code>generated quantities</code> block we only simulate population sizes <span class="math inline">\(N_i\)</span> if sites are occupied.</p>
 <div class="cell" data-output.var="zi_nmix">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource stan number-lines code-with-copy"><code class="sourceCode stan"><span id="cb28-1"><a href="#cb28-1"></a><span class="kw">data</span> {</span>
 <span id="cb28-2"><a href="#cb28-2"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; I, J_max, K;  <span class="co">// number of sites and maximum surveys and population size</span></span>
@@ -866,10 +926,10 @@ Total execution time: 38.2 seconds.</code></pre>
 <span id="cb28-5"><a href="#cb28-5"></a>}</span>
 <span id="cb28-6"><a href="#cb28-6"></a></span>
 <span id="cb28-7"><a href="#cb28-7"></a><span class="kw">transformed data</span> {</span>
-<span id="cb28-8"><a href="#cb28-8"></a>  <span class="dt">array</span>[I] <span class="dt">int</span> max_y, ks;  <span class="co">// maximum counts and number of population sizes</span></span>
+<span id="cb28-8"><a href="#cb28-8"></a>  <span class="dt">array</span>[I] <span class="dt">int</span> max_y, first_k;  <span class="co">// maximum counts and lowest population size</span></span>
 <span id="cb28-9"><a href="#cb28-9"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span>:I) {</span>
 <span id="cb28-10"><a href="#cb28-10"></a>    max_y[i] = max(y[i, <span class="dv">1</span>:J[i]]);</span>
-<span id="cb28-11"><a href="#cb28-11"></a>    ks[i] = K - max_y[i] + <span class="dv">1</span>;</span>
+<span id="cb28-11"><a href="#cb28-11"></a>    first_k[i] = max({max_y[i], <span class="dv">1</span>});</span>
 <span id="cb28-12"><a href="#cb28-12"></a>  }</span>
 <span id="cb28-13"><a href="#cb28-13"></a>}</span>
 <span id="cb28-14"><a href="#cb28-14"></a></span>
@@ -893,87 +953,84 @@ Total execution time: 38.2 seconds.</code></pre>
 <span id="cb28-32"><a href="#cb28-32"></a>  <span class="dt">vector</span>[I] log_psi = log(psi), log1m_psi = log1m(psi);</span>
 <span id="cb28-33"><a href="#cb28-33"></a>  </span>
 <span id="cb28-34"><a href="#cb28-34"></a>  <span class="co">// likelihood</span></span>
-<span id="cb28-35"><a href="#cb28-35"></a>  <span class="dt">real</span> theta;</span>
-<span id="cb28-36"><a href="#cb28-36"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span>:I) {</span>
-<span id="cb28-37"><a href="#cb28-37"></a>    </span>
-<span id="cb28-38"><a href="#cb28-38"></a>    <span class="co">// abundance</span></span>
-<span id="cb28-39"><a href="#cb28-39"></a>    <span class="dt">vector</span>[ks[i]] lp;</span>
-<span id="cb28-40"><a href="#cb28-40"></a>    <span class="cf">for</span> (k <span class="cf">in</span> max_y[i]:K) {</span>
-<span id="cb28-41"><a href="#cb28-41"></a>      lp[k - max_y[i] + <span class="dv">1</span>] = poisson_lpmf(k | lambda[i]) </span>
-<span id="cb28-42"><a href="#cb28-42"></a>                             + binomial_lpmf(y[i, <span class="dv">1</span>:J[i]] | k, p[i, <span class="dv">1</span>:J[i]]);</span>
-<span id="cb28-43"><a href="#cb28-43"></a>    }</span>
-<span id="cb28-44"><a href="#cb28-44"></a>    theta = log_sum_exp(lp);</span>
-<span id="cb28-45"><a href="#cb28-45"></a>    </span>
-<span id="cb28-46"><a href="#cb28-46"></a>    <span class="co">// increment occupancy</span></span>
-<span id="cb28-47"><a href="#cb28-47"></a>    <span class="cf">if</span> (max_y[i]) {</span>
-<span id="cb28-48"><a href="#cb28-48"></a>      <span class="kw">target +=</span> log_psi[i] + theta;</span>
-<span id="cb28-49"><a href="#cb28-49"></a>    } <span class="cf">else</span> {</span>
-<span id="cb28-50"><a href="#cb28-50"></a>      <span class="kw">target +=</span> log_sum_exp(log1m_psi[i], log_psi[i] + theta);</span>
-<span id="cb28-51"><a href="#cb28-51"></a>    }</span>
-<span id="cb28-52"><a href="#cb28-52"></a>  }</span>
-<span id="cb28-53"><a href="#cb28-53"></a>}</span>
-<span id="cb28-54"><a href="#cb28-54"></a></span>
-<span id="cb28-55"><a href="#cb28-55"></a><span class="kw">generated quantities</span> {</span>
-<span id="cb28-56"><a href="#cb28-56"></a>  <span class="dt">vector</span>[I] log_lik;</span>
-<span id="cb28-57"><a href="#cb28-57"></a>  <span class="dt">array</span>[I] <span class="dt">int</span> z = ones_int_array(I), N;</span>
-<span id="cb28-58"><a href="#cb28-58"></a>  {</span>
-<span id="cb28-59"><a href="#cb28-59"></a>    <span class="dt">vector</span>[I] psi = rep_vector(psi_a, I);</span>
-<span id="cb28-60"><a href="#cb28-60"></a>    <span class="dt">vector</span>[I] lambda = rep_vector(lambda_a, I);</span>
-<span id="cb28-61"><a href="#cb28-61"></a>    <span class="dt">matrix</span>[I, J_max] p = rep_matrix(p_a, I, J_max);</span>
-<span id="cb28-62"><a href="#cb28-62"></a>    <span class="dt">vector</span>[I] log_psi = log(psi), log1m_psi = log1m(psi);</span>
-<span id="cb28-63"><a href="#cb28-63"></a>    <span class="dt">real</span> theta;</span>
-<span id="cb28-64"><a href="#cb28-64"></a>    <span class="dt">row_vector</span>[<span class="dv">2</span>] lp_z;</span>
-<span id="cb28-65"><a href="#cb28-65"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span>:I) {</span>
-<span id="cb28-66"><a href="#cb28-66"></a>      <span class="dt">vector</span>[ks[i]] lp;</span>
-<span id="cb28-67"><a href="#cb28-67"></a>      <span class="cf">for</span> (k <span class="cf">in</span> max_y[i]:K) {</span>
-<span id="cb28-68"><a href="#cb28-68"></a>        lp[k - max_y[i] + <span class="dv">1</span>] = poisson_lpmf(k | lambda[i]) </span>
-<span id="cb28-69"><a href="#cb28-69"></a>                               + binomial_lpmf(y[i, <span class="dv">1</span>:J[i]] | k, p[i, <span class="dv">1</span>:J[i]]);</span>
-<span id="cb28-70"><a href="#cb28-70"></a>      }</span>
-<span id="cb28-71"><a href="#cb28-71"></a>      theta = log_sum_exp(lp);</span>
-<span id="cb28-72"><a href="#cb28-72"></a>      N[i] = categorical_logit_rng(lp - theta) + max_y[i] - <span class="dv">1</span>;</span>
-<span id="cb28-73"><a href="#cb28-73"></a>      <span class="cf">if</span> (max_y[i]) {</span>
-<span id="cb28-74"><a href="#cb28-74"></a>        log_lik[i] = log_psi[i] + theta;</span>
-<span id="cb28-75"><a href="#cb28-75"></a>      } <span class="cf">else</span> {</span>
-<span id="cb28-76"><a href="#cb28-76"></a>        lp_z = [ log1m_psi[i], log_psi[i] + theta ];</span>
-<span id="cb28-77"><a href="#cb28-77"></a>        log_lik[i] = log_sum_exp(lp_z);</span>
-<span id="cb28-78"><a href="#cb28-78"></a>        z[i] = sort_indices_desc(lp_z)[<span class="dv">1</span>] - <span class="dv">1</span>;</span>
-<span id="cb28-79"><a href="#cb28-79"></a>        <span class="cf">if</span> (!z[i]) {</span>
-<span id="cb28-80"><a href="#cb28-80"></a>          N[i] = <span class="dv">0</span>;</span>
-<span id="cb28-81"><a href="#cb28-81"></a>        }</span>
-<span id="cb28-82"><a href="#cb28-82"></a>      }</span>
-<span id="cb28-83"><a href="#cb28-83"></a>    }</span>
-<span id="cb28-84"><a href="#cb28-84"></a>  }</span>
-<span id="cb28-85"><a href="#cb28-85"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb28-35"><a href="#cb28-35"></a>  <span class="dt">vector</span>[K] lp;</span>
+<span id="cb28-36"><a href="#cb28-36"></a>  <span class="dt">real</span> theta;</span>
+<span id="cb28-37"><a href="#cb28-37"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span>:I) {</span>
+<span id="cb28-38"><a href="#cb28-38"></a>    <span class="cf">for</span> (k <span class="cf">in</span> first_k[i]:K) {</span>
+<span id="cb28-39"><a href="#cb28-39"></a>      lp[k] = poisson_lpmf(k | lambda[i]) </span>
+<span id="cb28-40"><a href="#cb28-40"></a>              + binomial_lpmf(y[i, <span class="dv">1</span>:J[i]] | k, p[i, <span class="dv">1</span>:J[i]]);</span>
+<span id="cb28-41"><a href="#cb28-41"></a>    }</span>
+<span id="cb28-42"><a href="#cb28-42"></a>    theta = log_sum_exp(lp[first_k[i]:K]);</span>
+<span id="cb28-43"><a href="#cb28-43"></a>    </span>
+<span id="cb28-44"><a href="#cb28-44"></a>    <span class="co">// increment occupancy</span></span>
+<span id="cb28-45"><a href="#cb28-45"></a>    <span class="cf">if</span> (max_y[i]) {</span>
+<span id="cb28-46"><a href="#cb28-46"></a>      <span class="kw">target +=</span> log_psi[i] + theta;</span>
+<span id="cb28-47"><a href="#cb28-47"></a>    } <span class="cf">else</span> {</span>
+<span id="cb28-48"><a href="#cb28-48"></a>      <span class="kw">target +=</span> log_sum_exp(log1m_psi[i], log_psi[i] + theta);</span>
+<span id="cb28-49"><a href="#cb28-49"></a>    }</span>
+<span id="cb28-50"><a href="#cb28-50"></a>  }</span>
+<span id="cb28-51"><a href="#cb28-51"></a>}</span>
+<span id="cb28-52"><a href="#cb28-52"></a></span>
+<span id="cb28-53"><a href="#cb28-53"></a><span class="kw">generated quantities</span> {</span>
+<span id="cb28-54"><a href="#cb28-54"></a>  <span class="dt">vector</span>[I] log_lik;</span>
+<span id="cb28-55"><a href="#cb28-55"></a>  <span class="dt">array</span>[I] <span class="dt">int</span> z = ones_int_array(I), N = zeros_int_array(I);</span>
+<span id="cb28-56"><a href="#cb28-56"></a>  {</span>
+<span id="cb28-57"><a href="#cb28-57"></a>    <span class="dt">vector</span>[I] psi = rep_vector(psi_a, I);</span>
+<span id="cb28-58"><a href="#cb28-58"></a>    <span class="dt">vector</span>[I] lambda = rep_vector(lambda_a, I);</span>
+<span id="cb28-59"><a href="#cb28-59"></a>    <span class="dt">matrix</span>[I, J_max] p = rep_matrix(p_a, I, J_max);</span>
+<span id="cb28-60"><a href="#cb28-60"></a>    <span class="dt">vector</span>[I] log_psi = log(psi), log1m_psi = log1m(psi);</span>
+<span id="cb28-61"><a href="#cb28-61"></a>    <span class="dt">vector</span>[K] lp;</span>
+<span id="cb28-62"><a href="#cb28-62"></a>    <span class="dt">real</span> theta;</span>
+<span id="cb28-63"><a href="#cb28-63"></a>    <span class="dt">vector</span>[<span class="dv">2</span>] lp_z;</span>
+<span id="cb28-64"><a href="#cb28-64"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span>:I) {</span>
+<span id="cb28-65"><a href="#cb28-65"></a>      <span class="cf">for</span> (k <span class="cf">in</span> first_k[i]:K) {</span>
+<span id="cb28-66"><a href="#cb28-66"></a>        lp[k] = poisson_lpmf(k | lambda[i]) </span>
+<span id="cb28-67"><a href="#cb28-67"></a>                + binomial_lpmf(y[i, <span class="dv">1</span>:J[i]] | k, p[i, <span class="dv">1</span>:J[i]]);</span>
+<span id="cb28-68"><a href="#cb28-68"></a>      }</span>
+<span id="cb28-69"><a href="#cb28-69"></a>      theta = log_sum_exp(lp[first_k[i]:K]);</span>
+<span id="cb28-70"><a href="#cb28-70"></a>      <span class="cf">if</span> (max_y[i]) {</span>
+<span id="cb28-71"><a href="#cb28-71"></a>        log_lik[i] = log_psi[i] + theta;</span>
+<span id="cb28-72"><a href="#cb28-72"></a>        N[i] = categorical_logit_rng(lp[first_k[i]:K] - theta) + max_y[i] - <span class="dv">1</span>;</span>
+<span id="cb28-73"><a href="#cb28-73"></a>      } <span class="cf">else</span> {</span>
+<span id="cb28-74"><a href="#cb28-74"></a>        lp_z = [ log1m_psi[i], log_psi[i] + theta ]';</span>
+<span id="cb28-75"><a href="#cb28-75"></a>        log_lik[i] = log_sum_exp(lp_z);</span>
+<span id="cb28-76"><a href="#cb28-76"></a>        z[i] = categorical_logit_rng(lp_z - log_lik[i]) - <span class="dv">1</span>;</span>
+<span id="cb28-77"><a href="#cb28-77"></a>        <span class="cf">if</span> (z[i]) {</span>
+<span id="cb28-78"><a href="#cb28-78"></a>          N[i] = categorical_logit_rng(lp[first_k[i]:K] - theta) + max_y[i] - <span class="dv">1</span>;</span>
+<span id="cb28-79"><a href="#cb28-79"></a>        }</span>
+<span id="cb28-80"><a href="#cb28-80"></a>      }</span>
+<span id="cb28-81"><a href="#cb28-81"></a>    }</span>
+<span id="cb28-82"><a href="#cb28-82"></a>  }</span>
+<span id="cb28-83"><a href="#cb28-83"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>After running this model we see estimation went well and latent occupancy states had great recovery. There’s a lot to be said for using counts in the observation models of occupancy models as it provides much more information about <span class="math inline">\(\psi\)</span> than a Binomial likelihood, because collapsing counts to 1s and 0s always discards information. But this might be the subject of a future blog post.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>zi_nmix_data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">I =</span> I, <span class="at">J_max =</span> J_max, <span class="at">K =</span> <span class="dv">3</span> <span class="sc">*</span> <span class="fu">max</span>(N), <span class="at">J =</span> J, <span class="at">y =</span> y)</span>
-<span id="cb29-2"><a href="#cb29-2"></a>fit_zi_nmix <span class="ot">&lt;-</span> zi_nmix<span class="sc">$</span><span class="fu">sample</span>(</span>
-<span id="cb29-3"><a href="#cb29-3"></a>  <span class="at">data =</span> zi_nmix_data, </span>
-<span id="cb29-4"><a href="#cb29-4"></a>  <span class="at">refresh =</span> <span class="dv">0</span>, <span class="at">chains =</span> chains, </span>
-<span id="cb29-5"><a href="#cb29-5"></a>  <span class="at">iter_warmup =</span> iter_warmup, <span class="at">iter_sampling =</span> iter_sampling</span>
-<span id="cb29-6"><a href="#cb29-6"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>fit_zi_nmix <span class="ot">&lt;-</span> zi_nmix<span class="sc">$</span><span class="fu">sample</span>(</span>
+<span id="cb29-2"><a href="#cb29-2"></a>  <span class="at">data =</span> <span class="fu">list</span>(<span class="at">I =</span> I, <span class="at">J_max =</span> J_max, <span class="at">K =</span> <span class="dv">3</span> <span class="sc">*</span> <span class="fu">max</span>(N), <span class="at">J =</span> J, <span class="at">y =</span> y), </span>
+<span id="cb29-3"><a href="#cb29-3"></a>  <span class="at">refresh =</span> <span class="dv">0</span>, <span class="at">chains =</span> chains, </span>
+<span id="cb29-4"><a href="#cb29-4"></a>  <span class="at">iter_warmup =</span> iter_warmup, <span class="at">iter_sampling =</span> iter_sampling</span>
+<span id="cb29-5"><a href="#cb29-5"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Running MCMC with 8 parallel chains...
 
-Chain 7 finished in 67.5 seconds.
-Chain 8 finished in 70.0 seconds.
-Chain 1 finished in 71.0 seconds.
-Chain 4 finished in 76.8 seconds.
-Chain 5 finished in 84.9 seconds.
-Chain 6 finished in 85.9 seconds.
-Chain 3 finished in 86.7 seconds.
-Chain 2 finished in 94.5 seconds.
+Chain 5 finished in 22.4 seconds.
+Chain 1 finished in 22.6 seconds.
+Chain 2 finished in 22.8 seconds.
+Chain 4 finished in 25.5 seconds.
+Chain 3 finished in 27.6 seconds.
+Chain 6 finished in 27.4 seconds.
+Chain 7 finished in 27.9 seconds.
+Chain 8 finished in 28.2 seconds.
 
 All 8 chains finished successfully.
-Mean chain execution time: 79.7 seconds.
-Total execution time: 94.6 seconds.</code></pre>
+Mean chain execution time: 25.5 seconds.
+Total execution time: 28.4 seconds.</code></pre>
 </div>
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>fit_zi_nmix<span class="sc">$</span><span class="fu">summary</span>(<span class="fu">c</span>(<span class="st">"psi_a"</span>, <span class="st">"lambda_a"</span>, <span class="st">"p_a"</span>)) <span class="sc">|&gt;</span> </span>
 <span id="cb31-2"><a href="#cb31-2"></a>  <span class="fu">select</span>(variable, median, <span class="fu">contains</span>(<span class="st">"q"</span>), rhat, <span class="fu">contains</span>(<span class="st">"ess"</span>)) <span class="sc">|&gt;</span> </span>
@@ -981,35 +1038,43 @@ Total execution time: 94.6 seconds.</code></pre>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 8
-  variable median      q5    q95  rhat ess_bulk ess_tail truth
-  &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
-1 psi_a     0.825  0.758   0.884  1.00    1521.    1566.   0.8
-2 lambda_a 19.6   12.5    41.6    1.01     934.    1002.  20  
-3 p_a       0.199  0.0937  0.311  1.01     918.     997.   0.2</code></pre>
+  variable median    q5    q95  rhat ess_bulk ess_tail truth
+  &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
+1 psi_a     0.804 0.731  0.869  1.00    1742.    1955.   0.8
+2 lambda_a  6.82  4.81  11.7    1.01    1151.    1069.   8  
+3 p_a       0.232 0.136  0.328  1.01    1159.    1079.   0.2</code></pre>
 </div>
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="co"># proportion of sites correctly classified</span></span>
-<span id="cb33-2"><a href="#cb33-2"></a><span class="fu">mean</span>(fit_zi_nmix<span class="sc">$</span><span class="fu">summary</span>(<span class="st">"z"</span>)<span class="sc">$</span>median <span class="sc">==</span> z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb33-2"><a href="#cb33-2"></a>fit_zi_nmix <span class="sc">|&gt;</span> </span>
+<span id="cb33-3"><a href="#cb33-3"></a>  <span class="fu">spread_rvars</span>(z[i]) <span class="sc">|&gt;</span> </span>
+<span id="cb33-4"><a href="#cb33-4"></a>  <span class="fu">mutate</span>(<span class="at">truth =</span> .env<span class="sc">$</span>z, </span>
+<span id="cb33-5"><a href="#cb33-5"></a>         <span class="at">Q =</span> <span class="fu">rowSums</span>(y) <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb33-6"><a href="#cb33-6"></a>  <span class="fu">filter</span>(<span class="sc">!</span>Q) <span class="sc">|&gt;</span> </span>
+<span id="cb33-7"><a href="#cb33-7"></a>  <span class="fu">summarise</span>(<span class="at">proportion_true =</span> <span class="fu">mean</span>(<span class="fu">median</span>(z) <span class="sc">==</span> truth))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1</code></pre>
+<pre><code># A tibble: 1 × 1
+  proportion_true
+            &lt;dbl&gt;
+1               1</code></pre>
 </div>
 </div>
 </section>
 <section id="time-to-event-n-mixture-model" class="level2">
 <h2 class="anchored" data-anchor-id="time-to-event-n-mixture-model">Time-to-event <em>N</em>-mixture model</h2>
-<p>The final model I’ll consider is a type of continuous time model.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> Time-to-event <em>N</em>-mixture models can be used to estimate abundance under the assumption that detection rates are proportional to abundance <span class="citation" data-cites="strebel2021">(<a href="#ref-strebel2021" role="doc-biblioref">Strebel et al. 2021</a>)</span>. Consider sites <span class="math inline">\(i \in 1:I\)</span> surveyed <span class="math inline">\(j \in 1:J_i\)</span> times for a minimum of length of <span class="math inline">\(\Delta_{ij}\)</span> (e.g., 30 minutes).<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> Surveys are conducted up to <span class="math inline">\(\Delta_{ij}\)</span> or are terminated after the time of first detection, yielding right-censored data <span class="math inline">\(y_{ij} = \Delta_{ij}\)</span> if no detection were made or <span class="math inline">\(y_{ij} &lt; \Delta_{ij}\)</span> if a detection was made. The waiting times are then modeled with some appropriate distribution such as the exponential. We can just replace the observation model in the zero-inflated <em>N</em>-mixture model in <a href="#eq-zi-nmix">Equation&nbsp;10</a> by modeling the waiting times as a function of the product of the per-individual detection rate <span class="math inline">\(\mu\)</span> and site-level abundance <span class="math inline">\(N_i\)</span>, yielding the following data-generating process:</p>
+<p>The final model I’ll consider is a type of continuous time model.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> Time-to-event <em>N</em>-mixture models can be used to estimate abundance under the assumption that detection rates are proportional to abundance <span class="citation" data-cites="strebel2021">(<a href="#ref-strebel2021" role="doc-biblioref">Strebel et al. 2021</a>)</span>. Consider sites <span class="math inline">\(i \in 1:I\)</span> surveyed <span class="math inline">\(j \in 1:J_i\)</span> times for a minimum of length of <span class="math inline">\(\Delta_{ij}\)</span> (e.g., 30 minutes).<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> Surveys are conducted up to <span class="math inline">\(\Delta_{ij}\)</span> or are terminated after the time of first detection, yielding right-censored waiting times data <span class="math inline">\(y_{ij} = \Delta_{ij}\)</span> if no detection were made or <span class="math inline">\(y_{ij} &lt; \Delta_{ij}\)</span> if a detection was made. The waiting times are then modeled with some appropriate distribution such as the exponential. We can just replace the observation model in the zero-inflated <em>N</em>-mixture model in <a href="#eq-zi-nmix" class="quarto-xref">Equation&nbsp;10</a> by modeling the waiting times as a function of the product of the per-individual detection rate <span class="math inline">\(\mu\)</span> and site-level abundance <span class="math inline">\(N_i\)</span>, yielding the following data-generating process:</p>
 <p><span id="eq-tte"><span class="math display">\[
 \begin{aligned}
-  z_i &amp;\sim \textrm{Bernoulli} (\psi) \\
-  N_i &amp;\sim \textrm{Poisson}(z_i \cdot \lambda) \\
-  y_{ij} &amp;\sim \min(\textrm{Exponential}(N_i \cdot \mu), \Delta_{ij})
+  z_i &amp;\sim \textrm{Bernoulli} \left(\psi\right) \\
+  N_i &amp;\sim \textrm{Poisson}\left(z_i \cdot \lambda\right) \\
+  y_{ij} &amp;\sim \min\left(\textrm{Exponential}\left(N_i \cdot \mu\right), \Delta_{ij}\right)
 \end{aligned}
 \tag{13}\]</span></span></p>
-<p>Just out of curiosity, I’m going to use the same parameters as for first zero-inflated <em>N</em>-mixture model above, leveraging the fact that <span class="math inline">\(\mu = -\log(1 - p)\)</span>.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> Since I’m trying to compare these models, I’ll assume that <span class="math inline">\(\Delta = 1\)</span> for all surveys, but this doesn’t have to be case for these models.</p>
+<p>Just out of curiosity, I’m going to use the same parameters as for first zero-inflated <em>N</em>-mixture model above, leveraging the fact that <span class="math inline">\(\mu = -\log\left(1 - p\right)\)</span>.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> Since I’m trying to compare these models, I’ll assume that <span class="math inline">\(\Delta = 1\)</span> for all surveys, but this doesn’t have to be case for these models.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="co"># convert detection probability to rate</span></span>
 <span id="cb35-2"><a href="#cb35-2"></a>mu <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">log</span>(<span class="dv">1</span> <span class="sc">-</span> p)</span>
@@ -1019,14 +1084,16 @@ Total execution time: 94.6 seconds.</code></pre>
 <span id="cb35-6"><a href="#cb35-6"></a>y <span class="ot">&lt;-</span> Delta <span class="ot">&lt;-</span> <span class="fu">matrix</span>(Delta_max, I, J_max)</span>
 <span id="cb35-7"><a href="#cb35-7"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>I) {</span>
 <span id="cb35-8"><a href="#cb35-8"></a>  <span class="cf">if</span> (N[i]) {</span>
-<span id="cb35-9"><a href="#cb35-9"></a>    y[i, <span class="dv">1</span><span class="sc">:</span>J[i]] <span class="ot">&lt;-</span> <span class="fu">pmin</span>(<span class="fu">rexp</span>(J[i], N[i] <span class="sc">*</span> mu), Delta[i, <span class="dv">1</span><span class="sc">:</span>J[i]])</span>
-<span id="cb35-10"><a href="#cb35-10"></a>  }</span>
-<span id="cb35-11"><a href="#cb35-11"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb35-9"><a href="#cb35-9"></a>    <span class="co"># pmin() is vectorised min() function </span></span>
+<span id="cb35-10"><a href="#cb35-10"></a>    y[i, <span class="dv">1</span><span class="sc">:</span>J[i]] <span class="ot">&lt;-</span> <span class="fu">pmin</span>(<span class="fu">rexp</span>(J[i], N[i] <span class="sc">*</span> mu), </span>
+<span id="cb35-11"><a href="#cb35-11"></a>                         Delta[i, <span class="dv">1</span><span class="sc">:</span>J[i]])</span>
+<span id="cb35-12"><a href="#cb35-12"></a>  }</span>
+<span id="cb35-13"><a href="#cb35-13"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>The Stan program uses the log density function <code>exponential_lpdf</code> when detections were made (<code>y[i, j] &lt; Delta[i, j]</code>), and the complement of the cumulative density function <code>exponential_lccdf</code> if no detections were made. The latter gives the log probability of not making any detections during the survey of length <span class="math inline">\(\Delta_{ij}\)</span>. Therefore, we can’t vectorise over the surveys because the density function depends on whether or not there was a detection in each survey.</p>
+<p>The Stan program uses the log density function <code>exponential_lpdf</code> when detections were made (<code>y[i, j] &lt; Delta[i, j]</code>), and the complement of the cumulative density function <code>exponential_lccdf</code> if no detections were made. The latter gives the log probability of not making any detections during the survey of length <span class="math inline">\(\Delta_{ij}\)</span>. Therefore, we can’t vectorise over the surveys because the density function depends on whether or not there was a detection in each survey. Since occupied sites need to have a population size of at least 1 individual, we marginalise over abundances <span class="math inline">\(N_i \in 1:K\)</span>.</p>
 <div class="cell" data-output.var="tte">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource stan number-lines code-with-copy"><code class="sourceCode stan"><span id="cb36-1"><a href="#cb36-1"></a><span class="kw">data</span> {</span>
 <span id="cb36-2"><a href="#cb36-2"></a>  <span class="dt">int</span>&lt;<span class="kw">lower</span>=<span class="dv">0</span>&gt; I, J_max, K, Delta_max;  <span class="co">// number of sites and maximum surveys, population size, and survey length</span></span>
@@ -1093,7 +1160,7 @@ Total execution time: 94.6 seconds.</code></pre>
 <span id="cb36-63"><a href="#cb36-63"></a></span>
 <span id="cb36-64"><a href="#cb36-64"></a><span class="kw">generated quantities</span> {</span>
 <span id="cb36-65"><a href="#cb36-65"></a>  <span class="dt">vector</span>[I] log_lik;</span>
-<span id="cb36-66"><a href="#cb36-66"></a>  <span class="dt">array</span>[I] <span class="dt">int</span> z = ones_int_array(I), N;</span>
+<span id="cb36-66"><a href="#cb36-66"></a>  <span class="dt">array</span>[I] <span class="dt">int</span> z = ones_int_array(I), N = zeros_int_array(I);</span>
 <span id="cb36-67"><a href="#cb36-67"></a>  {</span>
 <span id="cb36-68"><a href="#cb36-68"></a>    <span class="dt">vector</span>[I] psi = rep_vector(psi_a, I);</span>
 <span id="cb36-69"><a href="#cb36-69"></a>    <span class="dt">vector</span>[I] lambda = rep_vector(lambda_a, I);</span>
@@ -1101,7 +1168,7 @@ Total execution time: 94.6 seconds.</code></pre>
 <span id="cb36-71"><a href="#cb36-71"></a>    <span class="dt">vector</span>[I] log_psi = log(psi), log1m_psi = log1m(psi);</span>
 <span id="cb36-72"><a href="#cb36-72"></a>    <span class="dt">real</span> theta;</span>
 <span id="cb36-73"><a href="#cb36-73"></a>    <span class="dt">vector</span>[K] lp;</span>
-<span id="cb36-74"><a href="#cb36-74"></a>    <span class="dt">row_vector</span>[<span class="dv">2</span>] lp_z;</span>
+<span id="cb36-74"><a href="#cb36-74"></a>    <span class="dt">vector</span>[<span class="dv">2</span>] lp_z;</span>
 <span id="cb36-75"><a href="#cb36-75"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span>:I) {</span>
 <span id="cb36-76"><a href="#cb36-76"></a>      <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span>:K) {</span>
 <span id="cb36-77"><a href="#cb36-77"></a>        lp[k] = poisson_lpmf(k | lambda[i]);</span>
@@ -1114,15 +1181,15 @@ Total execution time: 94.6 seconds.</code></pre>
 <span id="cb36-84"><a href="#cb36-84"></a>        }</span>
 <span id="cb36-85"><a href="#cb36-85"></a>      }</span>
 <span id="cb36-86"><a href="#cb36-86"></a>      theta = log_sum_exp(lp);</span>
-<span id="cb36-87"><a href="#cb36-87"></a>      N[i] = categorical_logit_rng(lp - theta);</span>
-<span id="cb36-88"><a href="#cb36-88"></a>      <span class="cf">if</span> (Q_sum[i]) {</span>
-<span id="cb36-89"><a href="#cb36-89"></a>        log_lik[i] = log_psi[i] + theta;</span>
+<span id="cb36-87"><a href="#cb36-87"></a>      <span class="cf">if</span> (Q_sum[i]) {</span>
+<span id="cb36-88"><a href="#cb36-88"></a>        log_lik[i] = log_psi[i] + theta;</span>
+<span id="cb36-89"><a href="#cb36-89"></a>        N[i] = categorical_logit_rng(lp - theta);</span>
 <span id="cb36-90"><a href="#cb36-90"></a>      } <span class="cf">else</span> {</span>
-<span id="cb36-91"><a href="#cb36-91"></a>        lp_z = [ log1m_psi[i], log_psi[i] + theta ];</span>
+<span id="cb36-91"><a href="#cb36-91"></a>        lp_z = [ log1m_psi[i], log_psi[i] + theta ]';</span>
 <span id="cb36-92"><a href="#cb36-92"></a>        log_lik[i] = log_sum_exp(lp_z);</span>
-<span id="cb36-93"><a href="#cb36-93"></a>        z[i] = sort_indices_desc(lp_z)[<span class="dv">1</span>] - <span class="dv">1</span>;</span>
-<span id="cb36-94"><a href="#cb36-94"></a>        <span class="cf">if</span> (!z[i]) {</span>
-<span id="cb36-95"><a href="#cb36-95"></a>          N[i] = <span class="dv">0</span>;</span>
+<span id="cb36-93"><a href="#cb36-93"></a>        z[i] = categorical_logit_rng(lp_z - log_lik[i]) - <span class="dv">1</span>;</span>
+<span id="cb36-94"><a href="#cb36-94"></a>        <span class="cf">if</span> (z[i]) {</span>
+<span id="cb36-95"><a href="#cb36-95"></a>          N[i] = categorical_logit_rng(lp - theta);</span>
 <span id="cb36-96"><a href="#cb36-96"></a>        }</span>
 <span id="cb36-97"><a href="#cb36-97"></a>      }</span>
 <span id="cb36-98"><a href="#cb36-98"></a>    }</span>
@@ -1132,7 +1199,7 @@ Total execution time: 94.6 seconds.</code></pre>
 </div>
 <p>Let’s fit the time-to-event model, check the posteriors, and plot a subset of the abundance estimates alongside those of the first zero-inflated <em>N</em>-mixture model.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>fit_tte <span class="ot">&lt;-</span> tte<span class="sc">$</span><span class="fu">sample</span>(</span>
 <span id="cb37-2"><a href="#cb37-2"></a>  <span class="at">data =</span> <span class="fu">list</span>(<span class="at">I =</span> I, <span class="at">J_max =</span> J_max, <span class="at">K =</span> <span class="dv">3</span> <span class="sc">*</span> <span class="fu">max</span>(N), <span class="at">Delta_max =</span> Delta_max, <span class="at">J =</span> J, <span class="at">Delta =</span> Delta, <span class="at">y =</span> y), </span>
@@ -1144,20 +1211,20 @@ Total execution time: 94.6 seconds.</code></pre>
 <pre><code>Running MCMC with 8 parallel chains...</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Chain 2 finished in 27.5 seconds.
-Chain 7 finished in 30.4 seconds.
-Chain 3 finished in 31.8 seconds.
-Chain 5 finished in 33.4 seconds.
-Chain 8 finished in 34.3 seconds.
-Chain 4 finished in 34.9 seconds.
-Chain 6 finished in 35.1 seconds.
-Chain 1 finished in 36.0 seconds.
+<pre><code>Chain 3 finished in 12.7 seconds.
+Chain 1 finished in 13.2 seconds.
+Chain 8 finished in 13.2 seconds.
+Chain 2 finished in 14.1 seconds.
+Chain 6 finished in 14.4 seconds.
+Chain 5 finished in 14.7 seconds.
+Chain 7 finished in 14.7 seconds.
+Chain 4 finished in 15.1 seconds.
 
 All 8 chains finished successfully.
-Mean chain execution time: 32.9 seconds.
-Total execution time: 36.1 seconds.</code></pre>
+Mean chain execution time: 14.0 seconds.
+Total execution time: 15.3 seconds.</code></pre>
 </div>
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>fit_tte<span class="sc">$</span><span class="fu">summary</span>(<span class="fu">c</span>(<span class="st">"psi_a"</span>, <span class="st">"lambda_a"</span>, <span class="st">"mu_a"</span>)) <span class="sc">|&gt;</span> </span>
 <span id="cb40-2"><a href="#cb40-2"></a>  <span class="fu">select</span>(variable, median, <span class="fu">contains</span>(<span class="st">"q"</span>), rhat, <span class="fu">contains</span>(<span class="st">"ess"</span>)) <span class="sc">|&gt;</span> </span>
@@ -1165,15 +1232,15 @@ Total execution time: 36.1 seconds.</code></pre>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 8
-  variable median    q5    q95  rhat ess_bulk ess_tail  truth
-  &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;
-1 psi_a     0.827 0.759  0.883  1.01    1429.    1181.  0.8  
-2 lambda_a 11.1   5.29  38.6    1.01     902.     857. 20    
-3 mu_a      0.393 0.106  0.884  1.01     906.     848.  0.223</code></pre>
+  variable  median     q5    q95  rhat ess_bulk ess_tail truth
+  &lt;chr&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
+1 psi_a     0.784  0.710   0.849  1.00    1584.    1246. 0.8  
+2 lambda_a 15.6    5.97   31.0    1.01     808.    1522. 8    
+3 mu_a      0.0991 0.0490  0.267  1.01     807.    1539. 0.223</code></pre>
 </div>
 </div>
-<div class="cell" data-fig.asp="1">
-<details>
+<div class="cell">
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>out <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="fu">list</span>(fit_zi_nmix, fit_tte), </span>
 <span id="cb42-2"><a href="#cb42-2"></a>    <span class="sc">~</span>(<span class="fu">spread_rvars</span>(.x, z[i], N[i]))) <span class="sc">|&gt;</span> </span>
@@ -1189,40 +1256,53 @@ Total execution time: 36.1 seconds.</code></pre>
 <span id="cb42-12"><a href="#cb42-12"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> truth), </span>
 <span id="cb42-13"><a href="#cb42-13"></a>             <span class="at">position =</span> <span class="fu">position_nudge</span>(<span class="at">y =</span> <span class="sc">-</span><span class="fl">0.3</span>), </span>
 <span id="cb42-14"><a href="#cb42-14"></a>             <span class="at">size =</span> <span class="dv">2</span>, </span>
-<span id="cb42-15"><a href="#cb42-15"></a>             <span class="at">colour =</span> <span class="st">"red4"</span>, </span>
+<span id="cb42-15"><a href="#cb42-15"></a>             <span class="at">colour =</span> green, </span>
 <span id="cb42-16"><a href="#cb42-16"></a>             <span class="at">shape =</span> <span class="st">"cross"</span>) <span class="sc">+</span> </span>
 <span id="cb42-17"><a href="#cb42-17"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(N), </span>
 <span id="cb42-18"><a href="#cb42-18"></a>       <span class="at">y =</span> <span class="st">"Occupied Site"</span>, </span>
 <span id="cb42-19"><a href="#cb42-19"></a>       <span class="at">colour =</span> <span class="st">"Model"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="marginalisation_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+<div>
+<figure class="figure">
+<p><img src="marginalisation_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
 </div>
-<p>The estimates for the count model look better and seemed to perform better according to RMSE of the population sizes, which makes sense because the count model can provide more information (number of individuals detected) compared to the time-to-event model (waiting time to the first individual detected). Since the <span class="math inline">\(\textrm{Binomial}(N_i, p)\)</span> distribution converges to <span class="math inline">\(\textrm{Poisson}(N_i \cdot p)\)</span> for sufficiently large <span class="math inline">\(N\)</span> and sufficiently small <span class="math inline">\(p\)</span><a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a>, and because <span class="math inline">\(p \approx \mu\)</span> for small values of <span class="math inline">\(p\)</span>, researchers gain statistical power by not terminating the search after first detection but instead counting the number of individuals during the interval <span class="math inline">\(\Delta_{ij}\)</span>. But of course, one of the big draws of the time-to-event model is less time in the field; you win some, you lose some.</p>
+</div>
+<p>The estimates for the count model look better and seemed to perform better according to RMSE of the population sizes, which makes sense because the count model can provide more information (number of individuals detected) compared to the time-to-event model (waiting time to the first individual detected). Since the <span class="math inline">\(\textrm{Binomial}\left(N_i, p\right)\)</span> distribution converges to <span class="math inline">\(\textrm{Poisson}\left(N_i \cdot p\right)\)</span> for sufficiently large <span class="math inline">\(N\)</span> and sufficiently small <span class="math inline">\(p\)</span><a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a>, and because <span class="math inline">\(p \approx \mu\)</span> for small values of <span class="math inline">\(p\)</span>, researchers gain statistical power by not terminating the search after first detection but instead counting the number of individuals during the interval <span class="math inline">\(\Delta_{ij}\)</span>. But of course, one of the big draws of the time-to-event model is less time in the field; you win some, you lose some.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>out <span class="sc">|&gt;</span> </span>
-<span id="cb43-2"><a href="#cb43-2"></a>  <span class="fu">summarise</span>(<span class="at">RMSE =</span> <span class="fu">sqrt</span>(<span class="fu">rvar_mean</span>((truth <span class="sc">-</span> N)<span class="sc">^</span><span class="dv">2</span>)), </span>
-<span id="cb43-3"><a href="#cb43-3"></a>            <span class="at">.by =</span> model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb43-2"><a href="#cb43-2"></a>  <span class="fu">filter</span>(<span class="fu">median</span>(z) <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb43-3"><a href="#cb43-3"></a>  <span class="fu">summarise</span>(<span class="at">RMSE =</span> <span class="fu">sqrt</span>(<span class="fu">rvar_mean</span>((truth <span class="sc">-</span> N)<span class="sc">^</span><span class="dv">2</span>)), </span>
+<span id="cb43-4"><a href="#cb43-4"></a>            <span class="at">.by =</span> model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 2
-  model               RMSE
-  &lt;fct&gt;         &lt;rvar[1d]&gt;
-1 Counts           8 ± 5.9
-2 Time-to-event   11 ± 5.6</code></pre>
+  model                RMSE
+  &lt;fct&gt;          &lt;rvar[1d]&gt;
+1 Counts          3.5 ± 1.3
+2 Time-to-event  10.5 ± 6.9</code></pre>
 </div>
 </div>
 <p>At least our occupancy states are still estimated well.</p>
 <div class="cell">
-<details open="">
+<details open="" class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a><span class="fu">mean</span>(fit_tte<span class="sc">$</span><span class="fu">summary</span>(<span class="st">"z"</span>)<span class="sc">$</span>median <span class="sc">==</span> z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>fit_tte <span class="sc">|&gt;</span> </span>
+<span id="cb45-2"><a href="#cb45-2"></a>  <span class="fu">spread_rvars</span>(z[i]) <span class="sc">|&gt;</span> </span>
+<span id="cb45-3"><a href="#cb45-3"></a>  <span class="fu">mutate</span>(<span class="at">truth =</span> .env<span class="sc">$</span>z, </span>
+<span id="cb45-4"><a href="#cb45-4"></a>         <span class="at">Q =</span> <span class="fu">rowSums</span>(y) <span class="sc">&lt;</span> J <span class="sc">*</span> Delta_max) <span class="sc">|&gt;</span> </span>
+<span id="cb45-5"><a href="#cb45-5"></a>  <span class="fu">filter</span>(<span class="sc">!</span>Q) <span class="sc">|&gt;</span> </span>
+<span id="cb45-6"><a href="#cb45-6"></a>  <span class="fu">summarise</span>(<span class="at">proportion_true =</span> <span class="fu">mean</span>(<span class="fu">median</span>(z) <span class="sc">==</span> truth))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1</code></pre>
+<pre><code># A tibble: 1 × 1
+  proportion_true
+            &lt;dbl&gt;
+1           0.913</code></pre>
 </div>
 </div>
 <p>Thanks for reading!</p>
@@ -1236,7 +1316,7 @@ Total execution time: 36.1 seconds.</code></pre>
 </section>
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
 <div id="ref-burkner2024" class="csl-entry" role="listitem">
 Bürkner, P.-C., J. Gabry, M. Kay, and A. Vehtari. 2024. <span class="nocase">posterior</span>: <span>Tools</span> for working with posterior distributions.
 </div>
@@ -1273,13 +1353,12 @@ Wickham, H., M. Averick, J. Bryan, W. Chang, L. D. McGowan, R. François, G. Gro
 <li id="fn1"><p>The number of surveys can vary by site, which is the norm rather than the exception in ecological data.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>We do know that sites with detections are occupied.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>Both <span class="math inline">\(\psi\)</span> and <span class="math inline">\(p\)</span> can be modeled as functions of covariates or random effects at the site-level (occupancy) or the site-by-survey level (detection).<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>We could still formulate this with varying number of surveys, except that now the cell probabilities have to be expanded to not only account for the <span class="math inline">\(J + 1\)</span> possible outcomes but also the variation in <span class="math inline">\(J_i\)</span> itself.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>Normalising probabilities means to divide by the sum of total probabilities, which is achieved by subtracting the <code>log_sum_exp</code> of the log probabilities.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>This is referred to as <a href="https://en.wikipedia.org/wiki/Inverse_transform_sampling">inverse transform sampling</a>.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7"><p>The traditional <em>N</em>-mixture model can become a continuous time model by incorporating the survey lengths into the observation model.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn8"><p>The survey times can vary by site and occasion.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn9"><p>Probabilities can be converted to rates like this more generally, such as survival probabilities as a function of instantaneous mortality hazard rates <span class="math inline">\(S = 1 - \exp(-h)\)</span> <span class="citation" data-cites="ergon2018">(<a href="#ref-ergon2018" role="doc-biblioref">Ergon et al. 2018</a>)</span>.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn10"><p>See <a href="https://en.wikipedia.org/wiki/Binomial_distribution#Poisson_approximation">Wikipedia</a> for some rules of thumb.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>In order to get the posterior distribution of that site’s latent occupancy state <span class="math inline">\(z_i\)</span>, we need to sample the states relative to each state’s associated probabilities. We use the <code>categorical_(logit_)rng()</code> function(s) for this in Stan, which requires that the vector of probabilities or log probabilities is normalised. Normalising a vector of probabilities is achieved by dividing by the sum, and for a vector of log probabilities by subtracting the <code>log_sum_exp()</code>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>We could still formulate this with varying number of surveys, except that now the cell probabilities have to be expanded to not only account for the <span class="math inline">\(J + 1\)</span> possible outcomes but also the variation in <span class="math inline">\(J_i\)</span> itself.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>The traditional <em>N</em>-mixture model can become a continuous time model by incorporating the survey lengths into the observation model.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>The survey times can vary by site and occasion.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Probabilities can be converted to rates like this more generally, such as survival probabilities as a function of instantaneous mortality hazard rates <span class="math inline">\(S = 1 - \exp\left(-h\right)\)</span> <span class="citation" data-cites="ergon2018">(<a href="#ref-ergon2018" role="doc-biblioref">Ergon et al. 2018</a>)</span>.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>See <a href="https://en.wikipedia.org/wiki/Binomial_distribution#Poisson_approximation">Wikipedia</a> for some rules of thumb.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1317,18 +1396,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -1360,11 +1428,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/quantecol\.com\.au");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+          // default icon
+          link.classList.add("external");
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1374,8 +1481,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1387,7 +1503,129 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1431,6 +1669,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1456,6 +1695,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1513,20 +1778,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       });
     }
   }
-    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-      var filterRegex = new RegExp("https:\/\/quantecol\.com\.au");
-    var isInternal = (href) => {
-        return filterRegex.test(href) || localhostRegex.test(href);
-    }
-    // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-    for (var i=0; i<links.length; i++) {
-      const link = links[i];
-      if (!isInternal(link.href)) {
-          // default icon
-          link.classList.add("external");
-      }
-    }
 });
 </script>
 </div> <!-- /content -->
@@ -1535,12 +1786,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">
       &nbsp;
     </div>   
-    <div class="nav-footer-center">Quantecol | 53 Bentinck Street, Ballina NSW, Australia | ABN: 90 710 874 314</div>
+    <div class="nav-footer-center">
+<p>Quantecol | 53 Bentinck Street, Ballina NSW, Australia | ABN: 90 710 874 314</p>
+</div>
     <div class="nav-footer-right">
       &nbsp;
     </div>
   </div>
 </footer>
+
 
 
 
