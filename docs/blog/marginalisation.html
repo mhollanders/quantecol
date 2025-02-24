@@ -9,7 +9,7 @@
 <meta name="author" content="Dr.&nbsp;Matthijs Hollanders">
 <meta name="dcterms.date" content="2025-02-04">
 
-<title>Quantecol - Marginalisation – Quantecol</title>
+<title>Marginalisation – Quantecol</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -465,7 +465,7 @@ p_m\left(\boldsymbol{y}_i \mid \psi, p\right) = \begin{cases}
 <div class="cell-output cell-output-stdout">
 <pre><code>Running MCMC with 8 parallel chains...
 
-Chain 1 finished in 2.5 seconds.
+Chain 1 finished in 2.4 seconds.
 Chain 4 finished in 2.5 seconds.
 Chain 2 finished in 2.6 seconds.
 Chain 3 finished in 2.6 seconds.
@@ -608,13 +608,13 @@ See help('pareto-k-diagnostic') for details.</code></pre>
 <pre><code>Running MCMC with 8 parallel chains...</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Chain 1 finished in 0.7 seconds.
+<pre><code>Chain 1 finished in 0.8 seconds.
 Chain 2 finished in 0.7 seconds.
 Chain 3 finished in 0.7 seconds.
-Chain 4 finished in 0.8 seconds.
+Chain 4 finished in 0.7 seconds.
 Chain 5 finished in 0.7 seconds.
 Chain 6 finished in 0.7 seconds.
-Chain 7 finished in 0.7 seconds.
+Chain 7 finished in 0.8 seconds.
 Chain 8 finished in 0.7 seconds.
 
 All 8 chains finished successfully.
@@ -752,18 +752,18 @@ p_m\left(\boldsymbol{y}_i \mid \lambda, p\right) = \sum_{k = \max\left(y_i\right
 <div class="cell-output cell-output-stdout">
 <pre><code>Running MCMC with 8 parallel chains...
 
-Chain 1 finished in 0.8 seconds.
-Chain 2 finished in 0.9 seconds.
+Chain 1 finished in 0.9 seconds.
+Chain 2 finished in 0.8 seconds.
 Chain 3 finished in 0.8 seconds.
-Chain 6 finished in 0.8 seconds.
 Chain 4 finished in 0.9 seconds.
 Chain 5 finished in 0.9 seconds.
+Chain 6 finished in 0.9 seconds.
 Chain 7 finished in 0.8 seconds.
 Chain 8 finished in 0.8 seconds.
 
 All 8 chains finished successfully.
 Mean chain execution time: 0.8 seconds.
-Total execution time: 1.1 seconds.</code></pre>
+Total execution time: 1.0 seconds.</code></pre>
 </div>
 </div>
 <p>We see that the estimated abundance of several sites is pushed right up to <span class="math inline">\(K\)</span> which we set to the maximum count. This is an extreme example, but it illustrates the point that you can tell graphically when <span class="math inline">\(K\)</span> is too small as some posteriors will pile up at <span class="math inline">\(K\)</span>.</p>
@@ -803,18 +803,18 @@ Total execution time: 1.1 seconds.</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>Running MCMC with 8 parallel chains...
 
-Chain 5 finished in 12.6 seconds.
-Chain 4 finished in 13.2 seconds.
-Chain 1 finished in 13.8 seconds.
-Chain 7 finished in 13.5 seconds.
-Chain 8 finished in 13.9 seconds.
-Chain 2 finished in 14.6 seconds.
+Chain 5 finished in 12.3 seconds.
+Chain 4 finished in 13.1 seconds.
+Chain 7 finished in 13.4 seconds.
+Chain 1 finished in 14.0 seconds.
+Chain 8 finished in 14.0 seconds.
+Chain 2 finished in 14.4 seconds.
+Chain 6 finished in 14.5 seconds.
 Chain 3 finished in 14.7 seconds.
-Chain 6 finished in 14.6 seconds.
 
 All 8 chains finished successfully.
-Mean chain execution time: 13.9 seconds.
-Total execution time: 14.9 seconds.</code></pre>
+Mean chain execution time: 13.8 seconds.
+Total execution time: 14.8 seconds.</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -1017,18 +1017,18 @@ p_m\left(\boldsymbol{y}_i \mid \psi, \lambda, p\right) = \begin{cases}
 <div class="cell-output cell-output-stdout">
 <pre><code>Running MCMC with 8 parallel chains...
 
-Chain 5 finished in 22.4 seconds.
-Chain 1 finished in 22.6 seconds.
-Chain 2 finished in 22.8 seconds.
-Chain 4 finished in 25.5 seconds.
-Chain 3 finished in 27.6 seconds.
-Chain 6 finished in 27.4 seconds.
-Chain 7 finished in 27.9 seconds.
-Chain 8 finished in 28.2 seconds.
+Chain 5 finished in 21.7 seconds.
+Chain 2 finished in 21.9 seconds.
+Chain 1 finished in 22.1 seconds.
+Chain 4 finished in 24.4 seconds.
+Chain 3 finished in 26.9 seconds.
+Chain 7 finished in 26.9 seconds.
+Chain 6 finished in 27.3 seconds.
+Chain 8 finished in 27.9 seconds.
 
 All 8 chains finished successfully.
-Mean chain execution time: 25.5 seconds.
-Total execution time: 28.4 seconds.</code></pre>
+Mean chain execution time: 24.9 seconds.
+Total execution time: 28.2 seconds.</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
@@ -1211,18 +1211,18 @@ Total execution time: 28.4 seconds.</code></pre>
 <pre><code>Running MCMC with 8 parallel chains...</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Chain 3 finished in 12.7 seconds.
-Chain 1 finished in 13.2 seconds.
-Chain 8 finished in 13.2 seconds.
-Chain 2 finished in 14.1 seconds.
-Chain 6 finished in 14.4 seconds.
+<pre><code>Chain 3 finished in 12.6 seconds.
+Chain 1 finished in 13.3 seconds.
+Chain 8 finished in 13.4 seconds.
+Chain 2 finished in 14.2 seconds.
+Chain 6 finished in 14.3 seconds.
 Chain 5 finished in 14.7 seconds.
-Chain 7 finished in 14.7 seconds.
+Chain 7 finished in 14.8 seconds.
 Chain 4 finished in 15.1 seconds.
 
 All 8 chains finished successfully.
 Mean chain execution time: 14.0 seconds.
-Total execution time: 15.3 seconds.</code></pre>
+Total execution time: 15.2 seconds.</code></pre>
 </div>
 <details open="" class="code-fold">
 <summary>Code</summary>
